@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T21:50:33+00:00",
+  "title": "Design System: Scare",
+  "extensions": {
+    "colorMeta": {
+      "void": {
+        "role": "neutral",
+        "displayName": "Void",
+        "canonical": "#070504",
+        "cssVar": "--void",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "crypt": {
+        "role": "neutral",
+        "displayName": "Crypt",
+        "canonical": "#0e0906",
+        "cssVar": "--crypt",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink-05": {
+        "role": "neutral",
+        "displayName": "Soot",
+        "canonical": "#1a0e06",
+        "cssVar": "--ink-05",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink-15": {
+        "role": "neutral",
+        "displayName": "Charred",
+        "canonical": "#2e1808",
+        "cssVar": "--ink-15",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink-30": {
+        "role": "neutral",
+        "displayName": "Ember",
+        "canonical": "#5a2f0e",
+        "cssVar": "--ink-30",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink-60": {
+        "role": "neutral",
+        "displayName": "Smolder",
+        "canonical": "#c26a22",
+        "cssVar": "--ink-60",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink-80": {
+        "role": "neutral",
+        "displayName": "Warm Glow",
+        "canonical": "#f0a05a",
+        "cssVar": "--ink-80",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Pumpkin Ink",
+        "canonical": "#ff8a1f",
+        "cssVar": "--ink",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "hot": {
+        "role": "primary",
+        "displayName": "Candle Core",
+        "canonical": "#ffd9a3",
+        "cssVar": "--hot",
+        "tonalRamp": [
+          "#070504",
+          "#0e0906",
+          "#1a0e06",
+          "#2e1808",
+          "#5a2f0e",
+          "#c26a22",
+          "#ff8a1f",
+          "#ffd9a3"
+        ]
+      },
+      "blood": {
+        "role": "secondary",
+        "displayName": "Blood Ember",
+        "canonical": "#ff5b3a",
+        "cssVar": "--blood",
+        "tonalRamp": [
+          "#3d0a00",
+          "#701300",
+          "#a31b00",
+          "#d62400",
+          "#ff330a",
+          "#ff6647",
+          "#ffa28f",
+          "#ffddd6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Glyph Display",
+        "purpose": "All headings and big numerals: 5x7 bitmap letters built from typewriter glyphs; cell size set per use via --max (hero 9px, section 5.5px, close 6.5px, countdown 6px), narrowScale variant at <=640px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Deal step names, Departure Mono uppercase in Candle Core."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "User-authored titles (game names), Martian Mono 600."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text; Martian Mono at 87.5% width."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Hero sentence and large prose rows."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Frame heads, panel titles, fact terms, captions, countdown units; uppercase 0.14em in Smolder."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Button and control text; uppercase 0.12em."
+      }
+    },
+    "shadows": [
+      {
+        "name": "candle-glow",
+        "value": "0 0 10px rgb(255 138 31 / 0.45)",
+        "purpose": "text-shadow on the hottest glyph pixels only; light, not elevation."
+      },
+      {
+        "name": "input-focus-inset",
+        "value": "inset 0 0 0 1px #ff8a1f",
+        "purpose": "Thickens the input border on focus."
+      },
+      {
+        "name": "scanlines",
+        "value": "repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgb(0 0 0 / 0.14) 3px)",
+        "purpose": "Fixed full-page overlay, z-index 60, pointer-events none."
+      },
+      {
+        "name": "vignette",
+        "value": "radial-gradient(120% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.55) 100%)",
+        "purpose": "Fixed full-page candle-dark vignette, z-index 60, pointer-events none."
+      },
+      {
+        "name": "density-fill",
+        "value": "radial-gradient(rgb(7 5 4 / 0.32) 0.75px, transparent 1.1px) / 3px 3px",
+        "purpose": "Dot screen over ink-filled buttons; opens to 5px on hover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Every state transition and nudge."
+      },
+      {
+        "name": "state",
+        "value": "0.2s",
+        "purpose": "Color, border and background-color changes."
+      },
+      {
+        "name": "nudge",
+        "value": "0.3s-0.35s",
+        "purpose": "Icon and bracket translate (3px), dot-screen resize, FAQ toggle rotation."
+      },
+      {
+        "name": "cursor-blink",
+        "value": "1.1s steps(1) infinite",
+        "purpose": "Block cursor at the end of an open FAQ answer."
+      },
+      {
+        "name": "lantern",
+        "value": "spring toward pointer; idle drift after 3.5s; seeded flicker and gusts; knife-sweep recarve",
+        "purpose": "The Glyph Lantern canvas. A single still pose under reduced motion."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-duration 0.01ms; animation none",
+        "purpose": "Global kill switch under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "640px"
+      },
+      {
+        "name": "stack",
+        "value": "900px"
+      },
+      {
+        "name": "compact-hud",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Density-filled ink block for the one main action (Sign in with Hack Club, Register, Mark as shipped).",
+      "html": "<button class=\"ds-btn-primary\"><span>Sign in with Hack Club</span><svg class=\"ds-btn-icon\" viewBox=\"0 0 12 12\" width=\"1em\" height=\"1em\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 5h7v2H1zM6 2h2v2H6zM8 4h2v4H8zM6 8h2v2H6z\"/></svg></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:0.75em; min-height:48px; padding:0 22px; border:1px solid transparent; border-radius:0; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:14px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; color:#070504; background-color:#ff8a1f; background-image:radial-gradient(rgb(7 5 4 / 0.32) 0.75px, transparent 1.1px); background-size:3px 3px; transition:background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary .ds-btn-icon { width:1em; height:1em; transition:transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background-color:#ffd9a3; background-size:5px 5px; } .ds-btn-primary:hover .ds-btn-icon { transform:translateX(3px); } .ds-btn-primary:active { background-color:#c26a22; } .ds-btn-primary:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Dashed outline for secondary actions (How it works, Register a game, Cancel).",
+      "html": "<button class=\"ds-btn-ghost\"><svg class=\"ds-btn-icon\" viewBox=\"0 0 12 12\" width=\"1em\" height=\"1em\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M5 2h2v8H5zM2 5h8v2H2z\"/></svg><span>Register a game</span></button>",
+      "css": ".ds-btn-ghost { display:inline-flex; align-items:center; gap:0.75em; min-height:48px; padding:0 22px; border:1px dashed #c26a22; border-radius:0; background:none; color:#ff8a1f; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:14px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-ghost .ds-btn-icon { width:1em; height:1em; } .ds-btn-ghost:hover { color:#ffd9a3; border-color:#ffd9a3; background-color:#1a0e06; } .ds-btn-ghost:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; }"
+    },
+    {
+      "name": "HUD Bar",
+      "kind": "nav",
+      "refersTo": "button-hud",
+      "description": "Sticky 60px HUD: glyph-grid wordmark, bracketed section links, live countdown, compact density-filled sign-in.",
+      "html": "<header class=\"ds-hud\"><a class=\"ds-hud-mark\" href=\"#\"><span class=\"ds-hud-word\">SCARE</span><span class=\"ds-hud-sub\">A Hack Club YSWS</span></a><nav class=\"ds-hud-nav\"><a class=\"ds-hud-link\" href=\"#\"><span>[</span>The deal<span>]</span></a><a class=\"ds-hud-link\" href=\"#\"><span>[</span>FAQ<span>]</span></a></nav><span class=\"ds-hud-count\">Lights out in <span>32d 06h 14m 59s</span></span><button class=\"ds-btn-hud\">Sign in</button></header>",
+      "css": ".ds-hud { display:flex; align-items:center; gap:32px; height:60px; padding:0 24px; background:rgb(7 5 4 / 0.92); border-bottom:1px dotted #5a2f0e; font-family:'Departure Mono', ui-monospace, Menlo, monospace; } .ds-hud-mark { display:flex; align-items:baseline; gap:14px; color:#ffd9a3; text-decoration:none; } .ds-hud-word { font-size:18px; letter-spacing:0.28em; } .ds-hud-sub { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#c26a22; } .ds-hud-nav { display:flex; gap:4px; margin-inline:auto; } .ds-hud-link { display:inline-flex; gap:0.4em; padding:8px 10px; color:#f0a05a; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; text-decoration:none; transition:color 0.2s; } .ds-hud-link span { color:#5a2f0e; transition:color 0.2s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-hud-link:hover { color:#ffd9a3; } .ds-hud-link:hover span:first-child { color:#ff8a1f; transform:translateX(-3px); } .ds-hud-link:hover span:last-child { color:#ff8a1f; transform:translateX(3px); } .ds-hud-link:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; } .ds-hud-count { font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#c26a22; white-space:nowrap; } .ds-hud-count span { color:#ff8a1f; font-variant-numeric:tabular-nums; } .ds-btn-hud { min-height:36px; padding:0 14px; border:0; border-radius:0; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; color:#070504; background-color:#ff8a1f; background-image:radial-gradient(rgb(7 5 4 / 0.32) 0.75px, transparent 1.1px); background-size:3px 3px; transition:background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-hud:hover { background-color:#ffd9a3; background-size:5px 5px; } .ds-btn-hud:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square, solid-stroked field; label in Departure Mono with an inline hint; Blood border and `! ` message on error.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-title\">Game title <span class=\"ds-field-hint\">what you call it</span></label><input id=\"ds-title\" class=\"ds-input\" placeholder=\"The Thing in the Vents\"><p class=\"ds-field-error\">Give it a title</p></div>",
+      "css": ".ds-field { display:grid; gap:8px; } .ds-field-label { display:flex; gap:10px; align-items:baseline; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:#f0a05a; } .ds-field-hint { color:#c26a22; letter-spacing:0.06em; text-transform:none; } .ds-input { width:100%; padding:12px 14px; border:1px solid #5a2f0e; border-radius:0; background:#070504; color:#ffd9a3; font-family:'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; font-stretch:87.5%; font-size:15px; line-height:1.5; transition:border-color 0.2s, box-shadow 0.2s; } .ds-input::placeholder { color:#c26a22; opacity:1; } .ds-input:hover { border-color:#c26a22; } .ds-input:focus { outline:none; border-color:#ff8a1f; box-shadow:inset 0 0 0 1px #ff8a1f; } .ds-field-error { margin:0; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:12px; letter-spacing:0.04em; color:#ff5b3a; } .ds-field-error::before { content:'! '; }"
+    },
+    {
+      "name": "TBA Tag",
+      "kind": "chip",
+      "refersTo": "tba-tag",
+      "description": "Inline dotted tag for a program decision that is not made yet. Never replaced with an invented value.",
+      "html": "<p class=\"ds-tba-host\">Shipping earns you Pumpkins. <span class=\"ds-tba\">Earn rate announced soon</span></p>",
+      "css": ".ds-tba-host { font-family:'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; font-stretch:87.5%; font-size:15px; color:#f0a05a; } .ds-tba { display:inline-block; padding:1px 7px; border:1px dotted #c26a22; color:#c26a22; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:max(11.5px, 0.72em); letter-spacing:0.12em; line-height:1.6; text-transform:uppercase; vertical-align:0.12em; white-space:nowrap; }"
+    },
+    {
+      "name": "Frame with Header Row",
+      "kind": "card",
+      "refersTo": "frame-head",
+      "description": "The below-fold working container: dotted Ember frame, Crypt-to-Void gradient, status-line header, dotted row separators.",
+      "html": "<div class=\"ds-frame\"><div class=\"ds-frame-head\"><span>Ledger</span><span>Pumpkins</span></div><dl class=\"ds-ledger\"><div><dt>Currency</dt><dd>Pumpkins</dd></div><div><dt>Earn rate</dt><dd><span class=\"ds-tba\">Announced soon</span></dd></div><div><dt>Last day to ship</dt><dd>October 31, 2026</dd></div></dl></div>",
+      "css": ".ds-frame { border:1px dotted #5a2f0e; background:linear-gradient(#0e0906, #070504); max-width:560px; } .ds-frame-head { display:flex; justify-content:space-between; gap:16px; padding:12px 20px; border-bottom:1px dotted #5a2f0e; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#c26a22; } .ds-frame-head span:first-child { color:#ff8a1f; } .ds-ledger { margin:0; padding:6px 20px; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:15px; } .ds-ledger div { display:flex; align-items:baseline; gap:12px; padding:12px 0; } .ds-ledger dt { color:#f0a05a; letter-spacing:0.04em; } .ds-ledger div::after { content:''; order:1; flex:1; min-width:24px; border-bottom:1px dotted #5a2f0e; transform:translateY(-4px); } .ds-ledger dd { order:2; margin:0; color:#ffd9a3; } .ds-tba { display:inline-block; padding:1px 7px; border:1px dotted #c26a22; color:#c26a22; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; }"
+    },
+    {
+      "name": "Status Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Dashboard sidebar panel: Crypt fill, dotted Ember border, Label title, square status dot (hollow pending, filled done).",
+      "html": "<div class=\"ds-panel\"><h2 class=\"ds-panel-title\">Eligibility</h2><p class=\"ds-status\"><span class=\"ds-status-dot\"></span>Not verified yet</p><p class=\"ds-status ds-status-ok\"><span class=\"ds-status-dot\"></span>Verified for YSWS</p><p class=\"ds-panel-note\">Verify it to earn Pumpkins, then sign in again.</p><a class=\"ds-link\" href=\"#\">Verify at auth.hackclub.com</a></div>",
+      "css": ".ds-panel { padding:24px; border:1px dotted #5a2f0e; background:#0e0906; max-width:340px; font-family:'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; font-stretch:87.5%; } .ds-panel-title { margin:0 0 18px; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-weight:normal; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#c26a22; } .ds-status { display:flex; align-items:center; gap:10px; margin:0 0 8px; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:14px; letter-spacing:0.06em; color:#f0a05a; } .ds-status-ok { color:#ff8a1f; } .ds-status-dot { display:inline-block; width:8px; height:8px; border:1px solid currentColor; } .ds-status-ok .ds-status-dot { background:currentColor; } .ds-panel-note { margin:16px 0 12px; font-size:13px; line-height:1.6; color:#c26a22; } .ds-link { font-size:14px; color:#ff8a1f; text-decoration:underline dotted #c26a22 1px; text-underline-offset:0.3em; transition:color 0.2s, text-decoration-color 0.2s; } .ds-link:hover { color:#ffd9a3; text-decoration-color:#ffd9a3; } .ds-link:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; }"
+    },
+    {
+      "name": "Glyph Heading",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "5x7 bitmap display type built from typewriter glyphs (bold, density shadow), brighter toward each letter's foot. Static render of the project's renderGlyphs('BOO').",
+      "html": "<h2 class=\"ds-glyph\"><span class=\"ds-sr\">BOO</span><span class=\"ds-glyph-art\" aria-hidden=\"true\"><span class=\"ds-glyph-row\"><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;#</span><span class=\"ds-g-shadow\">      </span><span class=\"ds-g-ink\">&amp;&amp;##&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">      </span><span class=\"ds-g-ink\">#&amp;&amp;&amp;&amp;&amp;#&amp;</span><span class=\"ds-g-shadow\">    </span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">....</span><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">  </span><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">....</span><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">  </span><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">....</span><span class=\"ds-g-ink\">&amp;&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">  </span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-ink\">&amp;$&amp;&amp;</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">&amp;$&amp;&amp;</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-ink\">&amp;&amp;$$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">&amp;&amp;$&amp;</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-ink\">&amp;&amp;&amp;$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">$&amp;&amp;&amp;</span><span class=\"ds-g-shadow\">..</span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-ink\">$$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$$$$$$$</span><span class=\"ds-g-shadow\">....</span><span class=\"ds-g-ink\">$$&amp;$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">$$$$</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-ink\">$$$$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">$&amp;$$</span><span class=\"ds-g-shadow\">..</span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-ink\">$$$$</span><span class=\"ds-g-shadow\">....</span><span class=\"ds-g-ink\">$$$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">  </span><span class=\"ds-g-ink\">$$$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">$$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$$$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">$$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-shadow\">..</span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-ink\">@</span><span class=\"ds-g-hot\">@@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-hot\">@@@@</span><span class=\"ds-g-shadow\">..</span><span class=\"ds-g-hot\">@@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">..  </span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-shadow\">..</span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-hot\">@@@@@@@@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">....  </span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@@@@@@</span><span class=\"ds-g-shadow\">....  </span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-ink\">$</span><span class=\"ds-g-hot\">@@@</span><span class=\"ds-g-ink\">@$</span><span class=\"ds-g-hot\">@</span><span class=\"ds-g-shadow\">....</span></span><span class=\"ds-glyph-row\"><span class=\"ds-g-shadow\">  ..........      ........      ........  </span></span></span></h2>",
+      "css": ".ds-glyph { margin:0; font-weight:normal; } .ds-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); } .ds-glyph-art { display:block; font-family:'Departure Mono', ui-monospace, Menlo, monospace; font-size:9px; line-height:1.08; letter-spacing:0; white-space:pre; user-select:none; } .ds-glyph-row { display:block; } .ds-g-shadow { color:#5a2f0e; } .ds-g-dim { color:#c26a22; } .ds-g-ink { color:#ff8a1f; } .ds-g-hot { color:#ffd9a3; text-shadow:0 0 10px rgb(255 138 31 / 0.45); }"
+    },
+    {
+      "name": "FAQ Row",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Native details row: `>` prompt, plus that rotates to minus, answer ending in a blinking block cursor.",
+      "html": "<details class=\"ds-faq\" open><summary><span class=\"ds-faq-prompt\">&gt;</span><span>What are Pumpkins?</span><span class=\"ds-faq-toggle\"></span></summary><p class=\"ds-faq-a\">Scare&rsquo;s currency. Shipping horror games earns them.</p></details>",
+      "css": ".ds-faq { border-bottom:1px dotted #2e1808; max-width:640px; font-family:'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; font-stretch:87.5%; } .ds-faq summary { display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:baseline; padding:22px 0; list-style:none; cursor:pointer; color:#ff8a1f; font-size:17px; transition:color 0.2s; } .ds-faq summary::-webkit-details-marker { display:none; } .ds-faq summary:hover, .ds-faq[open] summary { color:#ffd9a3; } .ds-faq summary:focus-visible { outline:2px solid #ffd9a3; outline-offset:3px; } .ds-faq-prompt { font-family:'Departure Mono', ui-monospace, Menlo, monospace; color:#c26a22; } .ds-faq[open] .ds-faq-prompt { color:#ff8a1f; } .ds-faq-toggle { position:relative; width:12px; height:12px; align-self:center; } .ds-faq-toggle::before, .ds-faq-toggle::after { content:''; position:absolute; inset:5px 0; background:#c26a22; transition:transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-faq-toggle::after { transform:rotate(90deg); } .ds-faq[open] .ds-faq-toggle::after { transform:rotate(0deg); } .ds-faq-a { margin:0; padding:0 32px 28px 30px; font-size:16px; line-height:1.7; color:#f0a05a; } .ds-faq-a::after { content:''; display:inline-block; width:0.55em; height:1.05em; margin-left:0.35em; vertical-align:-0.18em; background:#ff8a1f; animation:ds-blink 1.1s steps(1) infinite; } @keyframes ds-blink { 50% { opacity:0; } } @media (prefers-reduced-motion: reduce) { .ds-faq-a::after { animation:none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Glyph Lantern",
+    "overview": "Scare is a jack-o'-lantern printed by a typewriter and lit from inside. Every surface is warm black paper, every mark is one pumpkin ink, and the only way anything gets brighter is by getting denser: a `.` becomes a `:` becomes a `#` becomes an `@`, until the candle core at the very center goes near-white. Halloween here is a live object that turns to watch you, not a costume of fog, bats and dripping type. The lantern on the landing page is the one full expression of this; everything else on the site is the same material at rest.\n\nThe system is monospace all the way down. Departure Mono (a pixel-grid mono) runs the HUD, labels, buttons and the 5x7 bitmap display type; Martian Mono, narrowed to 87.5% width, carries reading text. Structure is drawn, not filled: 1px dotted rules and frames, square corners, header rows set like terminal status lines. Density stays calm and readable. Atmosphere is two fixed overlays (fine scanlines and a candle-dark vignette) that sit above everything, take no pointer events, and never cost contrast.\n\nThe build refuses the stock Halloween landing page: no fog, no bats, no dripping or \"horror\" display fonts, no purple-and-green second palette. Horror is fun and tense, never gore.",
+    "keyCharacteristics": [
+      "One hue. Tone comes from glyph density and a single ink ramp, never from a second color.",
+      "Display type is built from characters: 5x7 bitmap letters whose lit pixels are typewriter glyphs chosen by ink weight.",
+      "Dotted 1px frames with a header row hold all below-fold content.",
+      "Square everything. No radius anywhere in the UI.",
+      "Primary buttons are filled with ink the way a glyph fills a cell: a dense dot screen, not a flat plate.",
+      "Motion is a spring, a flicker, a blinking cursor. All of it stops under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Ink Rule",
+        "body": "There is exactly one hue. Every color except `blood` is Pumpkin Ink at a density step. A new state, category or emphasis gets a denser or sparser step, never a new hue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Blood Is For Errors Rule",
+        "body": "`blood` appears only where something is wrong. If it is on screen, the user has a problem to fix.",
+        "section": "colors"
+      },
+      {
+        "name": "The Candle Core Rule",
+        "body": "`hot` is the only near-white and it means \"lit\": headings, highlights, and whatever is being hovered or focused. Plain white never appears.",
+        "section": "colors"
+      },
+      {
+        "name": "The Smolder Floor Rule",
+        "body": "Text never goes below `ink-60`. `ink-30` and darker are for lines, shadows and texture only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Built From Characters Rule",
+        "body": "Display type is always glyph type: bitmap letters made of typewriter characters. There is no display font. Never set a heading in a large webfont, and never add drip trails to glyph type (the renderer's `drips` option is the refused trope and stays at 0).",
+        "section": "typography"
+      },
+      {
+        "name": "The Narrow Scale Rule",
+        "body": "Every glyph heading at `scale={2}` ships a `narrowScale={1}` variant that swaps in at ≤640px, so letters stay letters when cells get tiny.",
+        "section": "typography"
+      },
+      {
+        "name": "The Machine Speaks Mono Rule",
+        "body": "Anything the interface itself says (labels, buttons, status, counts, nav) is Departure Mono, uppercase, tracked 0.1–0.14em. Anything a person reads as prose is Martian Mono in sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lit, Not Lifted Rule",
+        "body": "Nothing floats. Brightness is the only depth cue: things get closer by getting denser and warmer, never by casting a shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glass Stays Clean Rule",
+        "body": "The scanline and vignette layers never intercept input and never go darker than the specified alphas; atmosphere must not cost text contrast.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do make every new color a step on the ink ramp (`void` → `ink-05` → `ink-15` → `ink-30` → `ink-60` → `ink-80` → `ink` → `hot`); tone is density.",
+      "Do set every heading and big numeral in glyph type, with `bold`, and give any `scale={2}` heading a `narrowScale={1}` variant for ≤640px.",
+      "Do put below-fold content in a dotted 1px Ember frame with a header row: what it is on the left in Pumpkin Ink, a count or summary on the right in Smolder.",
+      "Do render any undecided program fact (earn rate, shop prices, start date, submission rules) with the `.tba` tag and short factual copy.",
+      "Do keep corners at 0px and strokes at 1px, dotted unless the stroke means something (dashed ghost button, solid input, solid shipped card).",
+      "Do use Candle Core for hover and focus on every interactive element, and the 2px Candle Core outline at 3px offset for keyboard focus.",
+      "Do draw icons as 12x12 pixel SVGs with crisp edges, sized in em.",
+      "Do stop all animation and transitions under `prefers-reduced-motion`, and keep the lantern still for those users."
+    ],
+    "donts": [
+      "Don't add a second hue. `blood` is for errors only; no purple, green, or white accents.",
+      "Don't add drip trails, fog, bats, cobwebs, or a \"horror\" display font. They are the refused trope.",
+      "Don't invent program facts, numbers, or dates to fill a layout. Use the `.tba` tag.",
+      "Don't set text in `ink-30` or darker; they fail contrast and are for lines and texture only.",
+      "Don't use border-radius, drop shadows, or glassmorphism on any surface.",
+      "Don't flash, strobe, or jump-scare. Motion is springs, flicker and a blinking cursor, never strobing for anyone.",
+      "Don't let the scanline or vignette overlays catch pointer events or darken past their set alphas."
+    ]
+  }
+}
