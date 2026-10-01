@@ -32,7 +32,22 @@ model Game {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
+  screenshot Screenshot?
+
   @@index([userId])
+}
+
+// A game's screenshot, required to ship. Kept out of Game so listing games never loads image bytes.
+model Screenshot {
+  id        String   @id @default(cuid())
+  mime      String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId String @unique
 }
 
 enum GameStatus {

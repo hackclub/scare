@@ -5,6 +5,7 @@ import { GlyphText } from "~/app/_components/glyph-text";
 import { ArrowRight, ArrowUpRight } from "~/app/_components/icons";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import { getPlatformUser } from "~/server/user";
 import { PUMPKINS_PER_HOUR } from "~/lib/program";
 import { HACKCLUB_AUTH } from "~/server/hackclub";
 import { PageHead } from "./_components/page-head";
@@ -17,10 +18,7 @@ type Step = { title: string; body: string; href: string; cta: string; external?:
 export default async function PlatformHome() {
   const session = (await auth())!;
   const [user, games] = await Promise.all([
-    db.user.findUnique({
-      where: { id: session.user.id },
-      select: { name: true, pumpkins: true, verificationStatus: true },
-    }),
+    getPlatformUser(session.user.id),
     db.game.findMany({
       where: { userId: session.user.id },
       orderBy: { updatedAt: "desc" },

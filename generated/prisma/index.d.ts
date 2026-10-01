@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Game = $Result.DefaultSelection<Prisma.$GamePayload>
 /**
+ * Model Screenshot
+ * 
+ */
+export type Screenshot = $Result.DefaultSelection<Prisma.$ScreenshotPayload>
+/**
  * Model Account
  * 
  */
@@ -207,6 +212,16 @@ export class PrismaClient<
     * ```
     */
   get game(): Prisma.GameDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.screenshot`: Exposes CRUD operations for the **Screenshot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Screenshots
+    * const screenshots = await prisma.screenshot.findMany()
+    * ```
+    */
+  get screenshot(): Prisma.ScreenshotDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
@@ -709,6 +724,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Game: 'Game',
+    Screenshot: 'Screenshot',
     Account: 'Account',
     Session: 'Session',
     User: 'User',
@@ -733,7 +749,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "game" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
+      modelProps: "game" | "screenshot" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -808,6 +824,80 @@ export namespace Prisma {
           count: {
             args: Prisma.GameCountArgs<ExtArgs>
             result: $Utils.Optional<GameCountAggregateOutputType> | number
+          }
+        }
+      }
+      Screenshot: {
+        payload: Prisma.$ScreenshotPayload<ExtArgs>
+        fields: Prisma.ScreenshotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScreenshotFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScreenshotFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          findFirst: {
+            args: Prisma.ScreenshotFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScreenshotFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          findMany: {
+            args: Prisma.ScreenshotFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>[]
+          }
+          create: {
+            args: Prisma.ScreenshotCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          createMany: {
+            args: Prisma.ScreenshotCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScreenshotCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>[]
+          }
+          delete: {
+            args: Prisma.ScreenshotDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          update: {
+            args: Prisma.ScreenshotUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScreenshotDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScreenshotUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScreenshotUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>[]
+          }
+          upsert: {
+            args: Prisma.ScreenshotUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScreenshotPayload>
+          }
+          aggregate: {
+            args: Prisma.ScreenshotAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScreenshot>
+          }
+          groupBy: {
+            args: Prisma.ScreenshotGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScreenshotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScreenshotCountArgs<ExtArgs>
+            result: $Utils.Optional<ScreenshotCountAggregateOutputType> | number
           }
         }
       }
@@ -1352,6 +1442,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     game?: GameOmit
+    screenshot?: ScreenshotOmit
     account?: AccountOmit
     session?: SessionOmit
     user?: UserOmit
@@ -1770,6 +1861,7 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    screenshot?: boolean | Game$screenshotArgs<ExtArgs>
   }, ExtArgs["result"]["game"]>
 
   export type GameSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1828,6 +1920,7 @@ export namespace Prisma {
   export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
   export type GameInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    screenshot?: boolean | Game$screenshotArgs<ExtArgs>
   }
   export type GameIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -1840,6 +1933,7 @@ export namespace Prisma {
     name: "Game"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      screenshot: Prisma.$ScreenshotPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2251,6 +2345,7 @@ export namespace Prisma {
   export interface Prisma__GameClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    screenshot<T extends Game$screenshotArgs<ExtArgs> = {}>(args?: Subset<T, Game$screenshotArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2690,6 +2785,25 @@ export namespace Prisma {
   }
 
   /**
+   * Game.screenshot
+   */
+  export type Game$screenshotArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    where?: ScreenshotWhereInput
+  }
+
+  /**
    * Game without action
    */
   export type GameDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2705,6 +2819,1124 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: GameInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Screenshot
+   */
+
+  export type AggregateScreenshot = {
+    _count: ScreenshotCountAggregateOutputType | null
+    _avg: ScreenshotAvgAggregateOutputType | null
+    _sum: ScreenshotSumAggregateOutputType | null
+    _min: ScreenshotMinAggregateOutputType | null
+    _max: ScreenshotMaxAggregateOutputType | null
+  }
+
+  export type ScreenshotAvgAggregateOutputType = {
+    size: number | null
+  }
+
+  export type ScreenshotSumAggregateOutputType = {
+    size: number | null
+  }
+
+  export type ScreenshotMinAggregateOutputType = {
+    id: string | null
+    mime: string | null
+    size: number | null
+    data: Bytes | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    gameId: string | null
+  }
+
+  export type ScreenshotMaxAggregateOutputType = {
+    id: string | null
+    mime: string | null
+    size: number | null
+    data: Bytes | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    gameId: string | null
+  }
+
+  export type ScreenshotCountAggregateOutputType = {
+    id: number
+    mime: number
+    size: number
+    data: number
+    createdAt: number
+    updatedAt: number
+    gameId: number
+    _all: number
+  }
+
+
+  export type ScreenshotAvgAggregateInputType = {
+    size?: true
+  }
+
+  export type ScreenshotSumAggregateInputType = {
+    size?: true
+  }
+
+  export type ScreenshotMinAggregateInputType = {
+    id?: true
+    mime?: true
+    size?: true
+    data?: true
+    createdAt?: true
+    updatedAt?: true
+    gameId?: true
+  }
+
+  export type ScreenshotMaxAggregateInputType = {
+    id?: true
+    mime?: true
+    size?: true
+    data?: true
+    createdAt?: true
+    updatedAt?: true
+    gameId?: true
+  }
+
+  export type ScreenshotCountAggregateInputType = {
+    id?: true
+    mime?: true
+    size?: true
+    data?: true
+    createdAt?: true
+    updatedAt?: true
+    gameId?: true
+    _all?: true
+  }
+
+  export type ScreenshotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Screenshot to aggregate.
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Screenshots to fetch.
+     */
+    orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScreenshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Screenshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Screenshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Screenshots
+    **/
+    _count?: true | ScreenshotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScreenshotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScreenshotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScreenshotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScreenshotMaxAggregateInputType
+  }
+
+  export type GetScreenshotAggregateType<T extends ScreenshotAggregateArgs> = {
+        [P in keyof T & keyof AggregateScreenshot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScreenshot[P]>
+      : GetScalarType<T[P], AggregateScreenshot[P]>
+  }
+
+
+
+
+  export type ScreenshotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScreenshotWhereInput
+    orderBy?: ScreenshotOrderByWithAggregationInput | ScreenshotOrderByWithAggregationInput[]
+    by: ScreenshotScalarFieldEnum[] | ScreenshotScalarFieldEnum
+    having?: ScreenshotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScreenshotCountAggregateInputType | true
+    _avg?: ScreenshotAvgAggregateInputType
+    _sum?: ScreenshotSumAggregateInputType
+    _min?: ScreenshotMinAggregateInputType
+    _max?: ScreenshotMaxAggregateInputType
+  }
+
+  export type ScreenshotGroupByOutputType = {
+    id: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt: Date
+    updatedAt: Date
+    gameId: string
+    _count: ScreenshotCountAggregateOutputType | null
+    _avg: ScreenshotAvgAggregateOutputType | null
+    _sum: ScreenshotSumAggregateOutputType | null
+    _min: ScreenshotMinAggregateOutputType | null
+    _max: ScreenshotMaxAggregateOutputType | null
+  }
+
+  type GetScreenshotGroupByPayload<T extends ScreenshotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScreenshotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScreenshotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScreenshotGroupByOutputType[P]>
+            : GetScalarType<T[P], ScreenshotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScreenshotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mime?: boolean
+    size?: boolean
+    data?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    gameId?: boolean
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["screenshot"]>
+
+  export type ScreenshotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mime?: boolean
+    size?: boolean
+    data?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    gameId?: boolean
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["screenshot"]>
+
+  export type ScreenshotSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mime?: boolean
+    size?: boolean
+    data?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    gameId?: boolean
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["screenshot"]>
+
+  export type ScreenshotSelectScalar = {
+    id?: boolean
+    mime?: boolean
+    size?: boolean
+    data?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    gameId?: boolean
+  }
+
+  export type ScreenshotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mime" | "size" | "data" | "createdAt" | "updatedAt" | "gameId", ExtArgs["result"]["screenshot"]>
+  export type ScreenshotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }
+  export type ScreenshotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }
+  export type ScreenshotIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    game?: boolean | GameDefaultArgs<ExtArgs>
+  }
+
+  export type $ScreenshotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Screenshot"
+    objects: {
+      game: Prisma.$GamePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mime: string
+      size: number
+      data: Prisma.Bytes
+      createdAt: Date
+      updatedAt: Date
+      gameId: string
+    }, ExtArgs["result"]["screenshot"]>
+    composites: {}
+  }
+
+  type ScreenshotGetPayload<S extends boolean | null | undefined | ScreenshotDefaultArgs> = $Result.GetResult<Prisma.$ScreenshotPayload, S>
+
+  type ScreenshotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScreenshotFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScreenshotCountAggregateInputType | true
+    }
+
+  export interface ScreenshotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Screenshot'], meta: { name: 'Screenshot' } }
+    /**
+     * Find zero or one Screenshot that matches the filter.
+     * @param {ScreenshotFindUniqueArgs} args - Arguments to find a Screenshot
+     * @example
+     * // Get one Screenshot
+     * const screenshot = await prisma.screenshot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScreenshotFindUniqueArgs>(args: SelectSubset<T, ScreenshotFindUniqueArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Screenshot that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScreenshotFindUniqueOrThrowArgs} args - Arguments to find a Screenshot
+     * @example
+     * // Get one Screenshot
+     * const screenshot = await prisma.screenshot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScreenshotFindUniqueOrThrowArgs>(args: SelectSubset<T, ScreenshotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Screenshot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotFindFirstArgs} args - Arguments to find a Screenshot
+     * @example
+     * // Get one Screenshot
+     * const screenshot = await prisma.screenshot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScreenshotFindFirstArgs>(args?: SelectSubset<T, ScreenshotFindFirstArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Screenshot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotFindFirstOrThrowArgs} args - Arguments to find a Screenshot
+     * @example
+     * // Get one Screenshot
+     * const screenshot = await prisma.screenshot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScreenshotFindFirstOrThrowArgs>(args?: SelectSubset<T, ScreenshotFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Screenshots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Screenshots
+     * const screenshots = await prisma.screenshot.findMany()
+     * 
+     * // Get first 10 Screenshots
+     * const screenshots = await prisma.screenshot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const screenshotWithIdOnly = await prisma.screenshot.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScreenshotFindManyArgs>(args?: SelectSubset<T, ScreenshotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Screenshot.
+     * @param {ScreenshotCreateArgs} args - Arguments to create a Screenshot.
+     * @example
+     * // Create one Screenshot
+     * const Screenshot = await prisma.screenshot.create({
+     *   data: {
+     *     // ... data to create a Screenshot
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScreenshotCreateArgs>(args: SelectSubset<T, ScreenshotCreateArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Screenshots.
+     * @param {ScreenshotCreateManyArgs} args - Arguments to create many Screenshots.
+     * @example
+     * // Create many Screenshots
+     * const screenshot = await prisma.screenshot.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScreenshotCreateManyArgs>(args?: SelectSubset<T, ScreenshotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Screenshots and returns the data saved in the database.
+     * @param {ScreenshotCreateManyAndReturnArgs} args - Arguments to create many Screenshots.
+     * @example
+     * // Create many Screenshots
+     * const screenshot = await prisma.screenshot.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Screenshots and only return the `id`
+     * const screenshotWithIdOnly = await prisma.screenshot.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScreenshotCreateManyAndReturnArgs>(args?: SelectSubset<T, ScreenshotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Screenshot.
+     * @param {ScreenshotDeleteArgs} args - Arguments to delete one Screenshot.
+     * @example
+     * // Delete one Screenshot
+     * const Screenshot = await prisma.screenshot.delete({
+     *   where: {
+     *     // ... filter to delete one Screenshot
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScreenshotDeleteArgs>(args: SelectSubset<T, ScreenshotDeleteArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Screenshot.
+     * @param {ScreenshotUpdateArgs} args - Arguments to update one Screenshot.
+     * @example
+     * // Update one Screenshot
+     * const screenshot = await prisma.screenshot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScreenshotUpdateArgs>(args: SelectSubset<T, ScreenshotUpdateArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Screenshots.
+     * @param {ScreenshotDeleteManyArgs} args - Arguments to filter Screenshots to delete.
+     * @example
+     * // Delete a few Screenshots
+     * const { count } = await prisma.screenshot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScreenshotDeleteManyArgs>(args?: SelectSubset<T, ScreenshotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Screenshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Screenshots
+     * const screenshot = await prisma.screenshot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScreenshotUpdateManyArgs>(args: SelectSubset<T, ScreenshotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Screenshots and returns the data updated in the database.
+     * @param {ScreenshotUpdateManyAndReturnArgs} args - Arguments to update many Screenshots.
+     * @example
+     * // Update many Screenshots
+     * const screenshot = await prisma.screenshot.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Screenshots and only return the `id`
+     * const screenshotWithIdOnly = await prisma.screenshot.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScreenshotUpdateManyAndReturnArgs>(args: SelectSubset<T, ScreenshotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Screenshot.
+     * @param {ScreenshotUpsertArgs} args - Arguments to update or create a Screenshot.
+     * @example
+     * // Update or create a Screenshot
+     * const screenshot = await prisma.screenshot.upsert({
+     *   create: {
+     *     // ... data to create a Screenshot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Screenshot we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScreenshotUpsertArgs>(args: SelectSubset<T, ScreenshotUpsertArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Screenshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotCountArgs} args - Arguments to filter Screenshots to count.
+     * @example
+     * // Count the number of Screenshots
+     * const count = await prisma.screenshot.count({
+     *   where: {
+     *     // ... the filter for the Screenshots we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScreenshotCountArgs>(
+      args?: Subset<T, ScreenshotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScreenshotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Screenshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScreenshotAggregateArgs>(args: Subset<T, ScreenshotAggregateArgs>): Prisma.PrismaPromise<GetScreenshotAggregateType<T>>
+
+    /**
+     * Group by Screenshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScreenshotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScreenshotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScreenshotGroupByArgs['orderBy'] }
+        : { orderBy?: ScreenshotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScreenshotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScreenshotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Screenshot model
+   */
+  readonly fields: ScreenshotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Screenshot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScreenshotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    game<T extends GameDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GameDefaultArgs<ExtArgs>>): Prisma__GameClient<$Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Screenshot model
+   */
+  interface ScreenshotFieldRefs {
+    readonly id: FieldRef<"Screenshot", 'String'>
+    readonly mime: FieldRef<"Screenshot", 'String'>
+    readonly size: FieldRef<"Screenshot", 'Int'>
+    readonly data: FieldRef<"Screenshot", 'Bytes'>
+    readonly createdAt: FieldRef<"Screenshot", 'DateTime'>
+    readonly updatedAt: FieldRef<"Screenshot", 'DateTime'>
+    readonly gameId: FieldRef<"Screenshot", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Screenshot findUnique
+   */
+  export type ScreenshotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter, which Screenshot to fetch.
+     */
+    where: ScreenshotWhereUniqueInput
+  }
+
+  /**
+   * Screenshot findUniqueOrThrow
+   */
+  export type ScreenshotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter, which Screenshot to fetch.
+     */
+    where: ScreenshotWhereUniqueInput
+  }
+
+  /**
+   * Screenshot findFirst
+   */
+  export type ScreenshotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter, which Screenshot to fetch.
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Screenshots to fetch.
+     */
+    orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Screenshots.
+     */
+    cursor?: ScreenshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Screenshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Screenshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Screenshots.
+     */
+    distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
+  }
+
+  /**
+   * Screenshot findFirstOrThrow
+   */
+  export type ScreenshotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter, which Screenshot to fetch.
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Screenshots to fetch.
+     */
+    orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Screenshots.
+     */
+    cursor?: ScreenshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Screenshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Screenshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Screenshots.
+     */
+    distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
+  }
+
+  /**
+   * Screenshot findMany
+   */
+  export type ScreenshotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter, which Screenshots to fetch.
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Screenshots to fetch.
+     */
+    orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Screenshots.
+     */
+    cursor?: ScreenshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Screenshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Screenshots.
+     */
+    skip?: number
+    distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
+  }
+
+  /**
+   * Screenshot create
+   */
+  export type ScreenshotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Screenshot.
+     */
+    data: XOR<ScreenshotCreateInput, ScreenshotUncheckedCreateInput>
+  }
+
+  /**
+   * Screenshot createMany
+   */
+  export type ScreenshotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Screenshots.
+     */
+    data: ScreenshotCreateManyInput | ScreenshotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Screenshot createManyAndReturn
+   */
+  export type ScreenshotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * The data used to create many Screenshots.
+     */
+    data: ScreenshotCreateManyInput | ScreenshotCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Screenshot update
+   */
+  export type ScreenshotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Screenshot.
+     */
+    data: XOR<ScreenshotUpdateInput, ScreenshotUncheckedUpdateInput>
+    /**
+     * Choose, which Screenshot to update.
+     */
+    where: ScreenshotWhereUniqueInput
+  }
+
+  /**
+   * Screenshot updateMany
+   */
+  export type ScreenshotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Screenshots.
+     */
+    data: XOR<ScreenshotUpdateManyMutationInput, ScreenshotUncheckedUpdateManyInput>
+    /**
+     * Filter which Screenshots to update
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * Limit how many Screenshots to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Screenshot updateManyAndReturn
+   */
+  export type ScreenshotUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * The data used to update Screenshots.
+     */
+    data: XOR<ScreenshotUpdateManyMutationInput, ScreenshotUncheckedUpdateManyInput>
+    /**
+     * Filter which Screenshots to update
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * Limit how many Screenshots to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Screenshot upsert
+   */
+  export type ScreenshotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Screenshot to update in case it exists.
+     */
+    where: ScreenshotWhereUniqueInput
+    /**
+     * In case the Screenshot found by the `where` argument doesn't exist, create a new Screenshot with this data.
+     */
+    create: XOR<ScreenshotCreateInput, ScreenshotUncheckedCreateInput>
+    /**
+     * In case the Screenshot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScreenshotUpdateInput, ScreenshotUncheckedUpdateInput>
+  }
+
+  /**
+   * Screenshot delete
+   */
+  export type ScreenshotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
+    /**
+     * Filter which Screenshot to delete.
+     */
+    where: ScreenshotWhereUniqueInput
+  }
+
+  /**
+   * Screenshot deleteMany
+   */
+  export type ScreenshotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Screenshots to delete
+     */
+    where?: ScreenshotWhereInput
+    /**
+     * Limit how many Screenshots to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Screenshot without action
+   */
+  export type ScreenshotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Screenshot
+     */
+    select?: ScreenshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Screenshot
+     */
+    omit?: ScreenshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScreenshotInclude<ExtArgs> | null
   }
 
 
@@ -9576,6 +10808,19 @@ export namespace Prisma {
   export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
 
 
+  export const ScreenshotScalarFieldEnum: {
+    id: 'id',
+    mime: 'mime',
+    size: 'size',
+    data: 'data',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    gameId: 'gameId'
+  };
+
+  export type ScreenshotScalarFieldEnum = (typeof ScreenshotScalarFieldEnum)[keyof typeof ScreenshotScalarFieldEnum]
+
+
   export const AccountScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -9750,6 +10995,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes[]'
+   */
+  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -9806,6 +11065,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    screenshot?: XOR<ScreenshotNullableScalarRelationFilter, ScreenshotWhereInput> | null
   }
 
   export type GameOrderByWithRelationInput = {
@@ -9824,6 +11084,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
+    screenshot?: ScreenshotOrderByWithRelationInput
   }
 
   export type GameWhereUniqueInput = Prisma.AtLeast<{
@@ -9845,6 +11106,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    screenshot?: XOR<ScreenshotNullableScalarRelationFilter, ScreenshotWhereInput> | null
   }, "id">
 
   export type GameOrderByWithAggregationInput = {
@@ -9887,6 +11149,73 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     userId?: StringWithAggregatesFilter<"Game"> | string
+  }
+
+  export type ScreenshotWhereInput = {
+    AND?: ScreenshotWhereInput | ScreenshotWhereInput[]
+    OR?: ScreenshotWhereInput[]
+    NOT?: ScreenshotWhereInput | ScreenshotWhereInput[]
+    id?: StringFilter<"Screenshot"> | string
+    mime?: StringFilter<"Screenshot"> | string
+    size?: IntFilter<"Screenshot"> | number
+    data?: BytesFilter<"Screenshot"> | Bytes
+    createdAt?: DateTimeFilter<"Screenshot"> | Date | string
+    updatedAt?: DateTimeFilter<"Screenshot"> | Date | string
+    gameId?: StringFilter<"Screenshot"> | string
+    game?: XOR<GameScalarRelationFilter, GameWhereInput>
+  }
+
+  export type ScreenshotOrderByWithRelationInput = {
+    id?: SortOrder
+    mime?: SortOrder
+    size?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gameId?: SortOrder
+    game?: GameOrderByWithRelationInput
+  }
+
+  export type ScreenshotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    gameId?: string
+    AND?: ScreenshotWhereInput | ScreenshotWhereInput[]
+    OR?: ScreenshotWhereInput[]
+    NOT?: ScreenshotWhereInput | ScreenshotWhereInput[]
+    mime?: StringFilter<"Screenshot"> | string
+    size?: IntFilter<"Screenshot"> | number
+    data?: BytesFilter<"Screenshot"> | Bytes
+    createdAt?: DateTimeFilter<"Screenshot"> | Date | string
+    updatedAt?: DateTimeFilter<"Screenshot"> | Date | string
+    game?: XOR<GameScalarRelationFilter, GameWhereInput>
+  }, "id" | "gameId">
+
+  export type ScreenshotOrderByWithAggregationInput = {
+    id?: SortOrder
+    mime?: SortOrder
+    size?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gameId?: SortOrder
+    _count?: ScreenshotCountOrderByAggregateInput
+    _avg?: ScreenshotAvgOrderByAggregateInput
+    _max?: ScreenshotMaxOrderByAggregateInput
+    _min?: ScreenshotMinOrderByAggregateInput
+    _sum?: ScreenshotSumOrderByAggregateInput
+  }
+
+  export type ScreenshotScalarWhereWithAggregatesInput = {
+    AND?: ScreenshotScalarWhereWithAggregatesInput | ScreenshotScalarWhereWithAggregatesInput[]
+    OR?: ScreenshotScalarWhereWithAggregatesInput[]
+    NOT?: ScreenshotScalarWhereWithAggregatesInput | ScreenshotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Screenshot"> | string
+    mime?: StringWithAggregatesFilter<"Screenshot"> | string
+    size?: IntWithAggregatesFilter<"Screenshot"> | number
+    data?: BytesWithAggregatesFilter<"Screenshot"> | Bytes
+    createdAt?: DateTimeWithAggregatesFilter<"Screenshot"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Screenshot"> | Date | string
+    gameId?: StringWithAggregatesFilter<"Screenshot"> | string
   }
 
   export type AccountWhereInput = {
@@ -10363,6 +11692,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutGamesInput
+    screenshot?: ScreenshotCreateNestedOneWithoutGameInput
   }
 
   export type GameUncheckedCreateInput = {
@@ -10380,6 +11710,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+    screenshot?: ScreenshotUncheckedCreateNestedOneWithoutGameInput
   }
 
   export type GameUpdateInput = {
@@ -10397,6 +11728,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutGamesNestedInput
+    screenshot?: ScreenshotUpdateOneWithoutGameNestedInput
   }
 
   export type GameUncheckedUpdateInput = {
@@ -10414,6 +11746,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    screenshot?: ScreenshotUncheckedUpdateOneWithoutGameNestedInput
   }
 
   export type GameCreateManyInput = {
@@ -10464,6 +11797,75 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ScreenshotCreateInput = {
+    id?: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    game: GameCreateNestedOneWithoutScreenshotInput
+  }
+
+  export type ScreenshotUncheckedCreateInput = {
+    id?: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gameId: string
+  }
+
+  export type ScreenshotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    game?: GameUpdateOneRequiredWithoutScreenshotNestedInput
+  }
+
+  export type ScreenshotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gameId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ScreenshotCreateManyInput = {
+    id?: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gameId: string
+  }
+
+  export type ScreenshotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScreenshotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gameId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountCreateInput = {
@@ -11047,6 +12449,11 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type ScreenshotNullableScalarRelationFilter = {
+    is?: ScreenshotWhereInput | null
+    isNot?: ScreenshotWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -11203,6 +12610,93 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type BytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
+  }
+
+  export type GameScalarRelationFilter = {
+    is?: GameWhereInput
+    isNot?: GameWhereInput
+  }
+
+  export type ScreenshotCountOrderByAggregateInput = {
+    id?: SortOrder
+    mime?: SortOrder
+    size?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gameId?: SortOrder
+  }
+
+  export type ScreenshotAvgOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type ScreenshotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mime?: SortOrder
+    size?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gameId?: SortOrder
+  }
+
+  export type ScreenshotMinOrderByAggregateInput = {
+    id?: SortOrder
+    mime?: SortOrder
+    size?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gameId?: SortOrder
+  }
+
+  export type ScreenshotSumOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type BytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
+  }
+
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
     provider: string
     providerAccountId: string
@@ -11290,17 +12784,6 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type AccountListRelationFilter = {
@@ -11407,22 +12890,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -11594,6 +13061,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ScreenshotCreateNestedOneWithoutGameInput = {
+    create?: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+    connectOrCreate?: ScreenshotCreateOrConnectWithoutGameInput
+    connect?: ScreenshotWhereUniqueInput
+  }
+
+  export type ScreenshotUncheckedCreateNestedOneWithoutGameInput = {
+    create?: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+    connectOrCreate?: ScreenshotCreateOrConnectWithoutGameInput
+    connect?: ScreenshotWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -11628,6 +13107,52 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutGamesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGamesInput, UserUpdateWithoutGamesInput>, UserUncheckedUpdateWithoutGamesInput>
+  }
+
+  export type ScreenshotUpdateOneWithoutGameNestedInput = {
+    create?: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+    connectOrCreate?: ScreenshotCreateOrConnectWithoutGameInput
+    upsert?: ScreenshotUpsertWithoutGameInput
+    disconnect?: ScreenshotWhereInput | boolean
+    delete?: ScreenshotWhereInput | boolean
+    connect?: ScreenshotWhereUniqueInput
+    update?: XOR<XOR<ScreenshotUpdateToOneWithWhereWithoutGameInput, ScreenshotUpdateWithoutGameInput>, ScreenshotUncheckedUpdateWithoutGameInput>
+  }
+
+  export type ScreenshotUncheckedUpdateOneWithoutGameNestedInput = {
+    create?: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+    connectOrCreate?: ScreenshotCreateOrConnectWithoutGameInput
+    upsert?: ScreenshotUpsertWithoutGameInput
+    disconnect?: ScreenshotWhereInput | boolean
+    delete?: ScreenshotWhereInput | boolean
+    connect?: ScreenshotWhereUniqueInput
+    update?: XOR<XOR<ScreenshotUpdateToOneWithWhereWithoutGameInput, ScreenshotUpdateWithoutGameInput>, ScreenshotUncheckedUpdateWithoutGameInput>
+  }
+
+  export type GameCreateNestedOneWithoutScreenshotInput = {
+    create?: XOR<GameCreateWithoutScreenshotInput, GameUncheckedCreateWithoutScreenshotInput>
+    connectOrCreate?: GameCreateOrConnectWithoutScreenshotInput
+    connect?: GameWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BytesFieldUpdateOperationsInput = {
+    set?: Bytes
+  }
+
+  export type GameUpdateOneRequiredWithoutScreenshotNestedInput = {
+    create?: XOR<GameCreateWithoutScreenshotInput, GameUncheckedCreateWithoutScreenshotInput>
+    connectOrCreate?: GameCreateOrConnectWithoutScreenshotInput
+    upsert?: GameUpsertWithoutScreenshotInput
+    connect?: GameWhereUniqueInput
+    update?: XOR<XOR<GameUpdateToOneWithWhereWithoutScreenshotInput, GameUpdateWithoutScreenshotInput>, GameUncheckedUpdateWithoutScreenshotInput>
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -11728,14 +13253,6 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -12088,17 +13605,11 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedBytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12126,6 +13637,29 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedBytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
@@ -12204,6 +13738,29 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutGamesInput, UserUncheckedCreateWithoutGamesInput>
   }
 
+  export type ScreenshotCreateWithoutGameInput = {
+    id?: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScreenshotUncheckedCreateWithoutGameInput = {
+    id?: string
+    mime: string
+    size: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScreenshotCreateOrConnectWithoutGameInput = {
+    where: ScreenshotWhereUniqueInput
+    create: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+  }
+
   export type UserUpsertWithoutGamesInput = {
     update: XOR<UserUpdateWithoutGamesInput, UserUncheckedUpdateWithoutGamesInput>
     create: XOR<UserCreateWithoutGamesInput, UserUncheckedCreateWithoutGamesInput>
@@ -12251,6 +13808,119 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ScreenshotUpsertWithoutGameInput = {
+    update: XOR<ScreenshotUpdateWithoutGameInput, ScreenshotUncheckedUpdateWithoutGameInput>
+    create: XOR<ScreenshotCreateWithoutGameInput, ScreenshotUncheckedCreateWithoutGameInput>
+    where?: ScreenshotWhereInput
+  }
+
+  export type ScreenshotUpdateToOneWithWhereWithoutGameInput = {
+    where?: ScreenshotWhereInput
+    data: XOR<ScreenshotUpdateWithoutGameInput, ScreenshotUncheckedUpdateWithoutGameInput>
+  }
+
+  export type ScreenshotUpdateWithoutGameInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScreenshotUncheckedUpdateWithoutGameInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GameCreateWithoutScreenshotInput = {
+    id?: string
+    title: string
+    pitch: string
+    engine?: string | null
+    sourceUrl?: string | null
+    playUrl?: string | null
+    status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
+    shippedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutGamesInput
+  }
+
+  export type GameUncheckedCreateWithoutScreenshotInput = {
+    id?: string
+    title: string
+    pitch: string
+    engine?: string | null
+    sourceUrl?: string | null
+    playUrl?: string | null
+    status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
+    shippedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+  }
+
+  export type GameCreateOrConnectWithoutScreenshotInput = {
+    where: GameWhereUniqueInput
+    create: XOR<GameCreateWithoutScreenshotInput, GameUncheckedCreateWithoutScreenshotInput>
+  }
+
+  export type GameUpsertWithoutScreenshotInput = {
+    update: XOR<GameUpdateWithoutScreenshotInput, GameUncheckedUpdateWithoutScreenshotInput>
+    create: XOR<GameCreateWithoutScreenshotInput, GameUncheckedCreateWithoutScreenshotInput>
+    where?: GameWhereInput
+  }
+
+  export type GameUpdateToOneWithWhereWithoutScreenshotInput = {
+    where?: GameWhereInput
+    data: XOR<GameUpdateWithoutScreenshotInput, GameUncheckedUpdateWithoutScreenshotInput>
+  }
+
+  export type GameUpdateWithoutScreenshotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    pitch?: StringFieldUpdateOperationsInput | string
+    engine?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    playUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutGamesNestedInput
+  }
+
+  export type GameUncheckedUpdateWithoutScreenshotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    pitch?: StringFieldUpdateOperationsInput | string
+    engine?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    playUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -12513,6 +14183,7 @@ export namespace Prisma {
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    screenshot?: ScreenshotCreateNestedOneWithoutGameInput
   }
 
   export type GameUncheckedCreateWithoutUserInput = {
@@ -12529,6 +14200,7 @@ export namespace Prisma {
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    screenshot?: ScreenshotUncheckedCreateNestedOneWithoutGameInput
   }
 
   export type GameCreateOrConnectWithoutUserInput = {
@@ -13078,6 +14750,7 @@ export namespace Prisma {
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screenshot?: ScreenshotUpdateOneWithoutGameNestedInput
   }
 
   export type GameUncheckedUpdateWithoutUserInput = {
@@ -13094,6 +14767,7 @@ export namespace Prisma {
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screenshot?: ScreenshotUncheckedUpdateOneWithoutGameNestedInput
   }
 
   export type GameUncheckedUpdateManyWithoutUserInput = {

@@ -67,20 +67,42 @@ async function ownGame(db: PrismaClient, userId: string, id: string) {
   return game;
 }
 
-/** Only web links: z.string().url() alone accepts javascript:, data: and the like, which become XSS in an href. */
-const httpUrl = (message: string) =>
+/**
+ * A web link, typed loosely: "itch.io/game" is fine and gets https:// added. It still has to be a
+ * real http(s) address with a proper domain. z.string().url() alone accepts javascript:, data: and
+ * the like, which become XSS in an href.
+ */
+const httpUrl = (empty: string) =>
   z
     .string()
     .trim()
     .max(500)
-    .refine((v) => {
-      try {
-        const { protocol } = new URL(v);
-        return protocol === "https:" || protocol === "http:";
-      } catch {
-        return false;
-      }
-    }, message);
+    .refine((v) => v.length > 0, empty)
+    .transform((v, ctx) => {
+      const link = normalizeLink(v);
+      if (link) return link;
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "That doesn't look like a link. Something like itch.io/your-game",
+      });
+      return z.NEVER;
+    });
+
+function normalizeLink(raw: string) {
+  if (/\s/.test(raw)) return null;
+  try {
+    const url = new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    const web = url.protocol === "https:" || url.protocol === "http:";
+    const domain = /^([a-z\d-]+\.)+[a-z\d-]{2,}$/i.test(url.hostname);
+    if (!web || !domain || url.username || url.password) return null;
+    // Bare domains come back as "https://meow.com/"; keep them as typed.
+    return url.pathname === "/" && !url.search && !url.hash && !raw.endsWith("/")
+      ? `${url.protocol}//${url.host}`
+      : url.href;
+  } catch {
+    return null;
+  }
+}
 
 /** Caps how many games one account can store. */
 const MAX_GAMES = 25;
@@ -89,7 +111,7 @@ const gameInput = z.object({
   title: z.string().trim().min(1, "Give it a name").max(80),
   pitch: z.string().trim().min(1, "Describe your project in a sentence or two").max(280),
   engine: z.string().trim().max(40).optional(),
-  sourceUrl: httpUrl("That doesn't look like a link. Include https://"),
+  sourceUrl: httpUrl("Link your source code"),
   ...timeFields,
 });
 
@@ -98,6 +120,8 @@ export const gameRouter = createTRPCRouter({
     ctx.db.game.findMany({
       where: { userId: ctx.session.user.id },
       orderBy: { createdAt: "desc" },
+      // Only whether there's a screenshot and when it changed; the bytes come from its own route.
+      include: { screenshot: { select: { updatedAt: true } } },
     }),
   ),
 
@@ -144,6 +168,10 @@ export const gameRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const game = await ownGame(ctx.db, ctx.session.user.id, input.id);
+      const shot = await ctx.db.screenshot.findUnique({ where: { gameId: game.id }, select: { id: true } });
+      if (!shot) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Add a screenshot before you ship." });
+      }
       // Freeze Hackatime's total at the moment of shipping. If Hackatime is down, keep the last read.
       let trackedSeconds = game.trackedSeconds;
       if (game.hackatimeProject) {
@@ -169,7 +197,7 @@ export const gameRouter = createTRPCRouter({
     .input(
       gameInput.extend({
         id: z.string().max(40),
-        playUrl: httpUrl("That doesn't look like a link. Include https://"),
+        playUrl: httpUrl("Shipped games need a play link"),
       }),
     )
     .mutation(async ({ ctx, input }) => {

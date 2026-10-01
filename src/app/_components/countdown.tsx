@@ -1,19 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import { pad, timeLeft } from "~/lib/program";
 import { GlyphText } from "./glyph-text";
 
-function useNow() {
-  const [now, setNow] = useState<number | null>(null);
-  useEffect(() => {
-    setNow(Date.now());
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return now;
-}
+// One clock for every countdown on the page, ticking on the second boundary, so they all
+// change together and a page with three of them runs one timer, not three.
+let now: number | null = null;
+let timer: ReturnType<typeof setTimeout> | undefined;
+const listeners = new Set<() => void>();
+
+const tick = () => {
+  now = Date.now();
+  listeners.forEach((l) => l());
+  timer = setTimeout(tick, 1000 - (now % 1000));
+};
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  if (listeners.size === 1) {
+    // React rechecks the snapshot after subscribing, so no need to notify here.
+    now = Date.now();
+    timer = setTimeout(tick, 1000 - (now % 1000));
+  }
+  return () => {
+    listeners.delete(listener);
+    if (listeners.size) return;
+    clearTimeout(timer);
+    // Forget the time, so the next mount shows placeholders rather than a stale reading.
+    now = null;
+  };
+};
+
+// The server renders placeholders; the real time arrives once mounted, as before.
+const useNow = () =>
+  useSyncExternalStore(
+    subscribe,
+    () => now,
+    () => null,
+  );
 
 export function Countdown({
   variant = "inline",

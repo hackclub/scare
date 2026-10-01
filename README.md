@@ -46,6 +46,14 @@ Participants link Hackatime from Profile (or from the project form) so they can 
 - Per game: `hackatimeProject`, `trackedSeconds` (Hackatime's total, re-read on the server on save and frozen at shipping) and `claimedSeconds` (set only when the participant edited the time). Counted time is `claimedSeconds ?? trackedSeconds`.
 - Project totals are all-time Hackatime totals; nothing limits them to the program's dates yet.
 
+### Screenshots
+
+A game needs a screenshot to ship (`game.ship` refuses without one). Uploads go to `POST /api/games/[id]/screenshot` (multipart, field `file`) and are served back to the owner from `GET` on the same path.
+
+- PNG, JPEG or WebP, up to 5 MB. The type is decided from the file's bytes (`src/lib/screenshot.ts`), so a GIF renamed to `.png` is still refused; animated PNG and WebP are refused too.
+- Stored in Postgres in the `Screenshot` table (one per game, replaced on re-upload), kept out of `Game` so listing games never loads image bytes. Move to object storage if volume grows.
+- Uploads are rate limited to 20 per user per 10 minutes.
+
 ### The Pumpkin economy
 
 - Rates live in `src/lib/program.ts`: `PUMPKINS_PER_HOUR = 10`, `USD_PER_HOUR = 4`, so one Pumpkin is worth $0.40.

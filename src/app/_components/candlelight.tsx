@@ -24,6 +24,7 @@ export function Candlelight({
     const light = { x: -1e4, y: -1e4, glow: 0 };
     let raf = 0;
     let last = 0;
+    let visible = true;
 
     const frame = (now: number) => {
       raf = 0;
@@ -33,7 +34,7 @@ export function Candlelight({
       const rect = el.getBoundingClientRect();
       const tx = pointer.x - rect.left;
       const ty = pointer.y - rect.top;
-      const awake = now - pointer.moved < 2600 && !document.hidden;
+      const awake = now - pointer.moved < 2600 && !document.hidden && visible;
 
       if (reduce || light.glow < 0.01) {
         // Don't sweep in from wherever the light was last; appear under the cursor.
@@ -70,22 +71,33 @@ export function Candlelight({
       pointer.x = e.clientX;
       pointer.y = e.clientY;
       pointer.moved = performance.now();
-      kick();
+      if (visible) kick();
     };
     const onLeave = () => {
       pointer.moved = -1e9;
       kick();
     };
 
+    // Scrolled out of view, the light goes out and stays out: no frames for art nobody can see.
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      kick();
+    });
+    io.observe(el);
+
     window.addEventListener("pointermove", onMove, { passive: true });
     document.documentElement.addEventListener("pointerleave", onLeave);
-    window.addEventListener("scroll", kick, { passive: true });
+    const onScroll = () => {
+      if (visible) kick();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
-      window.removeEventListener("scroll", kick);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 

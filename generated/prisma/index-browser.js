@@ -138,6 +138,16 @@ exports.Prisma.GameScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.ScreenshotScalarFieldEnum = {
+  id: 'id',
+  mime: 'mime',
+  size: 'size',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  gameId: 'gameId'
+};
+
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -236,6 +246,7 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
 
 exports.Prisma.ModelName = {
   Game: 'Game',
+  Screenshot: 'Screenshot',
   Account: 'Account',
   Session: 'Session',
   User: 'User',

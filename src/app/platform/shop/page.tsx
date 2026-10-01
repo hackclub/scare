@@ -3,7 +3,7 @@ import { GlyphText } from "~/app/_components/glyph-text";
 import { PUMPKINS_PER_HOUR } from "~/lib/program";
 import { CATALOG, SHELVES } from "~/lib/shop-catalog";
 import { auth } from "~/server/auth";
-import { db } from "~/server/db";
+import { getPlatformUser } from "~/server/user";
 import { api, HydrateClient } from "~/trpc/server";
 import { PageHead } from "../_components/page-head";
 import { ShopFloor } from "./shop-floor";
@@ -12,10 +12,7 @@ export const metadata = { title: "Shop" };
 
 export default async function Shop() {
   const session = (await auth())!;
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    select: { pumpkins: true },
-  });
+  const user = await getPlatformUser(session.user.id);
   const balance = user?.pumpkins ?? 0;
   void api.shop.orders.prefetch();
 

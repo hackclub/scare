@@ -852,8 +852,8 @@ button.pf-brand {
     display: none;
   }
   .pf-readout-label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
+    font-size: 11px;
+    letter-spacing: 0.08em;
   }
   .pf-readout-value {
     font-size: 14px;
@@ -1118,4 +1118,60 @@ button.pf-brand {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+/* ------------------------------------------------------------ screenshots */
+
+.shot {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  max-width: 420px;
+}
+.shot-img {
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border: 1px dotted var(--ink-30);
+  background: var(--void);
+}
+.shot-empty {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  max-height: 180px;
+  border: 1px dashed var(--ink-30);
+  background: repeating-linear-gradient(135deg, transparent 0 6px, var(--ink-05) 6px 7px);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.shot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+.shot-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.shot-row:has(input:focus-visible) .shot-btn {
+  outline: 2px solid var(--hot);
+  outline-offset: 3px;
+}
+.shot-help {
+  font-size: 12px;
+  color: var(--ink-60);
+}
+.shot-compact {
+  margin-top: 10px;
+}
+.ship-form .shot {
+  margin-top: 0;
 }

@@ -7,6 +7,7 @@ import { SilenceAmbience } from "~/app/_components/silence-ambience";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { hackatimeConfigured } from "~/server/hackatime";
+import { TRPCReactProvider } from "~/trpc/react";
 import { CarvingTable } from "./carving-table";
 
 export const metadata: Metadata = { title: "Welcome — Scare" };
@@ -45,7 +46,7 @@ export default async function Welcome({
   ]);
 
   return (
-    <>
+    <TRPCReactProvider>
       <SilenceAmbience />
       <CarvingTable
         seed={seedFrom(user?.hcIdentityId ?? session.user.id)}
@@ -53,6 +54,6 @@ export default async function Welcome({
         firstGame={firstGame?.title ?? null}
         returnStatus={hackatime ?? null}
       />
-    </>
+    </TRPCReactProvider>
   );
 }

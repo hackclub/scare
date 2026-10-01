@@ -5,7 +5,6 @@ import { Martian_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 
-import { TRPCReactProvider } from "~/trpc/react";
 import { TabHaunt } from "./_components/tab-haunt";
 
 export const metadata: Metadata = {
@@ -52,7 +51,9 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        {/* The tRPC client lives in the platform and welcome routes, which are the only ones
+            that use it, so the landing and sign-in pages don't ship it. */}
+        {children}
         <TabHaunt />
         {/* Privacy-friendly analytics by Plausible */}
         <Script

@@ -8,6 +8,7 @@ import { safeHref } from "~/lib/safe-url";
 import { pumpkinsForSeconds } from "~/lib/program";
 import { formatDuration, toHours } from "~/lib/time";
 import { api, type RouterOutputs } from "~/trpc/react";
+import { ScreenshotField } from "./screenshot";
 import { TimeField, timePayload, type TimeValue } from "./time-field";
 
 type Game = RouterOutputs["game"]["mine"][number];
@@ -274,6 +275,7 @@ function GameRow({ game }: { game: Game }) {
           )}
         </div>
         <p className="game-pitch">{game.pitch}</p>
+        {!shipping && <ScreenshotField gameId={game.id} current={game.screenshot} compact={!game.screenshot} />}
         <GameTime game={game} />
         {editingTime && !shipped && (
           <EditTime game={game} onDone={() => setEditingTime(false)} />
@@ -361,6 +363,8 @@ function GameRow({ game }: { game: Game }) {
               }}
               noValidate
             >
+              <p className="field-label">Screenshot</p>
+              <ScreenshotField gameId={game.id} current={game.screenshot} required />
               <label htmlFor={`ship-${game.id}`} className="field-label">
                 Where can people play it?
               </label>
@@ -380,11 +384,17 @@ function GameRow({ game }: { game: Game }) {
                   {shipErr}
                 </p>
               )}
+              {ship.error && !shipErr && (
+                <p className="form-error" role="alert">
+                  {ship.error.message}
+                </p>
+              )}
               <div className="form-actions">
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={ship.isPending}
+                  disabled={ship.isPending || !game.screenshot}
+                  title={game.screenshot ? undefined : "Add a screenshot first"}
                 >
                   <span>{ship.isPending ? "Shipping…" : "Ship it"}</span>
                 </button>

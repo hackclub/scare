@@ -56,11 +56,12 @@ function sdTri(px: number, py: number, a: Vec2, b: Vec2, c: Vec2) {
   const q1x = v1x - e1x * h1, q1y = v1y - e1y * h1;
   const q2x = v2x - e2x * h2, q2y = v2y - e2y * h2;
   const s = Math.sign(e0x * e2y - e0y * e2x);
-  const d0 = [q0x * q0x + q0y * q0y, s * (v0x * e0y - v0y * e0x)];
-  const d1 = [q1x * q1x + q1y * q1y, s * (v1x * e1y - v1y * e1x)];
-  const d2 = [q2x * q2x + q2y * q2y, s * (v2x * e2y - v2y * e2x)];
-  const dd = Math.min(d0[0]!, d1[0]!, d2[0]!);
-  const ss = Math.min(d0[1]!, d1[1]!, d2[1]!);
+  const dd = Math.min(q0x * q0x + q0y * q0y, q1x * q1x + q1y * q1y, q2x * q2x + q2y * q2y);
+  const ss = Math.min(
+    s * (v0x * e0y - v0y * e0x),
+    s * (v1x * e1y - v1y * e1x),
+    s * (v2x * e2y - v2y * e2x),
+  );
   return -Math.sqrt(dd) * Math.sign(ss);
 }
 
@@ -76,12 +77,12 @@ function carve(no: number, full = false): Face {
   const eye = (side: 1 | -1): Shape2D => {
     const cx = ex * side;
     switch (eyeKind) {
-      case "angry":
-        return (x, y) =>
-          sdTri(x, y,
-            [cx - es * side, ey + es * 0.9],
-            [cx + es * 1.05 * side, ey - es * 0.15],
-            [cx - es * 0.6 * side, ey - es * 0.75]);
+      case "angry": {
+        const a: Vec2 = [cx - es * side, ey + es * 0.9];
+        const b: Vec2 = [cx + es * 1.05 * side, ey - es * 0.15];
+        const c: Vec2 = [cx - es * 0.6 * side, ey - es * 0.75];
+        return (x, y) => sdTri(x, y, a, b, c);
+      }
       case "round":
         return (x, y) => Math.hypot(x - cx, y - ey) - es * 0.78;
       case "crescent":
@@ -93,9 +94,12 @@ function carve(no: number, full = false): Face {
       case "slit":
         return (x, y) =>
           Math.max(Math.abs(y - ey + (x - cx) * 0.35 * side) - es * 0.22, Math.abs(x - cx) - es);
-      default:
-        return (x, y) =>
-          sdTri(x, y, [cx - es, ey - es * 0.7], [cx + es, ey - es * 0.7], [cx, ey + es]);
+      default: {
+        const a: Vec2 = [cx - es, ey - es * 0.7];
+        const b: Vec2 = [cx + es, ey - es * 0.7];
+        const c: Vec2 = [cx, ey + es];
+        return (x, y) => sdTri(x, y, a, b, c);
+      }
     }
   };
   const le = eye(-1);
@@ -103,14 +107,16 @@ function carve(no: number, full = false): Face {
 
   const noseKind = pick(full ? ["tri", "tri", "inv", "dot"] : ["tri", "tri", "none", "inv", "dot"]);
   const ns = 0.07 + r() * 0.04;
+  const noseTri: [Vec2, Vec2, Vec2] =
+    noseKind === "inv"
+      ? [[-ns, 0.03], [ns, 0.03], [0, -ns * 1.2]]
+      : [[-ns, -0.08], [ns, -0.08], [0, ns * 0.9]];
   const nose: Shape2D =
     noseKind === "none"
       ? () => 9
       : noseKind === "dot"
         ? (x, y) => Math.hypot(x, y + 0.02) - ns * 0.6
-        : noseKind === "inv"
-          ? (x, y) => sdTri(x, y, [-ns, 0.03], [ns, 0.03], [0, -ns * 1.2])
-          : (x, y) => sdTri(x, y, [-ns, -0.08], [ns, -0.08], [0, ns * 0.9]);
+        : (x, y) => sdTri(x, y, ...noseTri);
 
   const mouthKind = pick(["grin", "teeth", "teeth", "zigzag", "o"]);
   const mw = 0.48 + r() * 0.12;
@@ -158,14 +164,18 @@ function sdSeg(px: number, py: number, a: Vec2, b: Vec2) {
 
 // The thing that's in there before the candle settles. Slit pupils follow `gaze`.
 function possessed(gaze: { x: number; y: number }): Face {
-  const eye = (s: 1 | -1): Shape2D => (x, y) => {
-    const px = 0.34 * s + gaze.x * 0.045, py = 0.18 + gaze.y * 0.025;
-    if (Math.hypot((x - px) / 0.03, (y - py) / 0.075) < 1) return 1;
-    return sdTri(x, y, [0.07 * s, 0.13], [0.55 * s, 0.38], [0.42 * s, 0.01]);
+  const eye = (s: 1 | -1): Shape2D => {
+    const a: Vec2 = [0.07 * s, 0.13], b: Vec2 = [0.55 * s, 0.38], c: Vec2 = [0.42 * s, 0.01];
+    return (x, y) => {
+      const px = 0.34 * s + gaze.x * 0.045, py = 0.18 + gaze.y * 0.025;
+      if (Math.hypot((x - px) / 0.03, (y - py) / 0.075) < 1) return 1;
+      return sdTri(x, y, a, b, c);
+    };
   };
   const le = eye(-1), re = eye(1);
 
-  const nose: Shape2D = (x, y) => sdTri(x, y, [-0.05, -0.13], [0.05, -0.13], [0, 0.05]);
+  const nA: Vec2 = [-0.05, -0.13], nB: Vec2 = [0.05, -0.13], nC: Vec2 = [0, 0.05];
+  const nose: Shape2D = (x, y) => sdTri(x, y, nA, nB, nC);
 
   const mw = 0.66, tw = 0.14;
   const mouth: Shape2D = (x, y) => {
@@ -182,23 +192,26 @@ function possessed(gaze: { x: number; y: number }): Face {
   };
 
   const crack: Vec2[] = [[0.1, 0.74], [0.19, 0.62], [0.13, 0.53], [0.25, 0.45], [0.22, 0.39]];
-  const drips: [number, number][] = [[-0.34, 0.12], [-0.06, 0.2], [0.29, 0.09]];
+  // Each drip hangs from the lip of the mouth: [top, bottom] of its segment.
+  const drips: [Vec2, Vec2][] = ([[-0.34, 0.12], [-0.06, 0.2], [0.29, 0.09]] as const).map(([dx, len]) => {
+    const u = dx / mw;
+    const lip = -0.33 + 0.25 * u * u - 0.15 * Math.sqrt(1 - u * u);
+    return [[dx, lip], [dx, lip - len]];
+  });
   const scars: Shape2D = (x, y) => {
     let d = 9;
     for (let i = 0; i < crack.length - 1; i++) d = Math.min(d, sdSeg(x, y, crack[i]!, crack[i + 1]!));
-    for (const [dx, len] of drips) {
-      const u = dx / mw;
-      const lip = -0.33 + 0.25 * u * u - 0.15 * Math.sqrt(1 - u * u);
-      d = Math.min(d, sdSeg(x, y, [dx, lip], [dx, lip - len]) - (y < lip - len + 0.02 ? 0.006 : 0));
+    for (const [top, end] of drips) {
+      d = Math.min(d, sdSeg(x, y, top, end) - (y < end[1] + 0.02 ? 0.006 : 0));
     }
     return d - 0.011;
   };
 
   const tilt = 0.05;
+  const c = Math.cos(tilt), s = Math.sin(tilt);
   return {
     no: 0,
     sd: (x, y) => {
-      const c = Math.cos(tilt), s = Math.sin(tilt);
       const X = x * c - y * s, Y = x * s + y * c;
       return Math.min(le(X, Y), re(X, Y), nose(X, Y), mouth(X, Y), scars(X, Y));
     },
@@ -257,15 +270,27 @@ function possession(ep: Episode | null, t: number) {
 /* ------------------------------------------------------------------------ */
 
 const SQUASH = 0.8;
+/** Everything in the scene sits inside this sphere (the stem tip reaches ~1.04). */
+const BOUND = 1.08;
+
+// The hot path runs per ray step, so it avoids Math.hypot and atan2, which are slow in V8.
+
+/** cos(5θ) for θ = atan2(z, x), via the Chebyshev identity cos 5θ = 16c⁵ − 20c³ + 5c. */
+function cos5(x: number, rxz: number) {
+  const c = rxz > 0 ? x / rxz : 1;
+  const c2 = c * c;
+  return c * ((16 * c2 - 20) * c2 + 5);
+}
 
 function sdBody(x: number, y: number, z: number) {
   const sy = y / SQUASH;
-  const rxz = Math.hypot(x, z);
-  const r3 = Math.hypot(rxz, sy);
+  const rxz2 = x * x + z * z;
+  const rxz = Math.sqrt(rxz2);
+  const r3 = Math.sqrt(rxz2 + sy * sy);
   const ribMask = rxz / (r3 + 1e-6);
-  const rib = Math.abs(Math.cos(Math.atan2(z, x) * 5));
+  const rib = Math.abs(cos5(x, rxz));
   const R = 1 - 0.075 * (1 - Math.sqrt(rib)) * ribMask;
-  const dimple = 0.22 * Math.exp(-rxz * rxz * 16) * (sy > 0 ? 1 : 0.5);
+  const dimple = 0.22 * Math.exp(-rxz2 * 16) * (sy > 0 ? 1 : 0.5);
   return (r3 - R + dimple) * 0.72;
 }
 
@@ -273,7 +298,8 @@ function sdStem(x: number, y: number, z: number) {
   const h = y - 0.62;
   const bend = h * h * 0.9;
   const radius = 0.085 - h * 0.05;
-  const d = Math.hypot(x - bend, z) - radius;
+  const dx = x - bend;
+  const d = Math.sqrt(dx * dx + z * z) - radius;
   return Math.max(d, 0.62 - y, y - 1.02);
 }
 
@@ -497,6 +523,18 @@ export function Lantern({
         ctx.drawImage(atlas!, ci * cw, (tone + base) * chh, cw, chh, Math.round(col * cellW * dpr), Math.round(row * cellH * dpr), cw, chh);
       };
 
+      // The pool of light the mouth throws on the floor, then a faint dot field.
+      const ground = (col: number, row: number, wx: number, wy: number) => {
+        const gy = (wy + 0.84) / 0.16, gx = wx / 1.12;
+        const pool = 1 - (gx * gx + gy * gy);
+        if (wy < -0.7 && pool > 0 && (!parts || litK > 0)) {
+          const v = pool * flame * ignite * (parts ? litK : 1);
+          put(col, row, Math.max(1, Math.min(6, Math.round(v * 7))), Math.min(3, Math.round(v * 3.5)), 0.85);
+        } else if (col % 3 === 0 && row % 2 === 0) {
+          put(col, row, 1, 0, 0.35 * ignite);
+        }
+      };
+
       for (let row = 0; row < rows; row++) {
         const py = (row + 0.5) * cellH;
         const wy = -(py - cyc) / unit;
@@ -514,24 +552,18 @@ export function Lantern({
           const wx = (px - cx) / unit;
 
           const inBounds = Math.abs(wx) < 1.3 && wy < 1.25 && wy > -0.95;
-          const ground = () => {
-            // The pool of light the mouth throws on the floor, then a faint dot field.
-            const gy = (wy + 0.84) / 0.16, gx = wx / 1.12;
-            const pool = 1 - (gx * gx + gy * gy);
-            if (wy < -0.7 && pool > 0 && (!parts || litK > 0)) {
-              const v = pool * flame * ignite * (parts ? litK : 1);
-              put(col, row, Math.max(1, Math.min(6, Math.round(v * 7))), Math.min(3, Math.round(v * 3.5)), 0.85);
-            } else if (col % 3 === 0 && row % 2 === 0) {
-              put(col, row, 1, 0, 0.35 * ignite);
-            }
-          };
-          if (!inBounds) {
-            ground();
+          // A ray that misses the bounding sphere can't hit anything. The sphere is centred on
+          // the pivot, so this holds at any rotation.
+          const r2 = wx * wx + wy * wy;
+          if (!inBounds || r2 >= BOUND * BOUND) {
+            ground(col, row, wx, wy);
             continue;
           }
 
-          // March an orthographic ray from the viewer into the scene.
+          // March an orthographic ray from the viewer into the scene, giving up once it has
+          // left the bounding sphere.
           let tz = 0;
+          const tEnd = 1.6 + Math.sqrt(BOUND * BOUND - r2);
           let hit = false;
           let ox = 0, oy = 0, oz = 0;
           for (let i = 0; i < 40; i++) {
@@ -545,11 +577,11 @@ export function Lantern({
             const d = sdScene(ox, oy, oz);
             if (d < 0.003) { hit = true; break; }
             tz += d;
-            if (tz > 3.2) break;
+            if (tz > tEnd) break;
           }
 
           if (!hit) {
-            ground();
+            ground(col, row, wx, wy);
             continue;
           }
 
@@ -562,7 +594,7 @@ export function Lantern({
           const n3 = sdScene(ox - e, oy + e, oz - e);
           const n4 = sdScene(ox + e, oy + e, oz + e);
           let nx = n1 - n2 - n3 + n4, ny = -n1 - n2 + n3 + n4, nz = -n1 + n2 - n3 + n4;
-          const nl = Math.hypot(nx, ny, nz) || 1;
+          const nl = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
           nx /= nl; ny /= nl; nz /= nl;
           // Moonlight from upper left, in object space it's fine to approximate in world
           const lam = Math.max(0, nx * -0.45 + ny * 0.62 + nz * 0.64);
@@ -621,7 +653,7 @@ export function Lantern({
             ci = RAMP.length + 0; // |
             tone = lum > 0.4 ? 2 : 1;
           } else {
-            const groove = 0.55 + 0.45 * Math.sqrt(Math.abs(Math.cos(Math.atan2(oz, ox) * 5)));
+            const groove = 0.55 + 0.45 * Math.sqrt(Math.abs(cos5(ox, Math.sqrt(ox * ox + oz * oz))));
             const spill = sd < 0.3 && cellLit ? (0.3 - sd) * 0.9 * flame : 0;
             lum = Math.min(1, (0.08 + lam * 0.55 + rim) * groove + spill);
             ci = Math.max(1, Math.round(lum * (RAMP.length - 3)));
@@ -676,7 +708,7 @@ export function Lantern({
     };
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
+      if (e.pointerType === "touch" || !visible) return;
       const rect = wrap.getBoundingClientRect();
       pointer.x = (e.clientX - rect.left) / Math.max(1, rect.width);
       pointer.y = (e.clientY - rect.top) / Math.max(1, rect.height);
