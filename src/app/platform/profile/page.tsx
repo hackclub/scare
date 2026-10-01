@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowUpRight } from "~/app/_components/icons";
 import { SignInButton, SignOutButton } from "~/app/_components/auth-buttons";
 import { auth } from "~/server/auth";
@@ -200,7 +201,12 @@ export default async function Profile({
                 </div>
                 <div className="pf-next-body pf-session">
                   <p className="pf-next-text">Signed in with Hack Club.</p>
-                  <SignOutButton variant="ghost" />
+                  <div className="pf-session-actions">
+                    <Link href="/welcome" className="btn btn-ghost">
+                      Carve again
+                    </Link>
+                    <SignOutButton variant="ghost" />
+                  </div>
                 </div>
               </section>
             </div>

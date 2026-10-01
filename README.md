@@ -57,6 +57,7 @@ Participants link Hackatime from Profile (or from the project form) so they can 
 
 - `/`: landing page
 - `/login`: sign-in
+- `/welcome`: first-run onboarding, the Carving Table. The platform redirects here until `User.onboardedAt` is set (finishing or skipping sets it); Profile → "Carve again" replays it
 - `/platform`: home (next step, status, your games)
 - `/platform/projects`: register and ship games
 - `/platform/shop`: the Pumpkin Shop, locked until it opens

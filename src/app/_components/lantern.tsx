@@ -11,10 +11,23 @@ import { Knife } from "./icons";
 type Vec2 = [number, number];
 type Shape2D = (x: number, y: number) => number; // signed distance, <0 inside
 
+type PartName = "eyes" | "nose" | "mouth";
+export type PartState = "blank" | "sketch" | "carved";
+export type Carving = {
+  /** Fixes the face, so a person's lantern is always the same one. */
+  seed: number;
+  parts: Record<PartName, PartState>;
+  /** The candle. Unlit, the cuts show the dark inside of the shell. */
+  lit: boolean;
+};
+
 interface Face {
   no: number;
   sd: Shape2D;
+  parts?: Record<PartName, Shape2D>;
 }
+
+const PARTS: PartName[] = ["eyes", "nose", "mouth"];
 
 function rng(seed: number) {
   let a = seed >>> 0;
@@ -51,7 +64,8 @@ function sdTri(px: number, py: number, a: Vec2, b: Vec2, c: Vec2) {
   return -Math.sqrt(dd) * Math.sign(ss);
 }
 
-function carve(no: number): Face {
+/** `full` guarantees every feature exists, for carvings that cut eyes, nose and mouth separately. */
+function carve(no: number, full = false): Face {
   const r = rng(no * 7919 + 13);
   const pick = <T,>(xs: T[]) => xs[Math.floor(r() * xs.length)]!;
 
@@ -87,7 +101,7 @@ function carve(no: number): Face {
   const le = eye(-1);
   const re = eye(1);
 
-  const noseKind = pick(["tri", "tri", "none", "inv", "dot"]);
+  const noseKind = pick(full ? ["tri", "tri", "inv", "dot"] : ["tri", "tri", "none", "inv", "dot"]);
   const ns = 0.07 + r() * 0.04;
   const nose: Shape2D =
     noseKind === "none"
@@ -122,13 +136,17 @@ function carve(no: number): Face {
   };
 
   const tilt = (r() - 0.5) * 0.12;
+  const c = Math.cos(tilt), s = Math.sin(tilt);
+  const tilted = (f: Shape2D): Shape2D => (x, y) => f(x * c - y * s, x * s + y * c);
+  const parts: Record<PartName, Shape2D> = {
+    eyes: tilted((x, y) => Math.min(le(x, y), re(x, y))),
+    nose: tilted(nose),
+    mouth: tilted(mouth),
+  };
   return {
     no,
-    sd: (x, y) => {
-      const c = Math.cos(tilt), s = Math.sin(tilt);
-      const X = x * c - y * s, Y = x * s + y * c;
-      return Math.min(le(X, Y), re(X, Y), nose(X, Y), mouth(X, Y));
-    },
+    parts,
+    sd: (x, y) => Math.min(parts.eyes(x, y), parts.nose(x, y), parts.mouth(x, y)),
   };
 }
 
@@ -300,9 +318,23 @@ interface Props {
   density?: number;
   /** Show the recarve control. */
   controls?: boolean;
+  /**
+   * A carving in progress: a fixed face whose features are blank, sketched or cut, and a
+   * candle that's lit or not. No recarving and no possession in this mode.
+   */
+  carving?: Carving;
+  label?: string;
 }
 
-export function Lantern({ className = "", density = 74, controls = true }: Props) {
+export function Lantern({
+  className = "",
+  density = 74,
+  controls = true,
+  carving,
+  label = "A jack-o'-lantern drawn in typewriter characters. It turns to watch your cursor.",
+}: Props) {
+  const carvingRef = useRef<Carving | undefined>(carving);
+  const applyCarvingRef = useRef<(c: Carving) => void>(() => undefined);
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const recarveRef = useRef<() => void>(() => undefined);
@@ -320,9 +352,15 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
     let last = 0;
     const start = performance.now();
 
-    let face = carve(Math.floor(Math.random() * 9000) + 1000);
+    const initial = carvingRef.current;
+    let face = initial ? carve(initial.seed, true) : carve(Math.floor(Math.random() * 9000) + 1000);
     let prevFace: Face | null = null;
     let carveStart = -1;
+    // Carving mode: which features are cut, and what they were before the current knife sweep.
+    let parts = initial?.parts ?? null;
+    let prevParts: Record<PartName, PartState> | null = null;
+    let lit = initial ? initial.lit : true;
+    let litStart = lit ? -1e9 : 0;
 
     const pointer = { x: 0.5, y: 0.45, moved: -1e9 };
     const rot = { yaw: 0, pitch: 0, vy: 0, vp: 0 };
@@ -330,9 +368,9 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
 
     const gaze = { x: 0, y: 0 };
     const demon = possessed(gaze);
-    let episode: Episode | null = reduce ? null : { start: 0, hold: ONLOAD_HOLD, intro: false };
+    let episode: Episode | null = reduce || initial ? null : { start: 0, hold: ONLOAD_HOLD, intro: false };
     let calmSince = 0;
-    let haunted = !reduce;
+    let haunted = !reduce && !initial;
     let bandOn = false, bandShift = 0;
 
     const buildAtlas = () => {
@@ -385,7 +423,7 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
         calmSince = t;
       }
       const stirring = now - pointer.moved < 150;
-      if (!reduce && !episode && stirring && t - calmSince > RELAPSE_COOLDOWN && Math.random() < dt * RELAPSE_RATE) {
+      if (!reduce && !parts && !episode && stirring && t - calmSince > RELAPSE_COOLDOWN && Math.random() < dt * RELAPSE_RATE) {
         episode = { start: t, hold: RELAPSE_HOLD, intro: true };
       }
       const hs = possession(episode, t);
@@ -433,10 +471,13 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
 
       // Ignition: density climbs from nothing when the lantern first lights.
       const ignite = reduce ? 1 : 1 - Math.pow(1 - Math.min(1, t / 1.6), 3);
+      // Lighting the candle in carving mode: the glow climbs through the cuts the same way.
+      const litK = !lit ? 0 : reduce ? 1 : 1 - Math.pow(1 - Math.min(1, (now - litStart) / 1800), 3);
 
       // Knife sweep for a recarve.
       const sweep = carveStart < 0 ? 2 : (now - carveStart) / 520;
       if (sweep >= 1 && prevFace) prevFace = null;
+      if (sweep >= 1 && prevParts) prevParts = null;
 
       const cy_ = Math.cos(-rot.yaw), sy_ = Math.sin(-rot.yaw);
       const cp_ = Math.cos(-rot.pitch), sp_ = Math.sin(-rot.pitch);
@@ -477,8 +518,8 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
             // The pool of light the mouth throws on the floor, then a faint dot field.
             const gy = (wy + 0.84) / 0.16, gx = wx / 1.12;
             const pool = 1 - (gx * gx + gy * gy);
-            if (wy < -0.7 && pool > 0) {
-              const v = pool * flame * ignite;
+            if (wy < -0.7 && pool > 0 && (!parts || litK > 0)) {
+              const v = pool * flame * ignite * (parts ? litK : 1);
               put(col, row, Math.max(1, Math.min(6, Math.round(v * 7))), Math.min(3, Math.round(v * 3.5)), 0.85);
             } else if (col % 3 === 0 && row % 2 === 0) {
               put(col, row, 1, 0, 0.35 * ignite);
@@ -532,12 +573,34 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
           let ci: number;
 
           const f = prevFace && px / W > sweep ? prevFace : rowFace;
-          const knife = prevFace && Math.abs(px / W - sweep) < 0.012;
-          const sd = !isStem && oz > 0.05 ? f.sd(ox, oy) : 9;
+          const knife = (prevFace ?? prevParts) && Math.abs(px / W - sweep) < 0.012;
+          const onFace = !isStem && oz > 0.05;
+          let sd = 9;
+          let sketch = 9;
+          if (onFace && parts && f.parts) {
+            const state = prevParts && px / W > sweep ? prevParts : parts;
+            for (const k of PARTS) {
+              if (state[k] === "blank") continue;
+              const d = f.parts[k](ox, oy);
+              if (state[k] === "carved") sd = Math.min(sd, d);
+              else sketch = Math.min(sketch, d);
+            }
+          } else if (onFace) {
+            sd = f.sd(ox, oy);
+          }
+          // In carving mode the candle may be out (or still catching): cells light one by one.
+          const cellLit = !parts || (litK > 0 && Math.random() < litK);
 
           if (knife) {
             ci = RAMP.length + (row % 2 ? 1 : 2);
             tone = 7;
+          } else if (!cellLit && sd < 0) {
+            // An unlit cut is a hole: nothing to see but the dark inside.
+            continue;
+          } else if (!cellLit && sd < 0.045) {
+            // ...with the fresh cut edge catching the moonlight.
+            ci = RAMP.length - 3;
+            tone = 4;
           } else if (sd < 0) {
             // Through the hole: the lit inside of the shell.
             const depth = Math.min(1, -sd * 9);
@@ -549,13 +612,17 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
             lum = flame * (0.9 - sd * 10);
             ci = Math.max(6, Math.round(lum * (RAMP.length - 2)));
             tone = 4 + Math.round(lum);
+          } else if (Math.abs(sketch) < 0.022) {
+            // A sketched feature: a dashed outline where the knife will go.
+            ci = (row + col) % 3 === 0 ? 1 : 5;
+            tone = 5;
           } else if (isStem) {
             lum = 0.18 + lam * 0.45;
             ci = RAMP.length + 0; // |
             tone = lum > 0.4 ? 2 : 1;
           } else {
             const groove = 0.55 + 0.45 * Math.sqrt(Math.abs(Math.cos(Math.atan2(oz, ox) * 5)));
-            const spill = sd < 0.3 ? (0.3 - sd) * 0.9 * flame : 0;
+            const spill = sd < 0.3 && cellLit ? (0.3 - sd) * 0.9 * flame : 0;
             lum = Math.min(1, (0.08 + lam * 0.55 + rim) * groove + spill);
             ci = Math.max(1, Math.round(lum * (RAMP.length - 3)));
             tone = Math.min(3, Math.round(lum * 3.6 + spill * 2));
@@ -580,7 +647,21 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
       if (!raf) raf = requestAnimationFrame(loop);
     };
 
+    applyCarvingRef.current = (c) => {
+      if (!parts) return;
+      const changed = PARTS.some((k) => parts![k] !== c.parts[k]);
+      if (changed) {
+        prevParts = reduce ? null : parts;
+        parts = { ...c.parts };
+        carveStart = performance.now();
+      }
+      if (c.lit && !lit) litStart = performance.now();
+      lit = c.lit;
+      kick();
+    };
+
     recarveRef.current = () => {
+      if (parts) return; // a carving in progress isn't yours to reroll
       // Poking it while it's possessed only makes it twitch sooner.
       if (episode) {
         const e = (performance.now() - start) / 1000 - episode.start;
@@ -634,6 +715,13 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
   }, [density]);
 
   const recarve = useCallback(() => recarveRef.current(), []);
+  const carvingKey = carving ? JSON.stringify(carving) : "";
+  useEffect(() => {
+    if (!carving) return;
+    carvingRef.current = carving;
+    applyCarvingRef.current(carving);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [carvingKey]);
 
   return (
     <div ref={wrapRef} className={`lantern ${className}`}>
@@ -641,10 +729,10 @@ export function Lantern({ className = "", density = 74, controls = true }: Props
         ref={canvasRef}
         className="lantern-canvas"
         role="img"
-        aria-label="A jack-o'-lantern drawn in typewriter characters. It turns to watch your cursor."
+        aria-label={label}
         onClick={recarve}
       />
-      {controls && (
+      {controls && !carving && (
         <button type="button" className="lantern-recarve" onClick={recarve}>
           <Knife className="lantern-recarve-icon" />
           <span>Recarve</span>

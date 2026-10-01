@@ -1,0 +1,336 @@
+/*
+ * The Carving Table: first-run onboarding.
+ * Three columns: the Keeper speaks on the left, your lantern sits in the middle,
+ * the one thing to do is on the right. Same ink, frames and type as the platform.
+ */
+
+.wel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 100svh;
+}
+
+.wel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px var(--gutter) 0;
+}
+.wel-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hot);
+}
+.wel-brand-pumpkin {
+  width: 21px;
+  height: 18px;
+  color: var(--ink);
+}
+.wel-brand-word {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  letter-spacing: 0.28em;
+}
+.wel-brand-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.wel-skip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wel-stage {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.3fr) minmax(300px, 0.9fr);
+  align-items: center;
+  gap: clamp(24px, 3vw, 48px);
+  padding: 0 var(--gutter) 32px;
+}
+
+/* ------------------------------------------------------------ the Keeper */
+
+.wel-keeper {
+  display: grid;
+  gap: 14px;
+  align-content: center;
+}
+.keeper-art {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 0.9vw, 13px);
+  line-height: 1.12;
+  white-space: pre;
+  color: var(--ink-60);
+}
+.keeper-eye {
+  color: var(--hot);
+  text-shadow: 0 0 8px rgb(255 138 31 / 0.7);
+  animation: keeper-blink 6s steps(1) infinite;
+}
+.keeper-flame {
+  color: var(--hot);
+  text-shadow: 0 0 10px rgb(255 138 31 / 0.85);
+  animation: keeper-flicker 2.3s steps(1) infinite;
+}
+@keyframes keeper-blink {
+  0%,
+  92%,
+  96% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0;
+  }
+}
+@keyframes keeper-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0.75;
+  }
+  33% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 0.6;
+  }
+  73% {
+    opacity: 1;
+  }
+}
+.wel-keeper-name {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.keeper-line {
+  margin: 0;
+  min-height: 7.2em;
+  max-width: 32ch;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.55;
+  color: var(--hot);
+  text-wrap: pretty;
+  cursor: default;
+}
+.keeper-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.2em;
+  vertical-align: -0.18em;
+  background: var(--ink);
+}
+.keeper-caret-idle {
+  animation: blink 1.1s steps(1) infinite;
+}
+
+/* ------------------------------------------------------------ the lantern */
+
+.wel-center {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.wel-lantern {
+  height: min(70svh, 680px);
+  min-height: 360px;
+}
+.wel-lantern .lantern-canvas {
+  cursor: default;
+}
+.wel-progress {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wel-progress-item {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+.wel-progress-label {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--ink-60);
+}
+.wel-progress-hint {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-30);
+}
+.wel-progress-sketch .wel-progress-label {
+  color: var(--ink);
+}
+.wel-progress-sketch .wel-progress-hint {
+  color: var(--ink-60);
+}
+.wel-progress-carved .wel-progress-label,
+.wel-progress-carved .wel-progress-hint {
+  color: var(--hot);
+}
+
+/* ------------------------------------------------------------ the action */
+
+.wel-act {
+  display: grid;
+  gap: 16px;
+  align-content: center;
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease-out);
+}
+.wel-act-ready,
+.wel-act:focus-within,
+.wel-act:hover {
+  opacity: 1;
+}
+.wel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.wel-form {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px dotted var(--ink-30);
+  background: linear-gradient(var(--crypt), var(--void));
+}
+.wel-hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-60);
+}
+
+.wel-tour {
+  display: grid;
+  gap: 20px;
+}
+.wel-rail {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 10px;
+  border: 1px dotted var(--ink-30);
+  background: var(--crypt);
+  list-style: none;
+}
+.wel-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  transition: color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+.wel-rail-pumpkin {
+  width: 14px;
+  height: 12px;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+.wel-rail-item[aria-current] {
+  color: var(--hot);
+  background: var(--ink-05);
+}
+.wel-rail-item[aria-current] .wel-rail-pumpkin {
+  opacity: 1;
+}
+
+/* The finale: everything steps back from the lantern. */
+.wel[data-step="lit"] .wel-progress,
+.wel[data-step="lit"] .keeper-art {
+  transition: opacity 1.2s var(--ease-out);
+}
+.wel[data-step="lit"] .keeper-art {
+  opacity: 0.6;
+}
+
+/* ------------------------------------------------------------ responsive */
+
+@media (max-width: 1100px) {
+  .wel-stage {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+    grid-template-areas:
+      "lantern lantern"
+      "keeper act";
+    align-items: start;
+  }
+  .wel-center {
+    grid-area: lantern;
+  }
+  .wel-keeper {
+    grid-area: keeper;
+  }
+  .wel-act {
+    grid-area: act;
+  }
+  .wel-lantern {
+    height: min(52svh, 520px);
+  }
+}
+
+@media (max-width: 720px) {
+  .wel-top {
+    padding-top: 16px;
+  }
+  .wel-brand-tag {
+    display: none;
+  }
+  .wel-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "lantern"
+      "keeper"
+      "act";
+    gap: 20px;
+    padding: 0 16px 40px;
+  }
+  .wel-lantern {
+    height: 38svh;
+    min-height: 260px;
+  }
+  .wel-keeper {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 4px 14px;
+  }
+  .keeper-art {
+    grid-row: span 2;
+    font-size: 6px;
+  }
+  .keeper-line {
+    min-height: 0;
+    font-size: 17px;
+  }
+  .wel-act {
+    opacity: 1;
+  }
+  .wel-actions .btn {
+    flex: 1;
+  }
+}

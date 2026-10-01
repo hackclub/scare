@@ -4984,6 +4984,8 @@ export namespace Prisma {
     yswsEligible: boolean | null
     verificationStatus: string | null
     pumpkins: number | null
+    onboardedAt: Date | null
+    tourSeenAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4997,6 +4999,8 @@ export namespace Prisma {
     yswsEligible: boolean | null
     verificationStatus: string | null
     pumpkins: number | null
+    onboardedAt: Date | null
+    tourSeenAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -5010,6 +5014,8 @@ export namespace Prisma {
     yswsEligible: number
     verificationStatus: number
     pumpkins: number
+    onboardedAt: number
+    tourSeenAt: number
     _all: number
   }
 
@@ -5033,6 +5039,8 @@ export namespace Prisma {
     yswsEligible?: true
     verificationStatus?: true
     pumpkins?: true
+    onboardedAt?: true
+    tourSeenAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -5046,6 +5054,8 @@ export namespace Prisma {
     yswsEligible?: true
     verificationStatus?: true
     pumpkins?: true
+    onboardedAt?: true
+    tourSeenAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -5059,6 +5069,8 @@ export namespace Prisma {
     yswsEligible?: true
     verificationStatus?: true
     pumpkins?: true
+    onboardedAt?: true
+    tourSeenAt?: true
     _all?: true
   }
 
@@ -5159,6 +5171,8 @@ export namespace Prisma {
     yswsEligible: boolean
     verificationStatus: string | null
     pumpkins: number
+    onboardedAt: Date | null
+    tourSeenAt: Date | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -5191,6 +5205,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: boolean
     pumpkins?: boolean
+    onboardedAt?: boolean
+    tourSeenAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     games?: boolean | User$gamesArgs<ExtArgs>
@@ -5210,6 +5226,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: boolean
     pumpkins?: boolean
+    onboardedAt?: boolean
+    tourSeenAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5223,6 +5241,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: boolean
     pumpkins?: boolean
+    onboardedAt?: boolean
+    tourSeenAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -5236,9 +5256,11 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: boolean
     pumpkins?: boolean
+    onboardedAt?: boolean
+    tourSeenAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "hcIdentityId" | "slackId" | "yswsEligible" | "verificationStatus" | "pumpkins", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "hcIdentityId" | "slackId" | "yswsEligible" | "verificationStatus" | "pumpkins" | "onboardedAt" | "tourSeenAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -5270,6 +5292,8 @@ export namespace Prisma {
       yswsEligible: boolean
       verificationStatus: string | null
       pumpkins: number
+      onboardedAt: Date | null
+      tourSeenAt: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5708,6 +5732,8 @@ export namespace Prisma {
     readonly yswsEligible: FieldRef<"User", 'Boolean'>
     readonly verificationStatus: FieldRef<"User", 'String'>
     readonly pumpkins: FieldRef<"User", 'Int'>
+    readonly onboardedAt: FieldRef<"User", 'DateTime'>
+    readonly tourSeenAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -9589,7 +9615,9 @@ export namespace Prisma {
     slackId: 'slackId',
     yswsEligible: 'yswsEligible',
     verificationStatus: 'verificationStatus',
-    pumpkins: 'pumpkins'
+    pumpkins: 'pumpkins',
+    onboardedAt: 'onboardedAt',
+    tourSeenAt: 'tourSeenAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -10023,6 +10051,8 @@ export namespace Prisma {
     yswsEligible?: BoolFilter<"User"> | boolean
     verificationStatus?: StringNullableFilter<"User"> | string | null
     pumpkins?: IntFilter<"User"> | number
+    onboardedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    tourSeenAt?: DateTimeNullableFilter<"User"> | Date | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     games?: GameListRelationFilter
@@ -10041,6 +10071,8 @@ export namespace Prisma {
     yswsEligible?: SortOrder
     verificationStatus?: SortOrderInput | SortOrder
     pumpkins?: SortOrder
+    onboardedAt?: SortOrderInput | SortOrder
+    tourSeenAt?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     games?: GameOrderByRelationAggregateInput
@@ -10062,6 +10094,8 @@ export namespace Prisma {
     yswsEligible?: BoolFilter<"User"> | boolean
     verificationStatus?: StringNullableFilter<"User"> | string | null
     pumpkins?: IntFilter<"User"> | number
+    onboardedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    tourSeenAt?: DateTimeNullableFilter<"User"> | Date | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     games?: GameListRelationFilter
@@ -10080,6 +10114,8 @@ export namespace Prisma {
     yswsEligible?: SortOrder
     verificationStatus?: SortOrderInput | SortOrder
     pumpkins?: SortOrder
+    onboardedAt?: SortOrderInput | SortOrder
+    tourSeenAt?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -10101,6 +10137,8 @@ export namespace Prisma {
     yswsEligible?: BoolWithAggregatesFilter<"User"> | boolean
     verificationStatus?: StringNullableWithAggregatesFilter<"User"> | string | null
     pumpkins?: IntWithAggregatesFilter<"User"> | number
+    onboardedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    tourSeenAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type OrderWhereInput = {
@@ -10598,6 +10636,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
@@ -10616,6 +10656,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
@@ -10634,6 +10676,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
@@ -10652,6 +10696,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
@@ -10670,6 +10716,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10683,6 +10731,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10696,6 +10746,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderCreateInput = {
@@ -11307,6 +11359,8 @@ export namespace Prisma {
     yswsEligible?: SortOrder
     verificationStatus?: SortOrder
     pumpkins?: SortOrder
+    onboardedAt?: SortOrder
+    tourSeenAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -11324,6 +11378,8 @@ export namespace Prisma {
     yswsEligible?: SortOrder
     verificationStatus?: SortOrder
     pumpkins?: SortOrder
+    onboardedAt?: SortOrder
+    tourSeenAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11337,6 +11393,8 @@ export namespace Prisma {
     yswsEligible?: SortOrder
     verificationStatus?: SortOrder
     pumpkins?: SortOrder
+    onboardedAt?: SortOrder
+    tourSeenAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -12114,6 +12172,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
@@ -12131,6 +12191,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
@@ -12164,6 +12226,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
@@ -12181,6 +12245,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
@@ -12198,6 +12264,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
@@ -12215,6 +12283,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
@@ -12248,6 +12318,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
@@ -12265,6 +12337,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
@@ -12282,6 +12356,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
@@ -12299,6 +12375,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
@@ -12332,6 +12410,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
@@ -12349,6 +12429,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
@@ -12697,6 +12779,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
@@ -12714,6 +12798,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
@@ -12747,6 +12833,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
@@ -12764,6 +12852,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
@@ -12781,6 +12871,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
@@ -12798,6 +12890,8 @@ export namespace Prisma {
     yswsEligible?: boolean
     verificationStatus?: string | null
     pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
@@ -12831,6 +12925,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
@@ -12848,6 +12944,8 @@ export namespace Prisma {
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
     verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput

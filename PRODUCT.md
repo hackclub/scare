@@ -23,16 +23,14 @@ Teen members of Hack Club (roughly 13–18), many of them first-time game devs. 
 - Build a horror game and ship it (playable by other people).
 - Shipping earns **Pumpkins**, Scare's currency.
 - Earn rate (confirmed 2026-10-01): **10 Pumpkins per hour**. Which hours count (shipped games only? Hackatime vs. edited time? after review?) is not decided.
-- Pumpkins are spent in a **points shop** for Steam games. The shop is a separate platform that does not exist yet; it opens later.
+- Pumpkins are spent in the **Pumpkin Shop** on the platform (`/platform/shop`). It is **open** with a fixed catalog; the current items are placeholders until the real catalog is set.
+- Program cost: **$4 per hour** (confirmed 2026-10-01), so 1 Pumpkin = $0.40; shop prices derive from each item's dollar cost.
 - Rewards named for the "You get" line (confirmed 2026-09-30): **Steam games, costume grants, candy, and hardware grants**. How each is earned or priced is not decided.
 - The program **ends on Halloween: October 31, 2026**.
 - Primary action: **sign in on this site** (then register/submit a game).
 
 ## Open decisions (do not invent)
 
-
-- Program cost: **$4 per hour** (confirmed 2026-10-01), so 1 Pumpkin = $0.40; shop prices derive from each item's dollar cost.
-- The Pumpkin Shop is **open** with a fixed catalog; the current items are placeholders until the real catalog is set.
 - Program start date and any mid-program milestones — undecided.
 - Exact submission requirements (engine rules, minimum playtime, review process) — undecided; placeholder copy only, clearly marked.
 

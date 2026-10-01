@@ -1114,3 +1114,8 @@ button.pf-brand {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 }
+.pf-session-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}

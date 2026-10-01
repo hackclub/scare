@@ -343,3 +343,13 @@ The signed-in platform at `/platform` (styles in `src/styles/platform.css`) uses
 - **Login (`/login`):** split view, the sign-in frame centered on the left, the live lantern (no controls) on the right; on mobile the lantern sits above at 30svh. Auth.js errors render as a Blood dotted notice in plain words.
 - **Private data:** phone, birthday and addresses are never stored; Profile reads them live from Hack Club Auth and shows them masked.
 
+## Onboarding: the Carving Table (`/welcome`)
+
+First-run flow told by **the Keeper**, a hooded ASCII figure carrying a lantern (eyes and flame in Candle Core, blinking and flickering on CSS step timing). Desktop is three columns: Keeper portrait + typed line (Martian 17–20px Candle Core, block caret) on the left, the person's own lantern in the middle, one action on the right (dimmed to 55% until the line finishes typing; full on hover/focus). At ≤1100px the lantern spans the top; at ≤720px everything stacks, lantern first.
+
+- **The lantern** runs in carving mode: a fixed face seeded from the Hack Club identity, each feature `blank`, `sketch` (dashed outline, Ember-to-Pumpkin dashes) or `carved` (a black hole with a lit cut edge while unlit). The candle stays out until the finale, then lights through the cuts with the ignition ramp. No possession, no recarve.
+- **Steps:** eyes = link Hackatime, mouth = first game (name, pitch, source), nose = a four-line tour of the platform pages shown on a mini rail. Every step has "Skip"; "Skip setup" sits top-right throughout. A skipped feature stays sketched and dark when lit.
+- **Finale line:** "Welcome to Scare - we are looking forward to your creation." then **Go to Scare**.
+- **Voice:** the Keeper talks like a person, not a narrator: plain, casual, a little deadpan. No atmospheric scene-setting, no em dashes, no triads.
+- **Progress** under the lantern: Eyes / Mouth / Nose, with hint text (blank: what it's for; sketch: "not yet"; carved: "done" in Candle Core).
+

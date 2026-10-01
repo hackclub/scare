@@ -14,7 +14,7 @@ import {
 const b64url = (buf: Buffer) => buf.toString("base64url");
 
 function safeNext(p: string | null) {
-  return p?.startsWith("/platform") ? p : "/platform/profile";
+  return p?.startsWith("/platform") || p?.startsWith("/welcome") ? p : "/platform/profile";
 }
 
 /** Start linking Hackatime to the signed-in Scare account. */

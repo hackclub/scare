@@ -171,7 +171,9 @@ exports.Prisma.UserScalarFieldEnum = {
   slackId: 'slackId',
   yswsEligible: 'yswsEligible',
   verificationStatus: 'verificationStatus',
-  pumpkins: 'pumpkins'
+  pumpkins: 'pumpkins',
+  onboardedAt: 'onboardedAt',
+  tourSeenAt: 'tourSeenAt'
 };
 
 exports.Prisma.OrderScalarFieldEnum = {

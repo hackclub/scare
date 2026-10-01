@@ -26,10 +26,13 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const [user, gameCount] = await Promise.all([
     db.user.findUnique({
       where: { id: session.user.id },
-      select: { name: true, pumpkins: true },
+      select: { name: true, pumpkins: true, onboardedAt: true },
     }),
     db.game.count({ where: { userId: session.user.id } }),
   ]);
+
+  // First visit: the Keeper wants a word before the platform opens.
+  if (user && !user.onboardedAt) redirect("/welcome");
 
   return (
     <div className="pf">
