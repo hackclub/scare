@@ -33,7 +33,9 @@ model Game {
     reviewedBy      String?
     awardedPumpkins Int?
     // Mirror in the program's Airtable (YSWS Project Submission), created on ship.
-    airtableRecordId String?   @unique
+    // Indexed, not @unique: the container's `prisma db push` refuses to add a unique constraint
+    // to an existing table, and the sync already guards against two games sharing a record.
+    airtableRecordId String?
     airtableSyncedAt DateTime?
     airtableError    String?
     createdAt DateTime   @default(now())
@@ -45,6 +47,7 @@ model Game {
     screenshot Screenshot?
 
     @@index([userId])
+    @@index([airtableRecordId])
 }
 
 // A game's screenshot, required to ship. Kept out of Game so listing games never loads image bytes.

@@ -12456,7 +12456,6 @@ export namespace Prisma {
 
   export type GameWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    airtableRecordId?: string
     AND?: GameWhereInput | GameWhereInput[]
     OR?: GameWhereInput[]
     NOT?: GameWhereInput | GameWhereInput[]
@@ -12475,6 +12474,7 @@ export namespace Prisma {
     reviewedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     reviewedBy?: StringNullableFilter<"Game"> | string | null
     awardedPumpkins?: IntNullableFilter<"Game"> | number | null
+    airtableRecordId?: StringNullableFilter<"Game"> | string | null
     airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     airtableError?: StringNullableFilter<"Game"> | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
@@ -12482,7 +12482,7 @@ export namespace Prisma {
     userId?: StringFilter<"Game"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     screenshot?: XOR<ScreenshotNullableScalarRelationFilter, ScreenshotWhereInput> | null
-  }, "id" | "airtableRecordId">
+  }, "id">
 
   export type GameOrderByWithAggregationInput = {
     id?: SortOrder

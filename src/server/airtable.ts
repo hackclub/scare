@@ -75,7 +75,7 @@ async function findByCodeUrl(codeUrl: string | null) {
   const id = json.records?.[0]?.id;
   if (!id) return null;
   // Only adopt it if no other game already owns that record.
-  const owner = await db.game.findUnique({ where: { airtableRecordId: id }, select: { id: true } });
+  const owner = await db.game.findFirst({ where: { airtableRecordId: id }, select: { id: true } });
   return owner ? null : id;
 }
 
