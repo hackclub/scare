@@ -14,10 +14,12 @@ import { rateLimit } from "~/server/rate-limit";
  * come from Hack Club Auth at sign-in and can't be edited by the user. Empty or unset means no
  * admins at all. Everything admin goes through requireAdmin(), on the server, every time.
  */
+// Platforms differ on quoting: a .env file strips `"ident!x"` to ident!x, but a dashboard env var
+// keeps the quotes literally. Strip quotes and whitespace around each entry before validating.
 const ADMIN_IDS = new Set(
   (env.ADMIN_IDENTITY_IDS ?? "")
     .split(",")
-    .map((s) => s.trim())
+    .map((s) => s.trim().replace(/^["']+|["']+$/g, "").trim())
     .filter((s) => /^ident![A-Za-z0-9_-]+$/.test(s)),
 );
 
