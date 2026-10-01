@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef } from "react";
 
+import { Knife } from "./icons";
+
 /* ------------------------------------------------------------------------ */
 /* Faces                                                                     */
 /* ------------------------------------------------------------------------ */
@@ -130,6 +132,108 @@ function carve(no: number): Face {
   };
 }
 
+function sdSeg(px: number, py: number, a: Vec2, b: Vec2) {
+  const bax = b[0] - a[0], bay = b[1] - a[1];
+  const h = Math.max(0, Math.min(1, ((px - a[0]) * bax + (py - a[1]) * bay) / (bax * bax + bay * bay)));
+  return Math.hypot(px - a[0] - bax * h, py - a[1] - bay * h);
+}
+
+// The thing that's in there before the candle settles. Slit pupils follow `gaze`.
+function possessed(gaze: { x: number; y: number }): Face {
+  const eye = (s: 1 | -1): Shape2D => (x, y) => {
+    const px = 0.34 * s + gaze.x * 0.045, py = 0.18 + gaze.y * 0.025;
+    if (Math.hypot((x - px) / 0.03, (y - py) / 0.075) < 1) return 1;
+    return sdTri(x, y, [0.07 * s, 0.13], [0.55 * s, 0.38], [0.42 * s, 0.01]);
+  };
+  const le = eye(-1), re = eye(1);
+
+  const nose: Shape2D = (x, y) => sdTri(x, y, [-0.05, -0.13], [0.05, -0.13], [0, 0.05]);
+
+  const mw = 0.66, tw = 0.14;
+  const mouth: Shape2D = (x, y) => {
+    const u = x / mw;
+    const c = Math.max(0, 1 - u * u);
+    const mid = -0.33 + 0.25 * u * u;
+    const half = 0.15 * Math.sqrt(c) + 0.01;
+    const f = ((x + mw) / tw) % 1;
+    const g = (f + 0.5) % 1;
+    const fang = Math.abs(Math.abs(x) - 0.21) < 0.07 ? 1.45 : 1;
+    const top = mid + half - half * 0.62 * fang * (1 - Math.abs(2 * f - 1));
+    const bot = mid - half + half * 0.55 * (1 - Math.abs(2 * g - 1));
+    return Math.max(y - top, bot - y, Math.abs(x) - mw);
+  };
+
+  const crack: Vec2[] = [[0.1, 0.74], [0.19, 0.62], [0.13, 0.53], [0.25, 0.45], [0.22, 0.39]];
+  const drips: [number, number][] = [[-0.34, 0.12], [-0.06, 0.2], [0.29, 0.09]];
+  const scars: Shape2D = (x, y) => {
+    let d = 9;
+    for (let i = 0; i < crack.length - 1; i++) d = Math.min(d, sdSeg(x, y, crack[i]!, crack[i + 1]!));
+    for (const [dx, len] of drips) {
+      const u = dx / mw;
+      const lip = -0.33 + 0.25 * u * u - 0.15 * Math.sqrt(1 - u * u);
+      d = Math.min(d, sdSeg(x, y, [dx, lip], [dx, lip - len]) - (y < lip - len + 0.02 ? 0.006 : 0));
+    }
+    return d - 0.011;
+  };
+
+  const tilt = 0.05;
+  return {
+    no: 0,
+    sd: (x, y) => {
+      const c = Math.cos(tilt), s = Math.sin(tilt);
+      const X = x * c - y * s, Y = x * s + y * c;
+      return Math.min(le(X, Y), re(X, Y), nose(X, Y), mouth(X, Y), scars(X, Y));
+    },
+  };
+}
+
+// On load the lantern is possessed for a moment, then twitches back to the real carving.
+// Now and then, while you're moving the mouse around, it slips back in for a blink.
+const TWITCH_OUT: [number, boolean][] = [
+  [0.06, false], [0.08, true], [0.05, false], [0.11, true],
+  [0.07, false], [0.05, true], [0.13, false], [0.06, true],
+];
+const TWITCH_IN: [number, boolean][] = [[0.05, true], [0.07, false], [0.06, true], [0.09, false]];
+const ONLOAD_HOLD = 1.7;
+const RELAPSE_HOLD = 0.6;
+const RELAPSE_COOLDOWN = 12; // seconds of calm before it can happen again
+const RELAPSE_RATE = 0.04; // chance per second of mouse movement
+
+interface Episode {
+  start: number;
+  hold: number;
+  intro: boolean;
+}
+
+const span = (xs: [number, boolean][]) => xs.reduce((n, [d]) => n + d, 0);
+
+function walk(xs: [number, boolean][], e: number) {
+  for (const [d, on] of xs) {
+    if (e < d) return on;
+    e -= d;
+  }
+  return false;
+}
+
+/** Seconds into the episode where the hold ends and the twitch back out begins. */
+function holdEnd(ep: Episode) {
+  return (ep.intro ? span(TWITCH_IN) : 0) + ep.hold;
+}
+
+function episodeEnd(ep: Episode) {
+  return holdEnd(ep) + span(TWITCH_OUT);
+}
+
+function possession(ep: Episode | null, t: number) {
+  if (!ep) return { on: false, twitch: false };
+  const e = t - ep.start;
+  const inDur = ep.intro ? span(TWITCH_IN) : 0;
+  if (e < inDur) return { on: walk(TWITCH_IN, e), twitch: true };
+  if (e < holdEnd(ep)) return { on: true, twitch: false };
+  if (e < episodeEnd(ep)) return { on: walk(TWITCH_OUT, e - holdEnd(ep)), twitch: true };
+  return { on: false, twitch: false };
+}
+
 /* ------------------------------------------------------------------------ */
 /* Geometry                                                                  */
 /* ------------------------------------------------------------------------ */
@@ -168,14 +272,21 @@ const EXTRA = "|/\\";
 const CHARS = RAMP + EXTRA;
 const TONES = 8;
 
-function toneColor(t: number) {
-  // single ink: ember -> pumpkin -> candle core
-  const stops: [number, number, number][] = [
-    [74, 32, 10],
-    [150, 70, 20],
-    [255, 138, 31],
-    [255, 222, 168],
-  ];
+function toneColor(t: number, possessedInk = false) {
+  // single ink: ember -> pumpkin -> candle core (or old blood -> arterial when possessed)
+  const stops: [number, number, number][] = possessedInk
+    ? [
+        [44, 4, 6],
+        [116, 10, 12],
+        [214, 26, 20],
+        [255, 176, 150],
+      ]
+    : [
+        [74, 32, 10],
+        [150, 70, 20],
+        [255, 138, 31],
+        [255, 222, 168],
+      ];
   const f = (t / (TONES - 1)) * (stops.length - 1);
   const i = Math.min(stops.length - 2, Math.floor(f));
   const k = f - i;
@@ -187,15 +298,13 @@ interface Props {
   className?: string;
   /** Approximate number of glyph rows across the canvas height. */
   density?: number;
-  label?: boolean;
+  /** Show the recarve control. */
+  controls?: boolean;
 }
 
-export function Lantern({ className = "", density = 74, label = true }: Props) {
+export function Lantern({ className = "", density = 74, controls = true }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const readoutRef = useRef<HTMLSpanElement>(null);
-  const pctRef = useRef<HTMLSpanElement>(null);
-  const carveNoRef = useRef<HTMLSpanElement>(null);
   const recarveRef = useRef<() => void>(() => undefined);
 
   useEffect(() => {
@@ -219,27 +328,31 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
     const rot = { yaw: 0, pitch: 0, vy: 0, vp: 0 };
     let gust = 0;
 
-    const setCarveNo = () => {
-      if (carveNoRef.current) carveNoRef.current.textContent = String(face.no).padStart(4, "0");
-    };
-    setCarveNo();
+    const gaze = { x: 0, y: 0 };
+    const demon = possessed(gaze);
+    let episode: Episode | null = reduce ? null : { start: 0, hold: ONLOAD_HOLD, intro: false };
+    let calmSince = 0;
+    let haunted = !reduce;
+    let bandOn = false, bandShift = 0;
 
     const buildAtlas = () => {
       const family = getComputedStyle(canvas).fontFamily || "monospace";
       const a = document.createElement("canvas");
       a.width = Math.ceil(cellW * dpr) * CHARS.length;
-      a.height = Math.ceil(cellH * dpr) * TONES;
+      a.height = Math.ceil(cellH * dpr) * TONES * 2;
       const g = a.getContext("2d")!;
       g.textAlign = "center";
       g.textBaseline = "middle";
       g.font = `${Math.round(cellH * 0.92 * dpr)}px ${family}`;
       const cw = Math.ceil(cellW * dpr), ch = Math.ceil(cellH * dpr);
-      for (let t = 0; t < TONES; t++) {
-        g.fillStyle = toneColor(t);
-        g.shadowColor = t >= 6 ? "rgba(255,138,31,0.9)" : "transparent";
-        g.shadowBlur = t >= 6 ? 7 * dpr : 0;
+      // Rows 0..TONES-1 are the candle ink, TONES..2*TONES-1 the possessed ink.
+      for (let row = 0; row < TONES * 2; row++) {
+        const t = row % TONES, evil = row >= TONES;
+        g.fillStyle = toneColor(t, evil);
+        g.shadowColor = t >= 6 ? (evil ? "rgba(255,24,16,0.95)" : "rgba(255,138,31,0.9)") : "transparent";
+        g.shadowBlur = t >= 6 ? (evil ? 9 : 7) * dpr : 0;
         for (let i = 0; i < CHARS.length; i++) {
-          g.fillText(CHARS[i]!, i * cw + cw / 2, t * ch + ch / 2 + dpr * 0.5);
+          g.fillText(CHARS[i]!, i * cw + cw / 2, row * ch + ch / 2 + dpr * 0.5);
         }
       }
       atlas = a;
@@ -267,10 +380,32 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
       const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
       last = now;
 
+      if (episode && t >= episode.start + episodeEnd(episode)) {
+        episode = null;
+        calmSince = t;
+      }
+      const stirring = now - pointer.moved < 150;
+      if (!reduce && !episode && stirring && t - calmSince > RELAPSE_COOLDOWN && Math.random() < dt * RELAPSE_RATE) {
+        episode = { start: t, hold: RELAPSE_HOLD, intro: true };
+      }
+      const hs = possession(episode, t);
+      if (haunted && !hs.on && !hs.twitch) rot.vy += 0.9; // shakes it off
+      haunted = hs.on || hs.twitch;
+      if (haunted) {
+        const k = Math.min(1, dt * 10);
+        gaze.x += (Math.max(-1, Math.min(1, (pointer.x - 0.5) * 4)) - gaze.x) * k;
+        gaze.y += (Math.max(-1, Math.min(1, -(pointer.y - 0.5) * 4)) - gaze.y) * k;
+      }
+      const jolt = hs.twitch
+        ? `translate(${Math.round((Math.random() - 0.5) * 8)}px, ${Math.round((Math.random() - 0.5) * 4)}px)`
+        : "";
+      if (canvas.style.transform !== jolt) canvas.style.transform = jolt;
+
       // Spring toward the pointer: the lantern has weight and overshoots a little.
       const idle = now - pointer.moved > 3500;
-      const tyaw = reduce ? 0.18 : idle ? Math.sin(t * 0.35) * 0.4 : (pointer.x - 0.5) * 1.5;
-      const tpitch = reduce ? 0.05 : idle ? Math.sin(t * 0.23) * 0.1 : (pointer.y - 0.5) * 0.7;
+      // While possessed it doesn't turn to follow you. It stares, and only the pupils move.
+      const tyaw = reduce ? 0.18 : haunted ? Math.sin(t * 41) * 0.012 : idle ? Math.sin(t * 0.35) * 0.4 : (pointer.x - 0.5) * 1.5;
+      const tpitch = reduce ? 0.05 : haunted ? -0.04 : idle ? Math.sin(t * 0.23) * 0.1 : (pointer.y - 0.5) * 0.7;
       if (reduce) {
         rot.yaw = tyaw;
         rot.pitch = tpitch;
@@ -280,15 +415,21 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
         rot.vp = (rot.vp + (Math.max(-0.35, Math.min(0.35, tpitch)) - rot.pitch) * k * dt) * damp;
         rot.yaw += rot.vy * dt * 3.5;
         rot.pitch += rot.vp * dt * 3.5;
+        if (hs.twitch) {
+          rot.yaw += (Math.random() - 0.5) * 0.24;
+          rot.pitch += (Math.random() - 0.5) * 0.1;
+        }
       }
 
       // Candle: layered sines plus the occasional gust that nearly puts it out.
-      if (!reduce && gust <= 0 && Math.random() < dt * 0.12) gust = 0.35;
+      if (!reduce && !haunted && gust <= 0 && Math.random() < dt * 0.12) gust = 0.35;
       gust = Math.max(0, gust - dt);
       const gustDip = gust > 0 ? Math.sin((gust / 0.35) * Math.PI) * 0.45 : 0;
       const flame = reduce
         ? 0.9
-        : 0.84 + Math.sin(t * 9.3) * 0.06 + Math.sin(t * 23.1 + 1.7) * 0.04 + (Math.random() - 0.5) * 0.05 - gustDip;
+        : haunted
+          ? 0.97 + (Math.random() - 0.5) * (hs.twitch ? 0.4 : 0.12)
+          : 0.84 + Math.sin(t * 9.3) * 0.06 + Math.sin(t * 23.1 + 1.7) * 0.04 + (Math.random() - 0.5) * 0.05 - gustDip;
 
       // Ignition: density climbs from nothing when the lantern first lights.
       const ignite = reduce ? 1 : 1 - Math.pow(1 - Math.min(1, t / 1.6), 3);
@@ -308,19 +449,27 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      let base = 0; // atlas tone offset: 0 candle ink, TONES possessed ink
       const put = (col: number, row: number, ci: number, tone: number, alpha = 1) => {
         if (ci <= 0) return;
         ctx.globalAlpha = alpha;
-        ctx.drawImage(atlas!, ci * cw, tone * chh, cw, chh, Math.round(col * cellW * dpr), Math.round(row * cellH * dpr), cw, chh);
+        ctx.drawImage(atlas!, ci * cw, (tone + base) * chh, cw, chh, Math.round(col * cellW * dpr), Math.round(row * cellH * dpr), cw, chh);
       };
-
-      let glowSum = 0, glowN = 0;
 
       for (let row = 0; row < rows; row++) {
         const py = (row + 0.5) * cellH;
         const wy = -(py - cyc) / unit;
+        // Twitching tears the picture into bands that slip sideways and show the other face.
+        if (row % 3 === 0) {
+          const g = hs.twitch ? Math.random() : 1;
+          bandOn = g < 0.12;
+          bandShift = g < 0.2 ? Math.round((Math.random() - 0.5) * 12) : 0;
+        }
+        const rowOn = hs.on !== bandOn;
+        const rowFace = rowOn ? demon : face;
+        base = rowOn ? TONES : 0;
         for (let col = 0; col < cols; col++) {
-          const px = (col + 0.5) * cellW;
+          const px = (col + 0.5 + bandShift) * cellW;
           const wx = (px - cx) / unit;
 
           const inBounds = Math.abs(wx) < 1.3 && wy < 1.25 && wy > -0.95;
@@ -382,7 +531,7 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
           let tone: number;
           let ci: number;
 
-          const f = prevFace && px / W > sweep ? prevFace : face;
+          const f = prevFace && px / W > sweep ? prevFace : rowFace;
           const knife = prevFace && Math.abs(px / W - sweep) < 0.012;
           const sd = !isStem && oz > 0.05 ? f.sd(ox, oy) : 9;
 
@@ -393,7 +542,6 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
             // Through the hole: the lit inside of the shell.
             const depth = Math.min(1, -sd * 9);
             lum = flame * (0.82 + depth * 0.18);
-            glowSum += lum; glowN++;
             ci = RAMP.length - 1 - (lum < 0.7 ? 1 : 0);
             tone = lum > 0.66 ? 7 : 6;
           } else if (sd < 0.04) {
@@ -420,12 +568,6 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
       }
 
       ctx.globalAlpha = 1;
-      if (readoutRef.current && Math.floor(t * 6) !== Math.floor((t - dt) * 6)) {
-        const pct = Math.min(100, glowN ? Math.round((glowSum / glowN) * 100) : 0);
-        const filled = Math.round(pct / 10);
-        readoutRef.current.textContent = "#".repeat(filled) + ".".repeat(10 - filled);
-        if (pctRef.current) pctRef.current.textContent = String(pct).padStart(3, "0");
-      }
     };
 
     const loop = (now: number) => {
@@ -439,10 +581,16 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
     };
 
     recarveRef.current = () => {
+      // Poking it while it's possessed only makes it twitch sooner.
+      if (episode) {
+        const e = (performance.now() - start) / 1000 - episode.start;
+        if (e < holdEnd(episode)) episode.hold = Math.max(0, e - (episode.intro ? span(TWITCH_IN) : 0));
+        kick();
+        return;
+      }
       prevFace = reduce ? null : face;
       face = carve(Math.floor(Math.random() * 9000) + 1000);
       carveStart = performance.now();
-      setCarveNo();
       kick();
     };
 
@@ -496,22 +644,11 @@ export function Lantern({ className = "", density = 74, label = true }: Props) {
         aria-label="A jack-o'-lantern drawn in typewriter characters. It turns to watch your cursor."
         onClick={recarve}
       />
-      {label && (
-        <div className="lantern-hud">
-          <span>
-            Carving no. <span ref={carveNoRef}>0000</span>
-          </span>
-          <span className="lantern-candle">
-            Candle{" "}
-            <span className="lantern-meter" aria-hidden="true">
-              [<span ref={readoutRef}>..........</span>]
-            </span>{" "}
-            <span ref={pctRef}>000</span>%
-          </span>
-          <button type="button" className="lantern-recarve" onClick={recarve}>
-            [ Recarve ]
-          </button>
-        </div>
+      {controls && (
+        <button type="button" className="lantern-recarve" onClick={recarve}>
+          <Knife className="lantern-recarve-icon" />
+          <span>Recarve</span>
+        </button>
       )}
     </div>
   );

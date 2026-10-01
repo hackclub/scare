@@ -18,7 +18,7 @@ function useNow() {
 export function Countdown({
   variant = "inline",
 }: {
-  variant?: "inline" | "glyph" | "panel";
+  variant?: "inline" | "glyph" | "panel" | "mini" | "readout";
 }) {
   const now = useNow();
   const left = now === null ? null : timeLeft(now);
@@ -40,6 +40,35 @@ export function Countdown({
           {left ? `${left.d} days, ${left.h} hours, ${left.m} minutes left` : ""}
         </p>
       </div>
+    );
+  }
+
+  // Decorative: the HUD and the closing countdown carry the accessible version.
+  if (variant === "mini") {
+    return (
+      <span className="countdown-mini" aria-hidden="true" suppressHydrationWarning>
+        {left?.done
+          ? "Out"
+          : left
+            ? `${left.d}d ${pad(left.h)}:${pad(left.m)}:${pad(left.s)}`
+            : "--d --:--:--"}
+      </span>
+    );
+  }
+
+  // Label and value as siblings, for a boxed readout that styles each.
+  if (variant === "readout") {
+    return (
+      <>
+        <span className="pf-readout-label">Lights out</span>
+        <span className="pf-readout-value" suppressHydrationWarning>
+          {left?.done
+            ? "Now"
+            : left
+              ? `${left.d}d ${pad(left.h)}h ${pad(left.m)}m ${pad(left.s)}s`
+              : "--d --h --m --s"}
+        </span>
+      </>
     );
   }
 

@@ -126,6 +126,9 @@ exports.Prisma.GameScalarFieldEnum = {
   sourceUrl: 'sourceUrl',
   playUrl: 'playUrl',
   status: 'status',
+  hackatimeProject: 'hackatimeProject',
+  trackedSeconds: 'trackedSeconds',
+  claimedSeconds: 'claimedSeconds',
   shippedAt: 'shippedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -161,9 +164,37 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  hcIdentityId: 'hcIdentityId',
   slackId: 'slackId',
   yswsEligible: 'yswsEligible',
+  verificationStatus: 'verificationStatus',
   pumpkins: 'pumpkins'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  itemId: 'itemId',
+  itemName: 'itemName',
+  pumpkins: 'pumpkins',
+  usd: 'usd',
+  details: 'details',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
+exports.Prisma.HackatimeLinkScalarFieldEnum = {
+  id: 'id',
+  hackatimeId: 'hackatimeId',
+  accessToken: 'accessToken',
+  scope: 'scope',
+  slackId: 'slackId',
+  githubUsername: 'githubUsername',
+  trustLevel: 'trustLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -186,11 +217,20 @@ exports.GameStatus = exports.$Enums.GameStatus = {
   SHIPPED: 'SHIPPED'
 };
 
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  PENDING: 'PENDING',
+  FULFILLED: 'FULFILLED',
+  CANCELLED: 'CANCELLED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   Game: 'Game',
   Account: 'Account',
   Session: 'Session',
   User: 'User',
+  Order: 'Order',
+  HackatimeLink: 'HackatimeLink',
   VerificationToken: 'VerificationToken'
 };
 

@@ -19,6 +19,7 @@
   --color-ink: #ff8a1f;
   --color-hot: #ffd9a3;
   --color-blood: #ff5b3a;
+  --color-gore: #a8120e;
 }
 
 :root {
@@ -32,6 +33,7 @@
   --ink: var(--color-ink);
   --hot: var(--color-hot);
   --blood: var(--color-blood);
+  --gore: var(--color-gore);
 
   /* Departure Mono advance width, in em */
   --adv: 0.6364;
@@ -190,6 +192,43 @@ code {
   text-shadow: 0 0 10px rgb(255 138 31 / 0.45);
 }
 
+/* Candlelight: a brighter copy of the art, revealed in a pool around the cursor. */
+.glyph-candle {
+  position: relative;
+  display: block;
+}
+.glyph-lit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--glow, 0);
+  --pool: radial-gradient(
+    circle var(--lr, 160px) at var(--lx, -9999px) var(--ly, -9999px),
+    #000 0%,
+    rgb(0 0 0 / 0.6) 35%,
+    rgb(0 0 0 / 0.18) 70%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--pool);
+  mask-image: var(--pool);
+}
+.glyph-lit .g-shadow {
+  color: var(--ink-30);
+}
+.glyph-lit .g-dim {
+  color: var(--ink);
+}
+.glyph-lit .g-ink {
+  color: var(--hot);
+  text-shadow: 0 0 8px rgb(255 138 31 / 0.55);
+}
+.glyph-lit .g-hot {
+  color: #fff4e2;
+  text-shadow:
+    0 0 6px rgb(255 217 163 / 0.9),
+    0 0 18px rgb(255 138 31 / 0.6);
+}
+
 .ascii {
   margin: 0;
   font-family: var(--font-mono);
@@ -252,6 +291,67 @@ code {
 }
 .btn-primary:active:not(:disabled) {
   background-color: var(--ink-60);
+}
+
+/* Crossed out like a pen through a wrong word, then cleared for the right one.
+   The slot is sized to the final word so the button never changes width. */
+.strike-slot {
+  display: inline-grid;
+}
+.strike-sizer,
+.strike {
+  grid-area: 1 / 1;
+}
+.strike-sizer {
+  visibility: hidden;
+}
+.strike {
+  position: relative;
+  justify-self: start;
+}
+/* Preflight makes svgs block; the skull has to sit in the line with the word */
+.strike-skull {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-left: 0.15em;
+  vertical-align: -0.1em;
+}
+
+/* While it still says "death", the button is soaked through; it drains back to ink. */
+.btn-doom {
+  transition:
+    background-color 0.6s var(--ease-out),
+    background-size 0.35s var(--ease-out),
+    color 0.6s var(--ease-out);
+}
+.btn-doom.is-dead,
+.btn-doom.is-dead:hover {
+  color: var(--hot);
+  background-color: var(--gore);
+  background-image: radial-gradient(rgb(7 5 4 / 0.4) 0.75px, transparent 1.1px);
+}
+.strike::after {
+  content: "";
+  position: absolute;
+  left: -0.15em;
+  right: -0.05em;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: currentColor;
+  transform: rotate(-4deg) scaleX(0);
+  transform-origin: left center;
+  transition:
+    transform 0.32s var(--ease-out),
+    opacity 0.25s var(--ease-out);
+}
+.strike-struck::after {
+  transform: rotate(-4deg) scaleX(1);
+}
+.strike-cleared::after {
+  transform: rotate(-4deg) scaleX(1);
+  opacity: 0;
 }
 
 .btn-ghost {
@@ -337,63 +437,134 @@ button.link {
   z-index: 40;
   height: var(--hud-h);
   background: rgb(7 5 4 / 0.92);
-  border-bottom: 1px dotted var(--ink-30);
+  transition: background 0.3s;
 }
 .hud-inner {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 32px;
   height: 100%;
+  max-width: 100vw;
+  margin-inline: auto;
   padding: 0 var(--gutter);
+  border: 1px dotted transparent;
   font-family: var(--font-mono);
+  transition:
+    max-width 0.5s var(--ease-out),
+    height 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out),
+    padding 0.5s var(--ease-out),
+    background 0.3s,
+    border-color 0.3s;
+}
+
+/* Scrolled: the bar lifts into a floating dotted island */
+.hud[data-island] {
+  background: transparent;
+  pointer-events: none;
+}
+.hud[data-island] .hud-inner {
+  max-width: min(1120px, 100vw - 24px);
+  height: calc(var(--hud-h) - 16px);
+  padding: 0 8px 0 24px;
+  transform: translateY(10px);
+  background: rgb(7 5 4 / 0.94);
+  gap: 40px;
+  border-color: var(--ink-30);
+  pointer-events: auto;
+}
+.hud[data-island] .hud-end {
+  gap: 20px;
+}
+/* The island keeps only what reads at a glance */
+.hud[data-island] .hud-sound-label,
+.hud[data-island] .countdown-label {
+  display: none;
+}
+.hud[data-island] .btn-hud {
+  min-height: 30px;
+  padding: 0 12px;
 }
 .hud-mark {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
   color: var(--hot);
   text-decoration: none;
+}
+.hud-pumpkin {
+  width: 21px;
+  height: 18px;
+  flex: none;
+  color: var(--ink);
+  transition: color 0.2s;
+}
+.hud-flag {
+  width: 58px;
+  height: auto;
+  flex: none;
+  color: var(--ink);
+  transition: color 0.2s, transform 0.4s var(--ease-out);
+  transform-origin: 0% 100%;
+}
+.hud-mark:hover .hud-pumpkin,
+.hud-mark:hover .hud-flag {
+  color: var(--hot);
+}
+.hud-mark:hover .hud-flag {
+  transform: rotate(-4deg);
+}
+.hud-mark-rule {
+  width: 1px;
+  height: 20px;
+  margin-inline: 2px;
+  border-left: 1px dotted var(--ink-30);
 }
 .hud-mark-word {
   font-size: 18px;
   letter-spacing: 0.28em;
-}
-.hud-mark-sub {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-60);
+  line-height: 1;
 }
 .hud-nav {
   display: flex;
-  gap: 4px;
+  gap: 20px;
   margin-inline: auto;
 }
 .hud-link {
-  display: inline-flex;
-  gap: 0.4em;
-  padding: 8px 10px;
-  color: var(--ink-80);
+  position: relative;
+  padding: 8px 6px;
+  color: var(--ink-60);
   font-size: 13px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s;
 }
-.hud-link span {
-  color: var(--ink-30);
-  transition: color 0.2s, transform 0.3s var(--ease-out);
-}
-.hud-link:hover {
+.hud-link:hover,
+.hud-link:focus-visible,
+.hud-link[aria-current] {
   color: var(--hot);
 }
-.hud-link:hover span:first-child {
+/* Sits in the gap left of the label so nothing shifts when it appears */
+.hud-link-pumpkin {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 13px;
+  height: 11px;
+  margin-top: -6px;
   color: var(--ink);
-  transform: translateX(-3px);
+  opacity: 0;
+  transform: translateY(3px) rotate(0deg) scale(0.7);
+  transition: opacity 0.2s, transform 0.35s var(--ease-out);
 }
-.hud-link:hover span:last-child {
-  color: var(--ink);
-  transform: translateX(3px);
+.hud-link:hover .hud-link-pumpkin,
+.hud-link:focus-visible .hud-link-pumpkin,
+.hud-link[aria-current] .hud-link-pumpkin {
+  opacity: 1;
+  transform: rotate(-12deg);
 }
 .hud-end {
   display: flex;
@@ -403,6 +574,33 @@ button.link {
 }
 .hud-nav + .hud-end {
   margin-left: 0;
+}
+.hud-sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: var(--ink-60);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.hud-sound:hover,
+.hud-sound:focus-visible {
+  color: var(--hot);
+}
+.hud-sound[aria-pressed="true"] {
+  color: var(--ink);
+}
+.hud-sound-icon {
+  width: 14px;
+  height: 14px;
 }
 .hud-count {
   font-size: 12px;
@@ -427,28 +625,108 @@ button.link {
   padding: 48px 0 64px var(--gutter);
   max-width: 720px;
 }
+.hero-flag {
+  display: block;
+  width: clamp(96px, 9vw, 128px);
+  margin: 0 0 28px -2px;
+  color: var(--ink);
+  transform-origin: 2% 100%;
+  transition: color 0.2s, transform 0.5s var(--ease-out);
+}
+.hero-flag svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero-flag:hover {
+  color: var(--hot);
+  transform: rotate(-5deg);
+}
 .hero-word {
   margin-left: -2px;
 }
+.hero-byline {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.hero-heart {
+  width: 11px;
+  height: 10px;
+  color: var(--hot);
+  filter: drop-shadow(0 0 4px rgb(255 138 31 / 0.55));
+}
 .hero-lead {
-  margin: 40px 0 0;
+  margin: 36px 0 0;
   max-width: 38ch;
   color: var(--ink-80);
   font-size: clamp(17px, 1.35vw, 20px);
   line-height: 1.6;
   text-wrap: pretty;
 }
+/* Glitch: calm for most of the cycle, a ~0.25s tear near the end. steps(1) makes each
+   keyframe a hard cut, like a bad signal, rather than a smooth wobble. */
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: var(--hot);
+}
+.glitch-word {
+  display: inline-block;
+  animation: glitch-word 4.2s steps(1) infinite;
+}
+.glitch-slice {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.glitch-a {
+  color: var(--blood);
+  animation: glitch-a 4.2s steps(1) infinite;
+}
+.glitch-b {
+  color: var(--ink);
+  animation: glitch-b 4.2s steps(1) infinite;
+}
+@keyframes glitch-word {
+  0%, 90%, 100% { transform: none; }
+  91% { transform: translateX(1px) skewX(-8deg); }
+  93% { transform: translateX(-1px); }
+  95% { transform: none; }
+}
+@keyframes glitch-a {
+  0%, 90%, 100% { opacity: 0; transform: none; clip-path: none; }
+  91% { opacity: 0.9; transform: translateX(-3px); clip-path: inset(26% 0 52% 0); }
+  92.5% { opacity: 0.9; transform: translateX(3px); clip-path: inset(56% 0 22% 0); }
+  94% { opacity: 0.8; transform: translateX(-2px); clip-path: inset(40% 0 38% 0); }
+  95.5% { opacity: 0; }
+}
+@keyframes glitch-b {
+  0%, 90%, 100% { opacity: 0; transform: none; clip-path: none; }
+  91.5% { opacity: 0.85; transform: translateX(3px); clip-path: inset(46% 0 30% 0); }
+  93% { opacity: 0.85; transform: translateX(-2px); clip-path: inset(22% 0 58% 0); }
+  94.5% { opacity: 0; }
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 36px;
 }
+/* Wraps rather than squeezes: the morphing values hold their widest width */
 .hero-facts {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: start;
-  gap: 12px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
   margin: 48px 0 0;
   padding-top: 20px;
   border-top: 1px dotted var(--ink-30);
@@ -460,11 +738,35 @@ button.link {
   text-transform: uppercase;
   color: var(--ink-60);
 }
+.morph {
+  display: inline-block;
+  white-space: pre;
+}
+.morph-scr {
+  color: var(--ink-60);
+}
 .hero-facts dd {
   margin: 4px 0 0;
   font-family: var(--font-mono);
   font-size: 14px;
   color: var(--ink);
+}
+
+/* A small live clock tucked into the corner of the deadline */
+.hero-fact-ends {
+  position: relative;
+}
+.countdown-mini {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: inherit;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-80);
+  white-space: nowrap;
 }
 
 .lantern {
@@ -482,43 +784,38 @@ button.link {
   align-self: stretch;
   min-height: 560px;
 }
-.lantern-hud {
+.lantern-recarve {
   position: absolute;
-  inset: auto 24px 20px 24px;
-  display: flex;
-  justify-content: space-between;
+  right: 24px;
+  bottom: 20px;
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px dashed var(--ink-30);
+  background: rgb(7 5 4 / 0.72);
+  color: var(--ink-80);
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-60);
-  pointer-events: none;
-}
-.lantern-hud > * {
-  pointer-events: auto;
-}
-.lantern-hud [class] > span,
-.lantern-hud span > span {
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-.lantern-meter {
-  letter-spacing: 0.02em;
-}
-.lantern-recarve {
-  padding: 8px 4px;
-  background: none;
-  border: 0;
-  color: var(--ink);
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
   cursor: pointer;
+  transition:
+    color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out);
 }
 .lantern-recarve:hover {
   color: var(--hot);
+  border-color: var(--hot);
+}
+.lantern-recarve-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.35s var(--ease-out);
+}
+.lantern-recarve:hover .lantern-recarve-icon {
+  transform: translate(2px, -2px) rotate(-8deg);
 }
 
 /* ---------------------------------------------------------------- bands */
@@ -882,12 +1179,13 @@ button.link {
 .countdown-units span:nth-child(4) { grid-column: 7; }
 
 /* Footer */
+/* Two quiet rows: help and credit, then the legal line and links. */
 .foot {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 16px 32px;
-  padding: 32px var(--gutter) 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px 32px;
+  padding: 24px var(--gutter) 32px;
   border-top: 1px dotted var(--ink-15);
   font-size: 13px;
   color: var(--ink-60);
@@ -895,13 +1193,83 @@ button.link {
 .foot p {
   margin: 0;
 }
-.foot-links {
+.foot-help {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  border: 1px dotted var(--ink-30);
+  background: var(--crypt);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-80);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.foot-help:hover,
+.foot-help:focus-visible {
+  color: var(--hot);
+  border-color: var(--ink);
+}
+.foot-help-tag {
+  padding: 2px 6px;
+  background: var(--ink);
+  color: var(--void);
+  letter-spacing: 0.12em;
+}
+.foot-help strong {
+  font-weight: inherit;
+  color: var(--ink);
+}
+.foot-help .link-icon {
+  transition: transform 0.3s var(--ease-out);
+}
+.foot-help:hover .link-icon {
+  transform: translate(2px, -2px);
+}
+.foot-byline {
+  justify-self: end;
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.foot-heart {
+  width: 11px;
+  height: 10px;
+  color: var(--hot);
+  filter: drop-shadow(0 0 4px rgb(255 138 31 / 0.55));
+}
+.foot-links {
+  justify-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+/* Sign-in: just help and credit, no rule, sitting in the panel's last row */
+.foot-compact {
+  padding: 0;
+  border-top: 0;
+}
+@media (max-width: 640px) {
+  .foot {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .foot-byline,
+  .foot-links {
+    justify-self: start;
+  }
 }
 
 /* ---------------------------------------------------------------- haunt */
@@ -1049,6 +1417,11 @@ button.link {
   letter-spacing: 0.06em;
   text-transform: none;
 }
+.field-note {
+  margin: -2px 0 2px;
+  font-size: 13px;
+  color: var(--ink-60);
+}
 .input {
   width: 100%;
   padding: 12px 14px;
@@ -1182,10 +1555,30 @@ button.link {
   gap: 10px;
   width: min(360px, 100%);
 }
-.board-note {
-  margin: 24px 0 0;
+.ship-pane {
+  grid-column: 1 / -1;
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  padding-top: 4px;
+  border-top: 1px dotted var(--ink-30);
+}
+.ship-details {
+  justify-self: stretch;
+  padding: 0;
   font-size: 13px;
-  color: var(--ink-60);
+}
+.ship-edit {
+  justify-self: stretch;
+  margin: 0;
+  padding-top: 16px;
+}
+.ship-details div {
+  padding: 8px 0;
+}
+.ship-details dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .confirm {
   color: var(--ink-80);
@@ -1217,7 +1610,8 @@ button.link {
 /* ------------------------------------------------------------ responsive */
 
 @media (max-width: 1100px) {
-  .hud-count {
+  .hud-count,
+  .hud-sound-label {
     display: none;
   }
   .step {
@@ -1232,8 +1626,7 @@ button.link {
   :root {
     --hud-h: 56px;
   }
-  .hud-nav,
-  .hud-mark-sub {
+  .hud-nav {
     display: none;
   }
   .hud-nav + .hud-end {
@@ -1245,27 +1638,28 @@ button.link {
   }
   .hero-lantern {
     order: -1;
-    height: min(46svh, 440px);
-    min-height: 300px;
+    height: min(38svh, 360px);
+    min-height: 280px;
   }
   .hero-copy {
-    padding: 8px var(--gutter) 72px;
+    padding: 4px var(--gutter) 72px;
+  }
+  .hero-flag {
+    width: 84px;
+    margin-bottom: 18px;
+  }
+  .hero-byline {
+    margin-top: 14px;
   }
   .hero-lead {
-    margin-top: 28px;
+    margin-top: 24px;
   }
   .hero-facts {
-    grid-template-columns: repeat(2, auto);
     gap: 16px 32px;
   }
-  .lantern-hud {
-    inset: auto var(--gutter) 6px var(--gutter);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
-  .lantern-hud > span:nth-child(2) {
-    display: none;
+  .lantern-recarve {
+    right: var(--gutter);
+    bottom: 10px;
   }
   .band-split {
     grid-template-columns: minmax(0, 1fr);

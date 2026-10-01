@@ -8,9 +8,9 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { TabHaunt } from "./_components/tab-haunt";
 
 export const metadata: Metadata = {
-  title: "Scare — ship a horror game, get Steam games",
+  title: "Scare — ship a horror game, get paid in Pumpkins",
   description:
-    "Scare is a Hack Club YSWS. Make a horror game, ship it before Halloween, earn Pumpkins, and spend them on Steam games.",
+    "Scare is a Hack Club YSWS. Build a horror game, ship it by Halloween, and get paid in Pumpkins for Steam games, candy, costume grants and hardware grants.",
   icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
 };
 

@@ -1,3 +1,4 @@
+import { Candlelight } from "./candlelight";
 import { renderGlyphs, toRuns, type GlyphOptions } from "~/lib/glyphs";
 
 const INK = ["g-shadow", "g-dim", "g-ink", "g-hot"] as const;
@@ -12,6 +13,10 @@ type Props = GlyphOptions & {
   narrowScale?: number;
   className?: string;
   id?: string;
+  /** The cursor carries a candle over the letters. */
+  lit?: boolean;
+  /** What assistive tech reads, when the art's line breaks would split a word. */
+  label?: string;
 };
 
 function Art({
@@ -57,28 +62,43 @@ export function GlyphText({
   narrowScale,
   className = "",
   id,
+  lit = false,
+  label,
   ...opts
 }: Props) {
   const lines = text.split("\n");
   const scale = opts.scale ?? 1;
   const hasNarrow = narrowScale !== undefined && narrowScale !== scale;
 
-  return (
-    <Tag id={id} className={`glyph-text ${className}`}>
-      <span className="sr-only">{lines.join(" ")}</span>
+  const arts = (extra: string) => (
+    <>
       <Art
         lines={lines}
         opts={opts}
         max={max}
-        className={hasNarrow ? "glyph-wide" : ""}
+        className={`${hasNarrow ? "glyph-wide" : ""} ${extra}`}
       />
       {hasNarrow && (
         <Art
           lines={lines}
           opts={{ ...opts, scale: narrowScale }}
           max={max * (scale / narrowScale)}
-          className="glyph-narrow"
+          className={`glyph-narrow ${extra}`}
         />
+      )}
+    </>
+  );
+
+  return (
+    <Tag id={id} className={`glyph-text ${className}`}>
+      <span className="sr-only">{label ?? lines.join(" ")}</span>
+      {lit ? (
+        <Candlelight className="glyph-candle">
+          {arts("")}
+          {arts("glyph-lit")}
+        </Candlelight>
+      ) : (
+        arts("")
       )}
     </Tag>
   );

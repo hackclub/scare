@@ -20,6 +20,11 @@ model Game {
     sourceUrl String?
     playUrl   String?
     status    GameStatus @default(BREWING)
+    // Time: a linked Hackatime project, the last total read from it, and the
+    // participant's own figure when they've edited it (null = use Hackatime's).
+    hackatimeProject String?
+    trackedSeconds   Int?
+    claimedSeconds   Int?
     shippedAt DateTime?
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
@@ -69,14 +74,61 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    // From Hack Club Auth claims
-    slackId       String?
-    yswsEligible  Boolean   @default(false)
+    // From Hack Club Auth (/api/v1/me). Phone, birthday and addresses are never stored here;
+    // they're read live from Hack Club Auth when needed.
+    hcIdentityId       String?   @unique
+    slackId            String?
+    yswsEligible       Boolean   @default(false)
+    verificationStatus String?
     // Scare's currency. Earn rates are not set yet; the shop platform will own this.
     pumpkins      Int       @default(0)
     accounts      Account[]
     sessions      Session[]
     games         Game[]
+    hackatime     HackatimeLink?
+    orders        Order[]
+}
+
+// A Pumpkin Shop order. Price and name are copied from the catalog at the time of purchase,
+// so later catalog edits never change what someone already paid.
+model Order {
+    id        String      @id @default(cuid())
+    itemId    String
+    itemName  String
+    pumpkins  Int
+    usd       Float
+    details   String?
+    status    OrderStatus @default(PENDING)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    @@index([userId])
+}
+
+enum OrderStatus {
+    PENDING
+    FULFILLED
+    CANCELLED
+    REJECTED
+}
+
+// A Hackatime account linked to a Scare user, for pulling coding time.
+model HackatimeLink {
+    id             String   @id @default(cuid())
+    hackatimeId    Int      @unique
+    accessToken    String
+    scope          String?
+    slackId        String?
+    githubUsername String?
+    trustLevel     String?
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @unique
 }
 
 model VerificationToken {

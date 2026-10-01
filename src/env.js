@@ -14,6 +14,13 @@ export const env = createEnv({
     // Hack Club Auth (https://auth.hackclub.com) OAuth app credentials
     AUTH_HACKCLUB_ID: z.string().optional(),
     AUTH_HACKCLUB_SECRET: z.string().optional(),
+    // Public site URL, used for OAuth redirect URIs (Auth.js reads it too)
+    AUTH_URL: z.string().url().optional(),
+    // Hackatime (https://hackatime.hackclub.com) OAuth app, for account linking
+    HACKATIME_CLIENT_ID: z.string().optional(),
+    HACKATIME_CLIENT_SECRET: z.string().optional(),
+    // Optional separate key for encrypting stored OAuth tokens; defaults to AUTH_SECRET
+    TOKEN_ENCRYPTION_KEY: z.string().min(16).optional(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -37,6 +44,10 @@ export const env = createEnv({
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_HACKCLUB_ID: process.env.AUTH_HACKCLUB_ID,
     AUTH_HACKCLUB_SECRET: process.env.AUTH_HACKCLUB_SECRET,
+    AUTH_URL: process.env.AUTH_URL,
+    HACKATIME_CLIENT_ID: process.env.HACKATIME_CLIENT_ID,
+    HACKATIME_CLIENT_SECRET: process.env.HACKATIME_CLIENT_SECRET,
+    TOKEN_ENCRYPTION_KEY: process.env.TOKEN_ENCRYPTION_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

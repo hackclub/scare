@@ -12,6 +12,7 @@ import { ZodError } from "zod";
 
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import { rateLimit } from "~/server/rate-limit";
 
 /**
  * 1. CONTEXT
@@ -45,8 +46,11 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
+    // Never send internals (Prisma errors, stack text) to clients in production.
+    const internal = error.code === "INTERNAL_SERVER_ERROR" && process.env.NODE_ENV === "production";
     return {
       ...shape,
+      message: internal ? "Something went wrong on our side." : shape.message,
       data: {
         ...shape.data,
         zodError:
@@ -94,8 +98,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
   const result = await next();
 
-  const end = Date.now();
-  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+  if (t._config.isDev) console.log(`[TRPC] ${path} took ${Date.now() - start}ms to execute`);
 
   return result;
 });
@@ -117,9 +120,21 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  */
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
-  .use(({ ctx, next }) => {
+  .use(({ ctx, next, type }) => {
     if (!ctx.session?.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    // 120 calls a minute per user, and a tighter cap on writes.
+    const id = ctx.session.user.id;
+    const limits: [string, number][] =
+      type === "mutation" ? [[`m:${id}`, 30], [`a:${id}`, 120]] : [[`a:${id}`, 120]];
+    for (const [key, limit] of limits) {
+      const r = rateLimit(key, limit, 60_000);
+      if (!r.ok)
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: `Slow down. Try again in ${r.retryAfter}s.`,
+        });
     }
     return next({
       ctx: {

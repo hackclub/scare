@@ -79,6 +79,12 @@ typography:
     fontSize: "18px"
     fontWeight: 400
     letterSpacing: "0.28em"
+  platform-title:
+    fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
+    fontSize: "clamp(28px, 3vw, 40px)"
+    fontWeight: 400
+    lineHeight: 1.1
+    letterSpacing: "0.1em"
   readout:
     fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
     fontSize: "26px"
@@ -218,6 +224,7 @@ The ink ramp is the neutral scale. Each step is Pumpkin Ink at lower density, so
 - **Title** (Martian Mono 600, 20px, line-height 1.3, Candle Core): User-authored titles such as game names. The Departure Mono variant (400, 20px, 0.12em, uppercase) titles the game board.
 - **Body** (Martian Mono 400, 16px, line-height 1.6, Warm Glow): Running text. Step bodies and pitches run 15px; FAQ answers 16px/1.7. Measures cap at 38–64ch (hero lead 38ch, band leads 52ch, FAQ answers 64ch). `text-wrap: pretty` on prose.
 - **Lead** (Martian Mono 400, clamp(17px, 1.35vw, 20px), line-height 1.6): The hero sentence; band leads and checklist rows sit at 17–20px.
+- **Hero lockup:** the Hack Club flag (Pumpkin Ink, letters masked to the ground, 96–128px wide, 84px on mobile; links to hackclub.com, tips 5° on hover) sits above the glyph SCARE; below it a Label-style byline, "Ran with [pixel heart] by Barnav", in Smolder 12px at 0.16em with the heart in Candle Core and a small candle glow.
 - **Label** (Departure Mono 400, 11–12px, 0.14em, uppercase, Smolder): Frame heads, panel titles, fact terms, countdown units, captions, lantern HUD. HUD links run 13px/0.1em; buttons 14px/0.12em (HUD button 12px).
 
 ### Named Rules
@@ -231,7 +238,7 @@ The ink ramp is the neutral scale. Each step is Pumpkin Ink at lower density, so
 
 A full-bleed character-grid page with a sticky HUD and long, spacious bands.
 
-- **HUD:** Sticky, 60px tall (56px at ≤900px), Void at 92% opacity, dotted Ember underline. Wordmark left, bracketed section nav centered, countdown and sign-in right. At ≤1100px the countdown hides; at ≤900px the nav and wordmark subtitle hide.
+- **HUD:** Sticky, 60px tall (56px at ≤900px), Void at 92% opacity, dotted Ember underline. Brand lockup left (pixel pumpkin, Hack Club flag, dotted rule, SCARE), bracketed section nav centered, countdown and sign-in right. At ≤1100px the countdown hides; at ≤900px the nav hides.
 - **Gutter:** `clamp(16px, 4vw, 48px)` on every horizontal edge; 16px minimum at phone width.
 - **Hero:** Two columns (copy 1fr, lantern 1.1fr), `min-height: calc(100svh - HUD)`. The lantern column stretches to full height (min 560px). At ≤900px it stacks with the lantern first at `min(46svh, 440px)`.
 - **Bands:** Max 1440px, vertical padding `clamp(96px, 12vw, 168px)`, separated by a dotted Charred rule. Heading block gets `clamp(48px, 6vw, 80px)` below. Three band layouts: full-width frame (the deal), split 1.1fr/0.9fr (Pumpkins ledger + ASCII shop), and aside 5fr/7fr with a sticky heading on the left and the frame on the right (rules, FAQ). All collapse to one column at ≤900px.
@@ -292,14 +299,14 @@ The honest placeholder for a program decision that hasn't been made. Departure M
 - **Error:** Border turns Blood; a Departure Mono 12px Blood message below, prefixed `! `.
 
 ### Navigation (HUD)
-Departure Mono 13px, 0.1em, uppercase, Warm Glow, each link wrapped in Ember `[ ]` brackets. Hover turns the label Candle Core and the brackets Pumpkin Ink, each bracket sliding 3px outward. The wordmark is Departure Mono 18px at 0.28em in Candle Core with a Smolder 11px subtitle. The inline countdown reads "Lights out in" in Smolder with tabular Pumpkin Ink digits.
+Departure Mono 13px, 0.1em, uppercase, Warm Glow, each link wrapped in Ember `[ ]` brackets. Hover turns the label Candle Core and the brackets Pumpkin Ink, each bracket sliding 3px outward. The brand lockup is one home link: the 14×12 pixel PumpkinMark (body Pumpkin Ink, stem Smolder), the official Hack Club flag (assets.hackclub.com, drawn in Pumpkin Ink with its lettering masked out to the ground, never in Hack Club red), a 20px dotted Ember rule, then SCARE in Departure Mono 18px at 0.28em in Candle Core. Hover warms pumpkin and flag to Candle Core and tips the flag 4°. The inline countdown reads "Lights out in" in Smolder with tabular Pumpkin Ink digits.
 
 ### Checklist and FAQ rows
 - **Checklist:** A `[✓]` box (Pumpkin Ink brackets, Candle Core pixel check) or an empty `[ ]` for pending items, which drop the whole row to Smolder and end with a `.tba` tag.
 - **FAQ:** A native `details` row: a `>` prompt in Smolder (Pumpkin Ink when open), the question in Pumpkin Ink (Candle Core on hover or open), and a 12px plus that rotates to a minus. The answer ends with a blinking block cursor in Pumpkin Ink (1.1s, stepped).
 
 ### The Glyph Lantern (signature)
-A canvas scene: a 3D pumpkin, shaded per cell with the density ramp ` .'\`:-=+*%#@` (plus `| / \` for the stem and cuts) and an 8-tone single-ink palette from ember (rgb 74 32 10) through Pumpkin Ink to candle core (rgb 255 222 168), with glow on the top two tones. Cells are 8–16px tall at a 0.62 width ratio. It springs toward the pointer with a little overshoot, drifts on its own after 3.5s idle, flickers with occasional gusts, and throws a pool of light on the floor. Click recarves a new seeded face (triangle, angry, round, crescent or slit eyes; teeth, grin, zigzag or O mouths) behind a knife sweep. A Label-style strip along its foot reads "Carving no.", a `[#####.....]` candle meter with percentage, and a `[ Recarve ]` control. Under reduced motion it renders one still, three-quarter pose and recarves without the sweep. Touch input does not steer it.
+A canvas scene: a 3D pumpkin, shaded per cell with the density ramp ` .'\`:-=+*%#@` (plus `| / \` for the stem and cuts) and an 8-tone single-ink palette from ember (rgb 74 32 10) through Pumpkin Ink to candle core (rgb 255 222 168), with glow on the top two tones. Cells are 8–16px tall at a 0.62 width ratio. It springs toward the pointer with a little overshoot, drifts on its own after 3.5s idle, flickers with occasional gusts, and throws a pool of light on the floor. Click recarves a new seeded face (triangle, angry, round, crescent or slit eyes; teeth, grin, zigzag or O mouths) behind a knife sweep. The only chrome on it is a Recarve control pinned bottom-right: a 36px dashed-Ember ghost button on 72% Void with a pixel knife icon; hover turns it Candle Core and nudges the knife. No numeric readouts sit on the scene. Under reduced motion it renders one still, three-quarter pose and recarves without the sweep. Touch input does not steer it.
 
 ### ASCII pictures
 Hand-set `pre` art in Departure Mono (line-height 1.15), `aria-hidden`, always next to words that carry the meaning: the four deal steps (Smolder, turning Candle Core on row hover), the boarded-up Pumpkin Shop, the empty-state tombstone.
@@ -324,3 +331,15 @@ Hand-set `pre` art in Departure Mono (line-height 1.15), `aria-hidden`, always n
 - **Don't** use border-radius, drop shadows, or glassmorphism on any surface.
 - **Don't** flash, strobe, or jump-scare. Motion is springs, flicker and a blinking cursor, never strobing for anyone.
 - **Don't** let the scanline or vignette overlays catch pointer events or darken past their set alphas.
+
+## Platform (operate mode)
+
+The signed-in platform at `/platform` (styles in `src/styles/platform.css`) uses the same ink, frames and ledgers, quieter:
+
+- **Shell:** a 248px Crypt rail (brand lockup with a "platform" tag, nav, "Logged in" with an eye button that reveals the name, hidden by default, sign out) beside a main column whose sticky 68px bar carries two boxed readouts, right-aligned: the Pumpkin balance (pumpkin icon, value, linking to the shop) and the countdown. Readouts are 44px dotted Ember frames on Crypt, label in Smolder 12px uppercase, value in Candle Core Departure 17px tabular. At ≤640px they share one row as a grid, and the balance drops its "Pumpkins" label. At ≤900px the rail becomes a top bar with four equal tabs underlined in Candle Core; the user block moves to Profile.
+- **Nav:** Departure 13px uppercase; the current page gets the lit PumpkinPlain marker and an Ink-05 fill, the same grammar as the landing HUD. Counts sit right in Smolder; Shop carries a dotted `locked` tag.
+- **Page head:** Departure platform-title in Candle Core, then a one-line density rule (`.` → `@`, 12 of each, Ember) clipped to the column, then a lead.
+- **Content:** dotted frames with header rows hold everything: a Next step panel (one contextual task, one primary button), a Status ledger with the glyph Pumpkin balance, compact game lists with square state dots.
+- **Login (`/login`):** split view, the sign-in frame centered on the left, the live lantern (no controls) on the right; on mobile the lantern sits above at 30svh. Auth.js errors render as a Blood dotted notice in plain words.
+- **Private data:** phone, birthday and addresses are never stored; Profile reads them live from Hack Club Auth and shows them masked.
+

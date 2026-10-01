@@ -1,11 +1,17 @@
 import { Ascii, type ArtName } from "./_components/ascii";
 import { SignInButton } from "./_components/auth-buttons";
 import { Countdown } from "./_components/countdown";
+import { DashboardLink } from "./_components/dashboard-link";
+import { Glitch } from "./_components/glitch";
 import { GlyphText } from "./_components/glyph-text";
 import { Hud } from "./_components/hud";
-import { ArrowDown, ArrowUpRight, Check } from "./_components/icons";
+import { HackClubFlag } from "./_components/hack-club-flag";
+import { ArrowDown, Check, Heart } from "./_components/icons";
 import { Lantern } from "./_components/lantern";
-import { DEADLINE_LABEL, LINKS } from "~/lib/program";
+import { SiteFooter } from "./_components/site-footer";
+import { MorphText } from "./_components/morph-text";
+import { DEADLINE_LABEL, LINKS, PUMPKINS_PER_HOUR } from "~/lib/program";
+import { auth } from "~/server/auth";
 
 const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
   {
@@ -33,8 +39,8 @@ const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
     title: "Earn",
     body: (
       <>
-        Shipping earns you <strong>Pumpkins</strong>, Scare&rsquo;s currency.{" "}
-        <span className="tba">Earn rate announced soon</span>
+        Every hour you put into a game you ship earns{" "}
+        <strong>{PUMPKINS_PER_HOUR} Pumpkins</strong>, Scare&rsquo;s currency.
       </>
     ),
   },
@@ -43,12 +49,15 @@ const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
     title: "Spend",
     body: (
       <>
-        Trade your Pumpkins for Steam games in the Pumpkin Shop. The shop opens
-        later.
+        Trade your Pumpkins in the Pumpkin Shop for Steam games, candy,
+        costume grants and hardware grants.
       </>
     ),
   },
 ];
+
+const REWARDS = ["Steam games", "Costume grants", "Candy", "Hardware grants"];
+const WORKS = ["Horror games", "Custom costumes", "Halloween-themed projects"];
 
 const RULES: React.ReactNode[] = [
   <>It&rsquo;s a horror game. Creepy, tense, gross, unsettling: your call.</>,
@@ -81,8 +90,9 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     q: "What are Pumpkins?",
     a: (
       <>
-        Scare&rsquo;s currency. Shipping horror games earns them, and you spend
-        them on Steam games in the Pumpkin Shop, which opens later.
+        Scare&rsquo;s currency. You earn {PUMPKINS_PER_HOUR} for every hour you
+        put into a horror game you ship, and spend them in the Pumpkin Shop on
+        Steam games, candy, costume grants and hardware grants.
       </>
     ),
   },
@@ -104,7 +114,8 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
         </a>{" "}
         is a nonprofit community of teenagers who make things with code. YSWS
         means You Ship, We Ship: you ship a project, and Hack Club ships you
-        something back. For Scare, that&rsquo;s Steam games.
+        something back. For Scare, that&rsquo;s Steam games, candy,
+        costume grants and hardware grants.
       </>
     ),
   },
@@ -124,7 +135,8 @@ export default async function Home({
 }: {
   searchParams: Promise<{ signin?: string }>;
 }) {
-  const { signin } = await searchParams;
+  const [{ signin }, session] = await Promise.all([searchParams, auth()]);
+  const cta = session ? <DashboardLink /> : <SignInButton />;
 
   return (
     <>
@@ -133,6 +145,9 @@ export default async function Home({
         {/* ---------------------------------------------------------- hero */}
         <section id="top" className="hero" aria-labelledby="hero-title">
           <div className="hero-copy">
+            <a href={LINKS.hackClub} className="hero-flag" aria-label="Hack Club">
+              <HackClubFlag id="hc-flag-hero" />
+            </a>
             <GlyphText
               id="hero-title"
               as="h1"
@@ -142,12 +157,15 @@ export default async function Home({
               scale={2}
               narrowScale={1}
               max={9}
+              lit
               className="hero-word"
             />
+            <p className="hero-byline">
+              Ran with <Heart className="hero-heart" title="love" /> by Barnav
+            </p>
             <p className="hero-lead">
-              Make a horror game. Ship it before the lights go out on
-              Halloween. Shipping earns you Pumpkins, and Pumpkins buy Steam
-              games.
+              Make a <Glitch>horror</Glitch> game, get Steam games, costumes,
+              and candy for free.
             </p>
 
             {signin === "unavailable" && (
@@ -158,7 +176,7 @@ export default async function Home({
             )}
 
             <div className="hero-actions">
-              <SignInButton />
+              {cta}
               <a href="#deal" className="btn btn-ghost">
                 <span>How it works</span>
                 <ArrowDown className="btn-icon" />
@@ -166,17 +184,22 @@ export default async function Home({
             </div>
 
             <dl className="hero-facts">
-              <div>
+              <div className="hero-fact-ends">
                 <dt>Ends</dt>
                 <dd>{DEADLINE_LABEL}</dd>
+                <Countdown variant="mini" />
               </div>
               <div>
                 <dt>You get</dt>
-                <dd>Steam games</dd>
+                <dd>
+                  <MorphText words={REWARDS} />
+                </dd>
               </div>
               <div>
-                <dt>Who</dt>
-                <dd>Teenagers in Hack Club</dd>
+                <dt>What works</dt>
+                <dd>
+                  <MorphText words={WORKS} offset={1200} />
+                </dd>
               </div>
             </dl>
           </div>
@@ -257,17 +280,15 @@ export default async function Home({
                 </div>
                 <div>
                   <dt>Earn rate</dt>
-                  <dd>
-                    <span className="tba">Announced soon</span>
-                  </dd>
+                  <dd>{PUMPKINS_PER_HOUR} per hour</dd>
                 </div>
                 <div>
                   <dt>What they buy</dt>
-                  <dd>Steam games</dd>
+                  <dd>Games, grants, candy</dd>
                 </div>
                 <div>
                   <dt>The Pumpkin Shop</dt>
-                  <dd>Opens later</dd>
+                  <dd>Open</dd>
                 </div>
                 <div>
                   <dt>Last day to ship</dt>
@@ -280,7 +301,7 @@ export default async function Home({
           <figure className="shop">
             <Ascii name="shop" className="shop-art" />
             <figcaption className="shop-caption">
-              The shop is still being carved. Ship now, spend later.
+              The shop is open. Sign in to spend your Pumpkins.
             </figcaption>
           </figure>
         </section>
@@ -400,27 +421,11 @@ export default async function Home({
           <p className="close-lead">
             When the clock hits zero, the candle goes out. Ship before it does.
           </p>
-          <SignInButton />
+          {cta}
         </section>
       </main>
 
-      <footer className="foot">
-        <p>
-          Scare is a{" "}
-          <a href={LINKS.hackClub} className="link">
-            Hack Club
-          </a>{" "}
-          YSWS. Hack Club is a 501(c)(3) nonprofit.
-        </p>
-        <nav aria-label="Elsewhere" className="foot-links">
-          <a href={LINKS.slack} className="link">
-            Hack Club Slack <ArrowUpRight className="link-icon" />
-          </a>
-          <a href={LINKS.hackClub} className="link">
-            hackclub.com <ArrowUpRight className="link-icon" />
-          </a>
-        </nav>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

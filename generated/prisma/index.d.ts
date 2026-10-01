@@ -34,6 +34,16 @@ export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Order
+ * 
+ */
+export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
+/**
+ * Model HackatimeLink
+ * 
+ */
+export type HackatimeLink = $Result.DefaultSelection<Prisma.$HackatimeLinkPayload>
+/**
  * Model VerificationToken
  * 
  */
@@ -50,11 +60,25 @@ export namespace $Enums {
 
 export type GameStatus = (typeof GameStatus)[keyof typeof GameStatus]
 
+
+export const OrderStatus: {
+  PENDING: 'PENDING',
+  FULFILLED: 'FULFILLED',
+  CANCELLED: 'CANCELLED',
+  REJECTED: 'REJECTED'
+};
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
 }
 
 export type GameStatus = $Enums.GameStatus
 
 export const GameStatus: typeof $Enums.GameStatus
+
+export type OrderStatus = $Enums.OrderStatus
+
+export const OrderStatus: typeof $Enums.OrderStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -213,6 +237,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.order`: Exposes CRUD operations for the **Order** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Orders
+    * const orders = await prisma.order.findMany()
+    * ```
+    */
+  get order(): Prisma.OrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.hackatimeLink`: Exposes CRUD operations for the **HackatimeLink** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HackatimeLinks
+    * const hackatimeLinks = await prisma.hackatimeLink.findMany()
+    * ```
+    */
+  get hackatimeLink(): Prisma.HackatimeLinkDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.verificationToken`: Exposes CRUD operations for the **VerificationToken** model.
@@ -668,6 +712,8 @@ export namespace Prisma {
     Account: 'Account',
     Session: 'Session',
     User: 'User',
+    Order: 'Order',
+    HackatimeLink: 'HackatimeLink',
     VerificationToken: 'VerificationToken'
   };
 
@@ -687,7 +733,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "game" | "account" | "session" | "user" | "verificationToken"
+      modelProps: "game" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -987,6 +1033,154 @@ export namespace Prisma {
           }
         }
       }
+      Order: {
+        payload: Prisma.$OrderPayload<ExtArgs>
+        fields: Prisma.OrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findFirst: {
+            args: Prisma.OrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findMany: {
+            args: Prisma.OrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          create: {
+            args: Prisma.OrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          createMany: {
+            args: Prisma.OrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          delete: {
+            args: Prisma.OrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          update: {
+            args: Prisma.OrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          aggregate: {
+            args: Prisma.OrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrder>
+          }
+          groupBy: {
+            args: Prisma.OrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      HackatimeLink: {
+        payload: Prisma.$HackatimeLinkPayload<ExtArgs>
+        fields: Prisma.HackatimeLinkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HackatimeLinkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HackatimeLinkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          findFirst: {
+            args: Prisma.HackatimeLinkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HackatimeLinkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          findMany: {
+            args: Prisma.HackatimeLinkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>[]
+          }
+          create: {
+            args: Prisma.HackatimeLinkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          createMany: {
+            args: Prisma.HackatimeLinkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HackatimeLinkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>[]
+          }
+          delete: {
+            args: Prisma.HackatimeLinkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          update: {
+            args: Prisma.HackatimeLinkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          deleteMany: {
+            args: Prisma.HackatimeLinkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HackatimeLinkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HackatimeLinkUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>[]
+          }
+          upsert: {
+            args: Prisma.HackatimeLinkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HackatimeLinkPayload>
+          }
+          aggregate: {
+            args: Prisma.HackatimeLinkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHackatimeLink>
+          }
+          groupBy: {
+            args: Prisma.HackatimeLinkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HackatimeLinkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HackatimeLinkCountArgs<ExtArgs>
+            result: $Utils.Optional<HackatimeLinkCountAggregateOutputType> | number
+          }
+        }
+      }
       VerificationToken: {
         payload: Prisma.$VerificationTokenPayload<ExtArgs>
         fields: Prisma.VerificationTokenFieldRefs
@@ -1161,6 +1355,8 @@ export namespace Prisma {
     account?: AccountOmit
     session?: SessionOmit
     user?: UserOmit
+    order?: OrderOmit
+    hackatimeLink?: HackatimeLinkOmit
     verificationToken?: VerificationTokenOmit
   }
 
@@ -1245,12 +1441,14 @@ export namespace Prisma {
     accounts: number
     sessions: number
     games: number
+    orders: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     games?: boolean | UserCountOutputTypeCountGamesArgs
+    orders?: boolean | UserCountOutputTypeCountOrdersArgs
   }
 
   // Custom InputTypes
@@ -1285,6 +1483,13 @@ export namespace Prisma {
     where?: GameWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+  }
+
 
   /**
    * Models
@@ -1296,8 +1501,20 @@ export namespace Prisma {
 
   export type AggregateGame = {
     _count: GameCountAggregateOutputType | null
+    _avg: GameAvgAggregateOutputType | null
+    _sum: GameSumAggregateOutputType | null
     _min: GameMinAggregateOutputType | null
     _max: GameMaxAggregateOutputType | null
+  }
+
+  export type GameAvgAggregateOutputType = {
+    trackedSeconds: number | null
+    claimedSeconds: number | null
+  }
+
+  export type GameSumAggregateOutputType = {
+    trackedSeconds: number | null
+    claimedSeconds: number | null
   }
 
   export type GameMinAggregateOutputType = {
@@ -1308,6 +1525,9 @@ export namespace Prisma {
     sourceUrl: string | null
     playUrl: string | null
     status: $Enums.GameStatus | null
+    hackatimeProject: string | null
+    trackedSeconds: number | null
+    claimedSeconds: number | null
     shippedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1322,6 +1542,9 @@ export namespace Prisma {
     sourceUrl: string | null
     playUrl: string | null
     status: $Enums.GameStatus | null
+    hackatimeProject: string | null
+    trackedSeconds: number | null
+    claimedSeconds: number | null
     shippedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1336,6 +1559,9 @@ export namespace Prisma {
     sourceUrl: number
     playUrl: number
     status: number
+    hackatimeProject: number
+    trackedSeconds: number
+    claimedSeconds: number
     shippedAt: number
     createdAt: number
     updatedAt: number
@@ -1343,6 +1569,16 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type GameAvgAggregateInputType = {
+    trackedSeconds?: true
+    claimedSeconds?: true
+  }
+
+  export type GameSumAggregateInputType = {
+    trackedSeconds?: true
+    claimedSeconds?: true
+  }
 
   export type GameMinAggregateInputType = {
     id?: true
@@ -1352,6 +1588,9 @@ export namespace Prisma {
     sourceUrl?: true
     playUrl?: true
     status?: true
+    hackatimeProject?: true
+    trackedSeconds?: true
+    claimedSeconds?: true
     shippedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -1366,6 +1605,9 @@ export namespace Prisma {
     sourceUrl?: true
     playUrl?: true
     status?: true
+    hackatimeProject?: true
+    trackedSeconds?: true
+    claimedSeconds?: true
     shippedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -1380,6 +1622,9 @@ export namespace Prisma {
     sourceUrl?: true
     playUrl?: true
     status?: true
+    hackatimeProject?: true
+    trackedSeconds?: true
+    claimedSeconds?: true
     shippedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -1425,6 +1670,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: GameAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GameSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: GameMinAggregateInputType
@@ -1455,6 +1712,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: GameCountAggregateInputType | true
+    _avg?: GameAvgAggregateInputType
+    _sum?: GameSumAggregateInputType
     _min?: GameMinAggregateInputType
     _max?: GameMaxAggregateInputType
   }
@@ -1467,11 +1726,16 @@ export namespace Prisma {
     sourceUrl: string | null
     playUrl: string | null
     status: $Enums.GameStatus
+    hackatimeProject: string | null
+    trackedSeconds: number | null
+    claimedSeconds: number | null
     shippedAt: Date | null
     createdAt: Date
     updatedAt: Date
     userId: string
     _count: GameCountAggregateOutputType | null
+    _avg: GameAvgAggregateOutputType | null
+    _sum: GameSumAggregateOutputType | null
     _min: GameMinAggregateOutputType | null
     _max: GameMaxAggregateOutputType | null
   }
@@ -1498,6 +1762,9 @@ export namespace Prisma {
     sourceUrl?: boolean
     playUrl?: boolean
     status?: boolean
+    hackatimeProject?: boolean
+    trackedSeconds?: boolean
+    claimedSeconds?: boolean
     shippedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1513,6 +1780,9 @@ export namespace Prisma {
     sourceUrl?: boolean
     playUrl?: boolean
     status?: boolean
+    hackatimeProject?: boolean
+    trackedSeconds?: boolean
+    claimedSeconds?: boolean
     shippedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1528,6 +1798,9 @@ export namespace Prisma {
     sourceUrl?: boolean
     playUrl?: boolean
     status?: boolean
+    hackatimeProject?: boolean
+    trackedSeconds?: boolean
+    claimedSeconds?: boolean
     shippedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1543,13 +1816,16 @@ export namespace Prisma {
     sourceUrl?: boolean
     playUrl?: boolean
     status?: boolean
+    hackatimeProject?: boolean
+    trackedSeconds?: boolean
+    claimedSeconds?: boolean
     shippedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "shippedAt" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
+  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
   export type GameInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -1573,6 +1849,9 @@ export namespace Prisma {
       sourceUrl: string | null
       playUrl: string | null
       status: $Enums.GameStatus
+      hackatimeProject: string | null
+      trackedSeconds: number | null
+      claimedSeconds: number | null
       shippedAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -2008,6 +2287,9 @@ export namespace Prisma {
     readonly sourceUrl: FieldRef<"Game", 'String'>
     readonly playUrl: FieldRef<"Game", 'String'>
     readonly status: FieldRef<"Game", 'GameStatus'>
+    readonly hackatimeProject: FieldRef<"Game", 'String'>
+    readonly trackedSeconds: FieldRef<"Game", 'Int'>
+    readonly claimedSeconds: FieldRef<"Game", 'Int'>
     readonly shippedAt: FieldRef<"Game", 'DateTime'>
     readonly createdAt: FieldRef<"Game", 'DateTime'>
     readonly updatedAt: FieldRef<"Game", 'DateTime'>
@@ -4691,8 +4973,10 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    hcIdentityId: string | null
     slackId: string | null
     yswsEligible: boolean | null
+    verificationStatus: string | null
     pumpkins: number | null
   }
 
@@ -4702,8 +4986,10 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    hcIdentityId: string | null
     slackId: string | null
     yswsEligible: boolean | null
+    verificationStatus: string | null
     pumpkins: number | null
   }
 
@@ -4713,8 +4999,10 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    hcIdentityId: number
     slackId: number
     yswsEligible: number
+    verificationStatus: number
     pumpkins: number
     _all: number
   }
@@ -4734,8 +5022,10 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    hcIdentityId?: true
     slackId?: true
     yswsEligible?: true
+    verificationStatus?: true
     pumpkins?: true
   }
 
@@ -4745,8 +5035,10 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    hcIdentityId?: true
     slackId?: true
     yswsEligible?: true
+    verificationStatus?: true
     pumpkins?: true
   }
 
@@ -4756,8 +5048,10 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    hcIdentityId?: true
     slackId?: true
     yswsEligible?: true
+    verificationStatus?: true
     pumpkins?: true
     _all?: true
   }
@@ -4854,8 +5148,10 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    hcIdentityId: string | null
     slackId: string | null
     yswsEligible: boolean
+    verificationStatus: string | null
     pumpkins: number
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -4884,12 +5180,16 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    hcIdentityId?: boolean
     slackId?: boolean
     yswsEligible?: boolean
+    verificationStatus?: boolean
     pumpkins?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     games?: boolean | User$gamesArgs<ExtArgs>
+    hackatime?: boolean | User$hackatimeArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4899,8 +5199,10 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    hcIdentityId?: boolean
     slackId?: boolean
     yswsEligible?: boolean
+    verificationStatus?: boolean
     pumpkins?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -4910,8 +5212,10 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    hcIdentityId?: boolean
     slackId?: boolean
     yswsEligible?: boolean
+    verificationStatus?: boolean
     pumpkins?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -4921,16 +5225,20 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    hcIdentityId?: boolean
     slackId?: boolean
     yswsEligible?: boolean
+    verificationStatus?: boolean
     pumpkins?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "slackId" | "yswsEligible" | "pumpkins", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "hcIdentityId" | "slackId" | "yswsEligible" | "verificationStatus" | "pumpkins", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     games?: boolean | User$gamesArgs<ExtArgs>
+    hackatime?: boolean | User$hackatimeArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4942,6 +5250,8 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       games: Prisma.$GamePayload<ExtArgs>[]
+      hackatime: Prisma.$HackatimeLinkPayload<ExtArgs> | null
+      orders: Prisma.$OrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4949,8 +5259,10 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
+      hcIdentityId: string | null
       slackId: string | null
       yswsEligible: boolean
+      verificationStatus: string | null
       pumpkins: number
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -5349,6 +5661,8 @@ export namespace Prisma {
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     games<T extends User$gamesArgs<ExtArgs> = {}>(args?: Subset<T, User$gamesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    hackatime<T extends User$hackatimeArgs<ExtArgs> = {}>(args?: Subset<T, User$hackatimeArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5383,8 +5697,10 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly hcIdentityId: FieldRef<"User", 'String'>
     readonly slackId: FieldRef<"User", 'String'>
     readonly yswsEligible: FieldRef<"User", 'Boolean'>
+    readonly verificationStatus: FieldRef<"User", 'String'>
     readonly pumpkins: FieldRef<"User", 'Int'>
   }
     
@@ -5844,6 +6160,49 @@ export namespace Prisma {
   }
 
   /**
+   * User.hackatime
+   */
+  export type User$hackatimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    where?: HackatimeLinkWhereInput
+  }
+
+  /**
+   * User.orders
+   */
+  export type User$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5859,6 +6218,2320 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Order
+   */
+
+  export type AggregateOrder = {
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  export type OrderAvgAggregateOutputType = {
+    pumpkins: number | null
+    usd: number | null
+  }
+
+  export type OrderSumAggregateOutputType = {
+    pumpkins: number | null
+    usd: number | null
+  }
+
+  export type OrderMinAggregateOutputType = {
+    id: string | null
+    itemId: string | null
+    itemName: string | null
+    pumpkins: number | null
+    usd: number | null
+    details: string | null
+    status: $Enums.OrderStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    userId: string | null
+  }
+
+  export type OrderMaxAggregateOutputType = {
+    id: string | null
+    itemId: string | null
+    itemName: string | null
+    pumpkins: number | null
+    usd: number | null
+    details: string | null
+    status: $Enums.OrderStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    userId: string | null
+  }
+
+  export type OrderCountAggregateOutputType = {
+    id: number
+    itemId: number
+    itemName: number
+    pumpkins: number
+    usd: number
+    details: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    userId: number
+    _all: number
+  }
+
+
+  export type OrderAvgAggregateInputType = {
+    pumpkins?: true
+    usd?: true
+  }
+
+  export type OrderSumAggregateInputType = {
+    pumpkins?: true
+    usd?: true
+  }
+
+  export type OrderMinAggregateInputType = {
+    id?: true
+    itemId?: true
+    itemName?: true
+    pumpkins?: true
+    usd?: true
+    details?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+  }
+
+  export type OrderMaxAggregateInputType = {
+    id?: true
+    itemId?: true
+    itemName?: true
+    pumpkins?: true
+    usd?: true
+    details?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+  }
+
+  export type OrderCountAggregateInputType = {
+    id?: true
+    itemId?: true
+    itemName?: true
+    pumpkins?: true
+    usd?: true
+    details?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type OrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Order to aggregate.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Orders
+    **/
+    _count?: true | OrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type GetOrderAggregateType<T extends OrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrder[P]>
+      : GetScalarType<T[P], AggregateOrder[P]>
+  }
+
+
+
+
+  export type OrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithAggregationInput | OrderOrderByWithAggregationInput[]
+    by: OrderScalarFieldEnum[] | OrderScalarFieldEnum
+    having?: OrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderCountAggregateInputType | true
+    _avg?: OrderAvgAggregateInputType
+    _sum?: OrderSumAggregateInputType
+    _min?: OrderMinAggregateInputType
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type OrderGroupByOutputType = {
+    id: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details: string | null
+    status: $Enums.OrderStatus
+    createdAt: Date
+    updatedAt: Date
+    userId: string
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  type GetOrderGroupByPayload<T extends OrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    itemId?: boolean
+    itemName?: boolean
+    pumpkins?: boolean
+    usd?: boolean
+    details?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    itemId?: boolean
+    itemName?: boolean
+    pumpkins?: boolean
+    usd?: boolean
+    details?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    itemId?: boolean
+    itemName?: boolean
+    pumpkins?: boolean
+    usd?: boolean
+    details?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectScalar = {
+    id?: boolean
+    itemId?: boolean
+    itemName?: boolean
+    pumpkins?: boolean
+    usd?: boolean
+    details?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+  }
+
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "itemName" | "pumpkins" | "usd" | "details" | "status" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["order"]>
+  export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Order"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      itemId: string
+      itemName: string
+      pumpkins: number
+      usd: number
+      details: string | null
+      status: $Enums.OrderStatus
+      createdAt: Date
+      updatedAt: Date
+      userId: string
+    }, ExtArgs["result"]["order"]>
+    composites: {}
+  }
+
+  type OrderGetPayload<S extends boolean | null | undefined | OrderDefaultArgs> = $Result.GetResult<Prisma.$OrderPayload, S>
+
+  type OrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderCountAggregateInputType | true
+    }
+
+  export interface OrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Order'], meta: { name: 'Order' } }
+    /**
+     * Find zero or one Order that matches the filter.
+     * @param {OrderFindUniqueArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderFindUniqueArgs>(args: SelectSubset<T, OrderFindUniqueArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Order that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrderFindUniqueOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Order that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderFindFirstArgs>(args?: SelectSubset<T, OrderFindFirstArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Order that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Orders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Orders
+     * const orders = await prisma.order.findMany()
+     * 
+     * // Get first 10 Orders
+     * const orders = await prisma.order.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderWithIdOnly = await prisma.order.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderFindManyArgs>(args?: SelectSubset<T, OrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Order.
+     * @param {OrderCreateArgs} args - Arguments to create a Order.
+     * @example
+     * // Create one Order
+     * const Order = await prisma.order.create({
+     *   data: {
+     *     // ... data to create a Order
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderCreateArgs>(args: SelectSubset<T, OrderCreateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Orders.
+     * @param {OrderCreateManyArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderCreateManyArgs>(args?: SelectSubset<T, OrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Orders and returns the data saved in the database.
+     * @param {OrderCreateManyAndReturnArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Orders and only return the `id`
+     * const orderWithIdOnly = await prisma.order.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Order.
+     * @param {OrderDeleteArgs} args - Arguments to delete one Order.
+     * @example
+     * // Delete one Order
+     * const Order = await prisma.order.delete({
+     *   where: {
+     *     // ... filter to delete one Order
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderDeleteArgs>(args: SelectSubset<T, OrderDeleteArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Order.
+     * @param {OrderUpdateArgs} args - Arguments to update one Order.
+     * @example
+     * // Update one Order
+     * const order = await prisma.order.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderUpdateArgs>(args: SelectSubset<T, OrderUpdateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Orders.
+     * @param {OrderDeleteManyArgs} args - Arguments to filter Orders to delete.
+     * @example
+     * // Delete a few Orders
+     * const { count } = await prisma.order.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderDeleteManyArgs>(args?: SelectSubset<T, OrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderUpdateManyArgs>(args: SelectSubset<T, OrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders and returns the data updated in the database.
+     * @param {OrderUpdateManyAndReturnArgs} args - Arguments to update many Orders.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Orders and only return the `id`
+     * const orderWithIdOnly = await prisma.order.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrderUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Order.
+     * @param {OrderUpsertArgs} args - Arguments to update or create a Order.
+     * @example
+     * // Update or create a Order
+     * const order = await prisma.order.upsert({
+     *   create: {
+     *     // ... data to create a Order
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Order we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderUpsertArgs>(args: SelectSubset<T, OrderUpsertArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderCountArgs} args - Arguments to filter Orders to count.
+     * @example
+     * // Count the number of Orders
+     * const count = await prisma.order.count({
+     *   where: {
+     *     // ... the filter for the Orders we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderCountArgs>(
+      args?: Subset<T, OrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderAggregateArgs>(args: Subset<T, OrderAggregateArgs>): Prisma.PrismaPromise<GetOrderAggregateType<T>>
+
+    /**
+     * Group by Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderGroupByArgs['orderBy'] }
+        : { orderBy?: OrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Order model
+   */
+  readonly fields: OrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Order.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Order model
+   */
+  interface OrderFieldRefs {
+    readonly id: FieldRef<"Order", 'String'>
+    readonly itemId: FieldRef<"Order", 'String'>
+    readonly itemName: FieldRef<"Order", 'String'>
+    readonly pumpkins: FieldRef<"Order", 'Int'>
+    readonly usd: FieldRef<"Order", 'Float'>
+    readonly details: FieldRef<"Order", 'String'>
+    readonly status: FieldRef<"Order", 'OrderStatus'>
+    readonly createdAt: FieldRef<"Order", 'DateTime'>
+    readonly updatedAt: FieldRef<"Order", 'DateTime'>
+    readonly userId: FieldRef<"Order", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Order findUnique
+   */
+  export type OrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findUniqueOrThrow
+   */
+  export type OrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findFirst
+   */
+  export type OrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findFirstOrThrow
+   */
+  export type OrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findMany
+   */
+  export type OrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Orders to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order create
+   */
+  export type OrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Order.
+     */
+    data: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+  }
+
+  /**
+   * Order createMany
+   */
+  export type OrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+  }
+
+  /**
+   * Order createManyAndReturn
+   */
+  export type OrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Order update
+   */
+  export type OrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Order.
+     */
+    data: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+    /**
+     * Choose, which Order to update.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order updateMany
+   */
+  export type OrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Order updateManyAndReturn
+   */
+  export type OrderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Order upsert
+   */
+  export type OrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Order to update in case it exists.
+     */
+    where: OrderWhereUniqueInput
+    /**
+     * In case the Order found by the `where` argument doesn't exist, create a new Order with this data.
+     */
+    create: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+    /**
+     * In case the Order was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+  }
+
+  /**
+   * Order delete
+   */
+  export type OrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter which Order to delete.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order deleteMany
+   */
+  export type OrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Orders to delete
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Order without action
+   */
+  export type OrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model HackatimeLink
+   */
+
+  export type AggregateHackatimeLink = {
+    _count: HackatimeLinkCountAggregateOutputType | null
+    _avg: HackatimeLinkAvgAggregateOutputType | null
+    _sum: HackatimeLinkSumAggregateOutputType | null
+    _min: HackatimeLinkMinAggregateOutputType | null
+    _max: HackatimeLinkMaxAggregateOutputType | null
+  }
+
+  export type HackatimeLinkAvgAggregateOutputType = {
+    hackatimeId: number | null
+  }
+
+  export type HackatimeLinkSumAggregateOutputType = {
+    hackatimeId: number | null
+  }
+
+  export type HackatimeLinkMinAggregateOutputType = {
+    id: string | null
+    hackatimeId: number | null
+    accessToken: string | null
+    scope: string | null
+    slackId: string | null
+    githubUsername: string | null
+    trustLevel: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    userId: string | null
+  }
+
+  export type HackatimeLinkMaxAggregateOutputType = {
+    id: string | null
+    hackatimeId: number | null
+    accessToken: string | null
+    scope: string | null
+    slackId: string | null
+    githubUsername: string | null
+    trustLevel: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    userId: string | null
+  }
+
+  export type HackatimeLinkCountAggregateOutputType = {
+    id: number
+    hackatimeId: number
+    accessToken: number
+    scope: number
+    slackId: number
+    githubUsername: number
+    trustLevel: number
+    createdAt: number
+    updatedAt: number
+    userId: number
+    _all: number
+  }
+
+
+  export type HackatimeLinkAvgAggregateInputType = {
+    hackatimeId?: true
+  }
+
+  export type HackatimeLinkSumAggregateInputType = {
+    hackatimeId?: true
+  }
+
+  export type HackatimeLinkMinAggregateInputType = {
+    id?: true
+    hackatimeId?: true
+    accessToken?: true
+    scope?: true
+    slackId?: true
+    githubUsername?: true
+    trustLevel?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+  }
+
+  export type HackatimeLinkMaxAggregateInputType = {
+    id?: true
+    hackatimeId?: true
+    accessToken?: true
+    scope?: true
+    slackId?: true
+    githubUsername?: true
+    trustLevel?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+  }
+
+  export type HackatimeLinkCountAggregateInputType = {
+    id?: true
+    hackatimeId?: true
+    accessToken?: true
+    scope?: true
+    slackId?: true
+    githubUsername?: true
+    trustLevel?: true
+    createdAt?: true
+    updatedAt?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type HackatimeLinkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HackatimeLink to aggregate.
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HackatimeLinks to fetch.
+     */
+    orderBy?: HackatimeLinkOrderByWithRelationInput | HackatimeLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HackatimeLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HackatimeLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HackatimeLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HackatimeLinks
+    **/
+    _count?: true | HackatimeLinkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HackatimeLinkAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HackatimeLinkSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HackatimeLinkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HackatimeLinkMaxAggregateInputType
+  }
+
+  export type GetHackatimeLinkAggregateType<T extends HackatimeLinkAggregateArgs> = {
+        [P in keyof T & keyof AggregateHackatimeLink]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHackatimeLink[P]>
+      : GetScalarType<T[P], AggregateHackatimeLink[P]>
+  }
+
+
+
+
+  export type HackatimeLinkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HackatimeLinkWhereInput
+    orderBy?: HackatimeLinkOrderByWithAggregationInput | HackatimeLinkOrderByWithAggregationInput[]
+    by: HackatimeLinkScalarFieldEnum[] | HackatimeLinkScalarFieldEnum
+    having?: HackatimeLinkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HackatimeLinkCountAggregateInputType | true
+    _avg?: HackatimeLinkAvgAggregateInputType
+    _sum?: HackatimeLinkSumAggregateInputType
+    _min?: HackatimeLinkMinAggregateInputType
+    _max?: HackatimeLinkMaxAggregateInputType
+  }
+
+  export type HackatimeLinkGroupByOutputType = {
+    id: string
+    hackatimeId: number
+    accessToken: string
+    scope: string | null
+    slackId: string | null
+    githubUsername: string | null
+    trustLevel: string | null
+    createdAt: Date
+    updatedAt: Date
+    userId: string
+    _count: HackatimeLinkCountAggregateOutputType | null
+    _avg: HackatimeLinkAvgAggregateOutputType | null
+    _sum: HackatimeLinkSumAggregateOutputType | null
+    _min: HackatimeLinkMinAggregateOutputType | null
+    _max: HackatimeLinkMaxAggregateOutputType | null
+  }
+
+  type GetHackatimeLinkGroupByPayload<T extends HackatimeLinkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HackatimeLinkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HackatimeLinkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HackatimeLinkGroupByOutputType[P]>
+            : GetScalarType<T[P], HackatimeLinkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HackatimeLinkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    hackatimeId?: boolean
+    accessToken?: boolean
+    scope?: boolean
+    slackId?: boolean
+    githubUsername?: boolean
+    trustLevel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["hackatimeLink"]>
+
+  export type HackatimeLinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    hackatimeId?: boolean
+    accessToken?: boolean
+    scope?: boolean
+    slackId?: boolean
+    githubUsername?: boolean
+    trustLevel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["hackatimeLink"]>
+
+  export type HackatimeLinkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    hackatimeId?: boolean
+    accessToken?: boolean
+    scope?: boolean
+    slackId?: boolean
+    githubUsername?: boolean
+    trustLevel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["hackatimeLink"]>
+
+  export type HackatimeLinkSelectScalar = {
+    id?: boolean
+    hackatimeId?: boolean
+    accessToken?: boolean
+    scope?: boolean
+    slackId?: boolean
+    githubUsername?: boolean
+    trustLevel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    userId?: boolean
+  }
+
+  export type HackatimeLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "hackatimeId" | "accessToken" | "scope" | "slackId" | "githubUsername" | "trustLevel" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["hackatimeLink"]>
+  export type HackatimeLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type HackatimeLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type HackatimeLinkIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $HackatimeLinkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HackatimeLink"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      hackatimeId: number
+      accessToken: string
+      scope: string | null
+      slackId: string | null
+      githubUsername: string | null
+      trustLevel: string | null
+      createdAt: Date
+      updatedAt: Date
+      userId: string
+    }, ExtArgs["result"]["hackatimeLink"]>
+    composites: {}
+  }
+
+  type HackatimeLinkGetPayload<S extends boolean | null | undefined | HackatimeLinkDefaultArgs> = $Result.GetResult<Prisma.$HackatimeLinkPayload, S>
+
+  type HackatimeLinkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HackatimeLinkFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HackatimeLinkCountAggregateInputType | true
+    }
+
+  export interface HackatimeLinkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HackatimeLink'], meta: { name: 'HackatimeLink' } }
+    /**
+     * Find zero or one HackatimeLink that matches the filter.
+     * @param {HackatimeLinkFindUniqueArgs} args - Arguments to find a HackatimeLink
+     * @example
+     * // Get one HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HackatimeLinkFindUniqueArgs>(args: SelectSubset<T, HackatimeLinkFindUniqueArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HackatimeLink that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HackatimeLinkFindUniqueOrThrowArgs} args - Arguments to find a HackatimeLink
+     * @example
+     * // Get one HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HackatimeLinkFindUniqueOrThrowArgs>(args: SelectSubset<T, HackatimeLinkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HackatimeLink that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkFindFirstArgs} args - Arguments to find a HackatimeLink
+     * @example
+     * // Get one HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HackatimeLinkFindFirstArgs>(args?: SelectSubset<T, HackatimeLinkFindFirstArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HackatimeLink that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkFindFirstOrThrowArgs} args - Arguments to find a HackatimeLink
+     * @example
+     * // Get one HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HackatimeLinkFindFirstOrThrowArgs>(args?: SelectSubset<T, HackatimeLinkFindFirstOrThrowArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HackatimeLinks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HackatimeLinks
+     * const hackatimeLinks = await prisma.hackatimeLink.findMany()
+     * 
+     * // Get first 10 HackatimeLinks
+     * const hackatimeLinks = await prisma.hackatimeLink.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const hackatimeLinkWithIdOnly = await prisma.hackatimeLink.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HackatimeLinkFindManyArgs>(args?: SelectSubset<T, HackatimeLinkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HackatimeLink.
+     * @param {HackatimeLinkCreateArgs} args - Arguments to create a HackatimeLink.
+     * @example
+     * // Create one HackatimeLink
+     * const HackatimeLink = await prisma.hackatimeLink.create({
+     *   data: {
+     *     // ... data to create a HackatimeLink
+     *   }
+     * })
+     * 
+     */
+    create<T extends HackatimeLinkCreateArgs>(args: SelectSubset<T, HackatimeLinkCreateArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HackatimeLinks.
+     * @param {HackatimeLinkCreateManyArgs} args - Arguments to create many HackatimeLinks.
+     * @example
+     * // Create many HackatimeLinks
+     * const hackatimeLink = await prisma.hackatimeLink.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HackatimeLinkCreateManyArgs>(args?: SelectSubset<T, HackatimeLinkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HackatimeLinks and returns the data saved in the database.
+     * @param {HackatimeLinkCreateManyAndReturnArgs} args - Arguments to create many HackatimeLinks.
+     * @example
+     * // Create many HackatimeLinks
+     * const hackatimeLink = await prisma.hackatimeLink.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HackatimeLinks and only return the `id`
+     * const hackatimeLinkWithIdOnly = await prisma.hackatimeLink.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HackatimeLinkCreateManyAndReturnArgs>(args?: SelectSubset<T, HackatimeLinkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HackatimeLink.
+     * @param {HackatimeLinkDeleteArgs} args - Arguments to delete one HackatimeLink.
+     * @example
+     * // Delete one HackatimeLink
+     * const HackatimeLink = await prisma.hackatimeLink.delete({
+     *   where: {
+     *     // ... filter to delete one HackatimeLink
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HackatimeLinkDeleteArgs>(args: SelectSubset<T, HackatimeLinkDeleteArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HackatimeLink.
+     * @param {HackatimeLinkUpdateArgs} args - Arguments to update one HackatimeLink.
+     * @example
+     * // Update one HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HackatimeLinkUpdateArgs>(args: SelectSubset<T, HackatimeLinkUpdateArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HackatimeLinks.
+     * @param {HackatimeLinkDeleteManyArgs} args - Arguments to filter HackatimeLinks to delete.
+     * @example
+     * // Delete a few HackatimeLinks
+     * const { count } = await prisma.hackatimeLink.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HackatimeLinkDeleteManyArgs>(args?: SelectSubset<T, HackatimeLinkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HackatimeLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HackatimeLinks
+     * const hackatimeLink = await prisma.hackatimeLink.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HackatimeLinkUpdateManyArgs>(args: SelectSubset<T, HackatimeLinkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HackatimeLinks and returns the data updated in the database.
+     * @param {HackatimeLinkUpdateManyAndReturnArgs} args - Arguments to update many HackatimeLinks.
+     * @example
+     * // Update many HackatimeLinks
+     * const hackatimeLink = await prisma.hackatimeLink.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HackatimeLinks and only return the `id`
+     * const hackatimeLinkWithIdOnly = await prisma.hackatimeLink.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HackatimeLinkUpdateManyAndReturnArgs>(args: SelectSubset<T, HackatimeLinkUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HackatimeLink.
+     * @param {HackatimeLinkUpsertArgs} args - Arguments to update or create a HackatimeLink.
+     * @example
+     * // Update or create a HackatimeLink
+     * const hackatimeLink = await prisma.hackatimeLink.upsert({
+     *   create: {
+     *     // ... data to create a HackatimeLink
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HackatimeLink we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HackatimeLinkUpsertArgs>(args: SelectSubset<T, HackatimeLinkUpsertArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HackatimeLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkCountArgs} args - Arguments to filter HackatimeLinks to count.
+     * @example
+     * // Count the number of HackatimeLinks
+     * const count = await prisma.hackatimeLink.count({
+     *   where: {
+     *     // ... the filter for the HackatimeLinks we want to count
+     *   }
+     * })
+    **/
+    count<T extends HackatimeLinkCountArgs>(
+      args?: Subset<T, HackatimeLinkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HackatimeLinkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HackatimeLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HackatimeLinkAggregateArgs>(args: Subset<T, HackatimeLinkAggregateArgs>): Prisma.PrismaPromise<GetHackatimeLinkAggregateType<T>>
+
+    /**
+     * Group by HackatimeLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HackatimeLinkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HackatimeLinkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HackatimeLinkGroupByArgs['orderBy'] }
+        : { orderBy?: HackatimeLinkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HackatimeLinkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHackatimeLinkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HackatimeLink model
+   */
+  readonly fields: HackatimeLinkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HackatimeLink.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HackatimeLinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HackatimeLink model
+   */
+  interface HackatimeLinkFieldRefs {
+    readonly id: FieldRef<"HackatimeLink", 'String'>
+    readonly hackatimeId: FieldRef<"HackatimeLink", 'Int'>
+    readonly accessToken: FieldRef<"HackatimeLink", 'String'>
+    readonly scope: FieldRef<"HackatimeLink", 'String'>
+    readonly slackId: FieldRef<"HackatimeLink", 'String'>
+    readonly githubUsername: FieldRef<"HackatimeLink", 'String'>
+    readonly trustLevel: FieldRef<"HackatimeLink", 'String'>
+    readonly createdAt: FieldRef<"HackatimeLink", 'DateTime'>
+    readonly updatedAt: FieldRef<"HackatimeLink", 'DateTime'>
+    readonly userId: FieldRef<"HackatimeLink", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HackatimeLink findUnique
+   */
+  export type HackatimeLinkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which HackatimeLink to fetch.
+     */
+    where: HackatimeLinkWhereUniqueInput
+  }
+
+  /**
+   * HackatimeLink findUniqueOrThrow
+   */
+  export type HackatimeLinkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which HackatimeLink to fetch.
+     */
+    where: HackatimeLinkWhereUniqueInput
+  }
+
+  /**
+   * HackatimeLink findFirst
+   */
+  export type HackatimeLinkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which HackatimeLink to fetch.
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HackatimeLinks to fetch.
+     */
+    orderBy?: HackatimeLinkOrderByWithRelationInput | HackatimeLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HackatimeLinks.
+     */
+    cursor?: HackatimeLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HackatimeLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HackatimeLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HackatimeLinks.
+     */
+    distinct?: HackatimeLinkScalarFieldEnum | HackatimeLinkScalarFieldEnum[]
+  }
+
+  /**
+   * HackatimeLink findFirstOrThrow
+   */
+  export type HackatimeLinkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which HackatimeLink to fetch.
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HackatimeLinks to fetch.
+     */
+    orderBy?: HackatimeLinkOrderByWithRelationInput | HackatimeLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HackatimeLinks.
+     */
+    cursor?: HackatimeLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HackatimeLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HackatimeLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HackatimeLinks.
+     */
+    distinct?: HackatimeLinkScalarFieldEnum | HackatimeLinkScalarFieldEnum[]
+  }
+
+  /**
+   * HackatimeLink findMany
+   */
+  export type HackatimeLinkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which HackatimeLinks to fetch.
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HackatimeLinks to fetch.
+     */
+    orderBy?: HackatimeLinkOrderByWithRelationInput | HackatimeLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HackatimeLinks.
+     */
+    cursor?: HackatimeLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HackatimeLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HackatimeLinks.
+     */
+    skip?: number
+    distinct?: HackatimeLinkScalarFieldEnum | HackatimeLinkScalarFieldEnum[]
+  }
+
+  /**
+   * HackatimeLink create
+   */
+  export type HackatimeLinkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a HackatimeLink.
+     */
+    data: XOR<HackatimeLinkCreateInput, HackatimeLinkUncheckedCreateInput>
+  }
+
+  /**
+   * HackatimeLink createMany
+   */
+  export type HackatimeLinkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HackatimeLinks.
+     */
+    data: HackatimeLinkCreateManyInput | HackatimeLinkCreateManyInput[]
+  }
+
+  /**
+   * HackatimeLink createManyAndReturn
+   */
+  export type HackatimeLinkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * The data used to create many HackatimeLinks.
+     */
+    data: HackatimeLinkCreateManyInput | HackatimeLinkCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HackatimeLink update
+   */
+  export type HackatimeLinkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a HackatimeLink.
+     */
+    data: XOR<HackatimeLinkUpdateInput, HackatimeLinkUncheckedUpdateInput>
+    /**
+     * Choose, which HackatimeLink to update.
+     */
+    where: HackatimeLinkWhereUniqueInput
+  }
+
+  /**
+   * HackatimeLink updateMany
+   */
+  export type HackatimeLinkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HackatimeLinks.
+     */
+    data: XOR<HackatimeLinkUpdateManyMutationInput, HackatimeLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which HackatimeLinks to update
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * Limit how many HackatimeLinks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HackatimeLink updateManyAndReturn
+   */
+  export type HackatimeLinkUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * The data used to update HackatimeLinks.
+     */
+    data: XOR<HackatimeLinkUpdateManyMutationInput, HackatimeLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which HackatimeLinks to update
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * Limit how many HackatimeLinks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HackatimeLink upsert
+   */
+  export type HackatimeLinkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the HackatimeLink to update in case it exists.
+     */
+    where: HackatimeLinkWhereUniqueInput
+    /**
+     * In case the HackatimeLink found by the `where` argument doesn't exist, create a new HackatimeLink with this data.
+     */
+    create: XOR<HackatimeLinkCreateInput, HackatimeLinkUncheckedCreateInput>
+    /**
+     * In case the HackatimeLink was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HackatimeLinkUpdateInput, HackatimeLinkUncheckedUpdateInput>
+  }
+
+  /**
+   * HackatimeLink delete
+   */
+  export type HackatimeLinkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
+    /**
+     * Filter which HackatimeLink to delete.
+     */
+    where: HackatimeLinkWhereUniqueInput
+  }
+
+  /**
+   * HackatimeLink deleteMany
+   */
+  export type HackatimeLinkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HackatimeLinks to delete
+     */
+    where?: HackatimeLinkWhereInput
+    /**
+     * Limit how many HackatimeLinks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HackatimeLink without action
+   */
+  export type HackatimeLinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HackatimeLink
+     */
+    select?: HackatimeLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HackatimeLink
+     */
+    omit?: HackatimeLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HackatimeLinkInclude<ExtArgs> | null
   }
 
 
@@ -6848,6 +9521,9 @@ export namespace Prisma {
     sourceUrl: 'sourceUrl',
     playUrl: 'playUrl',
     status: 'status',
+    hackatimeProject: 'hackatimeProject',
+    trackedSeconds: 'trackedSeconds',
+    claimedSeconds: 'claimedSeconds',
     shippedAt: 'shippedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -6892,12 +9568,46 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
+    hcIdentityId: 'hcIdentityId',
     slackId: 'slackId',
     yswsEligible: 'yswsEligible',
+    verificationStatus: 'verificationStatus',
     pumpkins: 'pumpkins'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const OrderScalarFieldEnum: {
+    id: 'id',
+    itemId: 'itemId',
+    itemName: 'itemName',
+    pumpkins: 'pumpkins',
+    usd: 'usd',
+    details: 'details',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    userId: 'userId'
+  };
+
+  export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+  export const HackatimeLinkScalarFieldEnum: {
+    id: 'id',
+    hackatimeId: 'hackatimeId',
+    accessToken: 'accessToken',
+    scope: 'scope',
+    slackId: 'slackId',
+    githubUsername: 'githubUsername',
+    trustLevel: 'trustLevel',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    userId: 'userId'
+  };
+
+  export type HackatimeLinkScalarFieldEnum = (typeof HackatimeLinkScalarFieldEnum)[keyof typeof HackatimeLinkScalarFieldEnum]
 
 
   export const VerificationTokenScalarFieldEnum: {
@@ -6945,16 +9655,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
+   * Reference to a field of type 'Int'
    */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'DateTime'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
@@ -6969,6 +9679,13 @@ export namespace Prisma {
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderStatus'
+   */
+  export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
     
   /**
    * Deep Input Types
@@ -6986,6 +9703,9 @@ export namespace Prisma {
     sourceUrl?: StringNullableFilter<"Game"> | string | null
     playUrl?: StringNullableFilter<"Game"> | string | null
     status?: EnumGameStatusFilter<"Game"> | $Enums.GameStatus
+    hackatimeProject?: StringNullableFilter<"Game"> | string | null
+    trackedSeconds?: IntNullableFilter<"Game"> | number | null
+    claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
@@ -7001,6 +9721,9 @@ export namespace Prisma {
     sourceUrl?: SortOrderInput | SortOrder
     playUrl?: SortOrderInput | SortOrder
     status?: SortOrder
+    hackatimeProject?: SortOrderInput | SortOrder
+    trackedSeconds?: SortOrderInput | SortOrder
+    claimedSeconds?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7019,6 +9742,9 @@ export namespace Prisma {
     sourceUrl?: StringNullableFilter<"Game"> | string | null
     playUrl?: StringNullableFilter<"Game"> | string | null
     status?: EnumGameStatusFilter<"Game"> | $Enums.GameStatus
+    hackatimeProject?: StringNullableFilter<"Game"> | string | null
+    trackedSeconds?: IntNullableFilter<"Game"> | number | null
+    claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
@@ -7034,13 +9760,18 @@ export namespace Prisma {
     sourceUrl?: SortOrderInput | SortOrder
     playUrl?: SortOrderInput | SortOrder
     status?: SortOrder
+    hackatimeProject?: SortOrderInput | SortOrder
+    trackedSeconds?: SortOrderInput | SortOrder
+    claimedSeconds?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
     _count?: GameCountOrderByAggregateInput
+    _avg?: GameAvgOrderByAggregateInput
     _max?: GameMaxOrderByAggregateInput
     _min?: GameMinOrderByAggregateInput
+    _sum?: GameSumOrderByAggregateInput
   }
 
   export type GameScalarWhereWithAggregatesInput = {
@@ -7054,6 +9785,9 @@ export namespace Prisma {
     sourceUrl?: StringNullableWithAggregatesFilter<"Game"> | string | null
     playUrl?: StringNullableWithAggregatesFilter<"Game"> | string | null
     status?: EnumGameStatusWithAggregatesFilter<"Game"> | $Enums.GameStatus
+    hackatimeProject?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    trackedSeconds?: IntNullableWithAggregatesFilter<"Game"> | number | null
+    claimedSeconds?: IntNullableWithAggregatesFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
@@ -7217,12 +9951,16 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    hcIdentityId?: StringNullableFilter<"User"> | string | null
     slackId?: StringNullableFilter<"User"> | string | null
     yswsEligible?: BoolFilter<"User"> | boolean
+    verificationStatus?: StringNullableFilter<"User"> | string | null
     pumpkins?: IntFilter<"User"> | number
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     games?: GameListRelationFilter
+    hackatime?: XOR<HackatimeLinkNullableScalarRelationFilter, HackatimeLinkWhereInput> | null
+    orders?: OrderListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7231,17 +9969,22 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    hcIdentityId?: SortOrderInput | SortOrder
     slackId?: SortOrderInput | SortOrder
     yswsEligible?: SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
     pumpkins?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     games?: GameOrderByRelationAggregateInput
+    hackatime?: HackatimeLinkOrderByWithRelationInput
+    orders?: OrderOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    hcIdentityId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -7250,11 +9993,14 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     slackId?: StringNullableFilter<"User"> | string | null
     yswsEligible?: BoolFilter<"User"> | boolean
+    verificationStatus?: StringNullableFilter<"User"> | string | null
     pumpkins?: IntFilter<"User"> | number
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     games?: GameListRelationFilter
-  }, "id" | "email">
+    hackatime?: XOR<HackatimeLinkNullableScalarRelationFilter, HackatimeLinkWhereInput> | null
+    orders?: OrderListRelationFilter
+  }, "id" | "email" | "hcIdentityId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -7262,8 +10008,10 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    hcIdentityId?: SortOrderInput | SortOrder
     slackId?: SortOrderInput | SortOrder
     yswsEligible?: SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
     pumpkins?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -7281,9 +10029,175 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    hcIdentityId?: StringNullableWithAggregatesFilter<"User"> | string | null
     slackId?: StringNullableWithAggregatesFilter<"User"> | string | null
     yswsEligible?: BoolWithAggregatesFilter<"User"> | boolean
+    verificationStatus?: StringNullableWithAggregatesFilter<"User"> | string | null
     pumpkins?: IntWithAggregatesFilter<"User"> | number
+  }
+
+  export type OrderWhereInput = {
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    id?: StringFilter<"Order"> | string
+    itemId?: StringFilter<"Order"> | string
+    itemName?: StringFilter<"Order"> | string
+    pumpkins?: IntFilter<"Order"> | number
+    usd?: FloatFilter<"Order"> | number
+    details?: StringNullableFilter<"Order"> | string | null
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    userId?: StringFilter<"Order"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type OrderOrderByWithRelationInput = {
+    id?: SortOrder
+    itemId?: SortOrder
+    itemName?: SortOrder
+    pumpkins?: SortOrder
+    usd?: SortOrder
+    details?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type OrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    itemId?: StringFilter<"Order"> | string
+    itemName?: StringFilter<"Order"> | string
+    pumpkins?: IntFilter<"Order"> | number
+    usd?: FloatFilter<"Order"> | number
+    details?: StringNullableFilter<"Order"> | string | null
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    userId?: StringFilter<"Order"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type OrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    itemId?: SortOrder
+    itemName?: SortOrder
+    pumpkins?: SortOrder
+    usd?: SortOrder
+    details?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+    _count?: OrderCountOrderByAggregateInput
+    _avg?: OrderAvgOrderByAggregateInput
+    _max?: OrderMaxOrderByAggregateInput
+    _min?: OrderMinOrderByAggregateInput
+    _sum?: OrderSumOrderByAggregateInput
+  }
+
+  export type OrderScalarWhereWithAggregatesInput = {
+    AND?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    OR?: OrderScalarWhereWithAggregatesInput[]
+    NOT?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Order"> | string
+    itemId?: StringWithAggregatesFilter<"Order"> | string
+    itemName?: StringWithAggregatesFilter<"Order"> | string
+    pumpkins?: IntWithAggregatesFilter<"Order"> | number
+    usd?: FloatWithAggregatesFilter<"Order"> | number
+    details?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
+    createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    userId?: StringWithAggregatesFilter<"Order"> | string
+  }
+
+  export type HackatimeLinkWhereInput = {
+    AND?: HackatimeLinkWhereInput | HackatimeLinkWhereInput[]
+    OR?: HackatimeLinkWhereInput[]
+    NOT?: HackatimeLinkWhereInput | HackatimeLinkWhereInput[]
+    id?: StringFilter<"HackatimeLink"> | string
+    hackatimeId?: IntFilter<"HackatimeLink"> | number
+    accessToken?: StringFilter<"HackatimeLink"> | string
+    scope?: StringNullableFilter<"HackatimeLink"> | string | null
+    slackId?: StringNullableFilter<"HackatimeLink"> | string | null
+    githubUsername?: StringNullableFilter<"HackatimeLink"> | string | null
+    trustLevel?: StringNullableFilter<"HackatimeLink"> | string | null
+    createdAt?: DateTimeFilter<"HackatimeLink"> | Date | string
+    updatedAt?: DateTimeFilter<"HackatimeLink"> | Date | string
+    userId?: StringFilter<"HackatimeLink"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type HackatimeLinkOrderByWithRelationInput = {
+    id?: SortOrder
+    hackatimeId?: SortOrder
+    accessToken?: SortOrder
+    scope?: SortOrderInput | SortOrder
+    slackId?: SortOrderInput | SortOrder
+    githubUsername?: SortOrderInput | SortOrder
+    trustLevel?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type HackatimeLinkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    hackatimeId?: number
+    userId?: string
+    AND?: HackatimeLinkWhereInput | HackatimeLinkWhereInput[]
+    OR?: HackatimeLinkWhereInput[]
+    NOT?: HackatimeLinkWhereInput | HackatimeLinkWhereInput[]
+    accessToken?: StringFilter<"HackatimeLink"> | string
+    scope?: StringNullableFilter<"HackatimeLink"> | string | null
+    slackId?: StringNullableFilter<"HackatimeLink"> | string | null
+    githubUsername?: StringNullableFilter<"HackatimeLink"> | string | null
+    trustLevel?: StringNullableFilter<"HackatimeLink"> | string | null
+    createdAt?: DateTimeFilter<"HackatimeLink"> | Date | string
+    updatedAt?: DateTimeFilter<"HackatimeLink"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "hackatimeId" | "userId">
+
+  export type HackatimeLinkOrderByWithAggregationInput = {
+    id?: SortOrder
+    hackatimeId?: SortOrder
+    accessToken?: SortOrder
+    scope?: SortOrderInput | SortOrder
+    slackId?: SortOrderInput | SortOrder
+    githubUsername?: SortOrderInput | SortOrder
+    trustLevel?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+    _count?: HackatimeLinkCountOrderByAggregateInput
+    _avg?: HackatimeLinkAvgOrderByAggregateInput
+    _max?: HackatimeLinkMaxOrderByAggregateInput
+    _min?: HackatimeLinkMinOrderByAggregateInput
+    _sum?: HackatimeLinkSumOrderByAggregateInput
+  }
+
+  export type HackatimeLinkScalarWhereWithAggregatesInput = {
+    AND?: HackatimeLinkScalarWhereWithAggregatesInput | HackatimeLinkScalarWhereWithAggregatesInput[]
+    OR?: HackatimeLinkScalarWhereWithAggregatesInput[]
+    NOT?: HackatimeLinkScalarWhereWithAggregatesInput | HackatimeLinkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HackatimeLink"> | string
+    hackatimeId?: IntWithAggregatesFilter<"HackatimeLink"> | number
+    accessToken?: StringWithAggregatesFilter<"HackatimeLink"> | string
+    scope?: StringNullableWithAggregatesFilter<"HackatimeLink"> | string | null
+    slackId?: StringNullableWithAggregatesFilter<"HackatimeLink"> | string | null
+    githubUsername?: StringNullableWithAggregatesFilter<"HackatimeLink"> | string | null
+    trustLevel?: StringNullableWithAggregatesFilter<"HackatimeLink"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"HackatimeLink"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HackatimeLink"> | Date | string
+    userId?: StringWithAggregatesFilter<"HackatimeLink"> | string
   }
 
   export type VerificationTokenWhereInput = {
@@ -7337,6 +10251,9 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7351,6 +10268,9 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7365,6 +10285,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7379,6 +10302,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7393,6 +10319,9 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7407,6 +10336,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7420,6 +10352,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7591,12 +10526,16 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -7605,12 +10544,16 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -7619,12 +10562,16 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7633,12 +10580,16 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7647,8 +10598,10 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
   }
 
@@ -7658,8 +10611,10 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
   }
 
@@ -7669,9 +10624,191 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderCreateInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+  }
+
+  export type OrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OrderCreateManyInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+  }
+
+  export type OrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HackatimeLinkCreateInput = {
+    id?: string
+    hackatimeId: number
+    accessToken: string
+    scope?: string | null
+    slackId?: string | null
+    githubUsername?: string | null
+    trustLevel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutHackatimeInput
+  }
+
+  export type HackatimeLinkUncheckedCreateInput = {
+    id?: string
+    hackatimeId: number
+    accessToken: string
+    scope?: string | null
+    slackId?: string | null
+    githubUsername?: string | null
+    trustLevel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+  }
+
+  export type HackatimeLinkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutHackatimeNestedInput
+  }
+
+  export type HackatimeLinkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HackatimeLinkCreateManyInput = {
+    id?: string
+    hackatimeId: number
+    accessToken: string
+    scope?: string | null
+    slackId?: string | null
+    githubUsername?: string | null
+    trustLevel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+  }
+
+  export type HackatimeLinkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HackatimeLinkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type VerificationTokenCreateInput = {
@@ -7751,6 +10888,17 @@ export namespace Prisma {
     not?: NestedEnumGameStatusFilter<$PrismaModel> | $Enums.GameStatus
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -7791,10 +10939,18 @@ export namespace Prisma {
     sourceUrl?: SortOrder
     playUrl?: SortOrder
     status?: SortOrder
+    hackatimeProject?: SortOrder
+    trackedSeconds?: SortOrder
+    claimedSeconds?: SortOrder
     shippedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+  }
+
+  export type GameAvgOrderByAggregateInput = {
+    trackedSeconds?: SortOrder
+    claimedSeconds?: SortOrder
   }
 
   export type GameMaxOrderByAggregateInput = {
@@ -7805,6 +10961,9 @@ export namespace Prisma {
     sourceUrl?: SortOrder
     playUrl?: SortOrder
     status?: SortOrder
+    hackatimeProject?: SortOrder
+    trackedSeconds?: SortOrder
+    claimedSeconds?: SortOrder
     shippedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7819,10 +10978,18 @@ export namespace Prisma {
     sourceUrl?: SortOrder
     playUrl?: SortOrder
     status?: SortOrder
+    hackatimeProject?: SortOrder
+    trackedSeconds?: SortOrder
+    claimedSeconds?: SortOrder
     shippedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+  }
+
+  export type GameSumOrderByAggregateInput = {
+    trackedSeconds?: SortOrder
+    claimedSeconds?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7869,6 +11036,22 @@ export namespace Prisma {
     _max?: NestedEnumGameStatusFilter<$PrismaModel>
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -7895,17 +11078,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -7971,22 +11143,6 @@ export namespace Prisma {
     refresh_token_expires_in?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type SessionCountOrderByAggregateInput = {
     id?: SortOrder
     sessionToken?: SortOrder
@@ -8042,6 +11198,17 @@ export namespace Prisma {
     none?: GameWhereInput
   }
 
+  export type HackatimeLinkNullableScalarRelationFilter = {
+    is?: HackatimeLinkWhereInput | null
+    isNot?: HackatimeLinkWhereInput | null
+  }
+
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -8054,14 +11221,20 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    hcIdentityId?: SortOrder
     slackId?: SortOrder
     yswsEligible?: SortOrder
+    verificationStatus?: SortOrder
     pumpkins?: SortOrder
   }
 
@@ -8075,8 +11248,10 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    hcIdentityId?: SortOrder
     slackId?: SortOrder
     yswsEligible?: SortOrder
+    verificationStatus?: SortOrder
     pumpkins?: SortOrder
   }
 
@@ -8086,8 +11261,10 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    hcIdentityId?: SortOrder
     slackId?: SortOrder
     yswsEligible?: SortOrder
+    verificationStatus?: SortOrder
     pumpkins?: SortOrder
   }
 
@@ -8117,6 +11294,146 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type EnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
+  export type OrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    itemId?: SortOrder
+    itemName?: SortOrder
+    pumpkins?: SortOrder
+    usd?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type OrderAvgOrderByAggregateInput = {
+    pumpkins?: SortOrder
+    usd?: SortOrder
+  }
+
+  export type OrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    itemId?: SortOrder
+    itemName?: SortOrder
+    pumpkins?: SortOrder
+    usd?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type OrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    itemId?: SortOrder
+    itemName?: SortOrder
+    pumpkins?: SortOrder
+    usd?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type OrderSumOrderByAggregateInput = {
+    pumpkins?: SortOrder
+    usd?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type HackatimeLinkCountOrderByAggregateInput = {
+    id?: SortOrder
+    hackatimeId?: SortOrder
+    accessToken?: SortOrder
+    scope?: SortOrder
+    slackId?: SortOrder
+    githubUsername?: SortOrder
+    trustLevel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type HackatimeLinkAvgOrderByAggregateInput = {
+    hackatimeId?: SortOrder
+  }
+
+  export type HackatimeLinkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    hackatimeId?: SortOrder
+    accessToken?: SortOrder
+    scope?: SortOrder
+    slackId?: SortOrder
+    githubUsername?: SortOrder
+    trustLevel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type HackatimeLinkMinOrderByAggregateInput = {
+    id?: SortOrder
+    hackatimeId?: SortOrder
+    accessToken?: SortOrder
+    scope?: SortOrder
+    slackId?: SortOrder
+    githubUsername?: SortOrder
+    trustLevel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type HackatimeLinkSumOrderByAggregateInput = {
+    hackatimeId?: SortOrder
   }
 
   export type VerificationTokenIdentifierTokenCompoundUniqueInput = {
@@ -8160,6 +11477,14 @@ export namespace Prisma {
     set?: $Enums.GameStatus
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -8180,14 +11505,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
@@ -8233,6 +11550,19 @@ export namespace Prisma {
     connect?: GameWhereUniqueInput | GameWhereUniqueInput[]
   }
 
+  export type HackatimeLinkCreateNestedOneWithoutUserInput = {
+    create?: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+    connectOrCreate?: HackatimeLinkCreateOrConnectWithoutUserInput
+    connect?: HackatimeLinkWhereUniqueInput
+  }
+
+  export type OrderCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -8252,6 +11582,19 @@ export namespace Prisma {
     connectOrCreate?: GameCreateOrConnectWithoutUserInput | GameCreateOrConnectWithoutUserInput[]
     createMany?: GameCreateManyUserInputEnvelope
     connect?: GameWhereUniqueInput | GameWhereUniqueInput[]
+  }
+
+  export type HackatimeLinkUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+    connectOrCreate?: HackatimeLinkCreateOrConnectWithoutUserInput
+    connect?: HackatimeLinkWhereUniqueInput
+  }
+
+  export type OrderUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -8308,6 +11651,30 @@ export namespace Prisma {
     deleteMany?: GameScalarWhereInput | GameScalarWhereInput[]
   }
 
+  export type HackatimeLinkUpdateOneWithoutUserNestedInput = {
+    create?: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+    connectOrCreate?: HackatimeLinkCreateOrConnectWithoutUserInput
+    upsert?: HackatimeLinkUpsertWithoutUserInput
+    disconnect?: HackatimeLinkWhereInput | boolean
+    delete?: HackatimeLinkWhereInput | boolean
+    connect?: HackatimeLinkWhereUniqueInput
+    update?: XOR<XOR<HackatimeLinkUpdateToOneWithWhereWithoutUserInput, HackatimeLinkUpdateWithoutUserInput>, HackatimeLinkUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -8350,6 +11717,70 @@ export namespace Prisma {
     deleteMany?: GameScalarWhereInput | GameScalarWhereInput[]
   }
 
+  export type HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+    connectOrCreate?: HackatimeLinkCreateOrConnectWithoutUserInput
+    upsert?: HackatimeLinkUpsertWithoutUserInput
+    disconnect?: HackatimeLinkWhereInput | boolean
+    delete?: HackatimeLinkWhereInput | boolean
+    connect?: HackatimeLinkWhereUniqueInput
+    update?: XOR<XOR<HackatimeLinkUpdateToOneWithWhereWithoutUserInput, HackatimeLinkUpdateWithoutUserInput>, HackatimeLinkUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EnumOrderStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OrderStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
+    upsert?: UserUpsertWithoutOrdersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOrdersInput, UserUpdateWithoutOrdersInput>, UserUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type UserCreateNestedOneWithoutHackatimeInput = {
+    create?: XOR<UserCreateWithoutHackatimeInput, UserUncheckedCreateWithoutHackatimeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutHackatimeInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutHackatimeNestedInput = {
+    create?: XOR<UserCreateWithoutHackatimeInput, UserUncheckedCreateWithoutHackatimeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutHackatimeInput
+    upsert?: UserUpsertWithoutHackatimeInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutHackatimeInput, UserUpdateWithoutHackatimeInput>, UserUncheckedUpdateWithoutHackatimeInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -8383,6 +11814,17 @@ export namespace Prisma {
     in?: $Enums.GameStatus[]
     notIn?: $Enums.GameStatus[]
     not?: NestedEnumGameStatusFilter<$PrismaModel> | $Enums.GameStatus
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -8452,17 +11894,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumGameStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GameStatus | EnumGameStatusFieldRefInput<$PrismaModel>
     in?: $Enums.GameStatus[]
@@ -8471,6 +11902,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGameStatusFilter<$PrismaModel>
     _max?: NestedEnumGameStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8499,33 +11957,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -8568,17 +11999,54 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutGamesInput = {
     id?: string
     name?: string | null
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGamesInput = {
@@ -8587,11 +12055,15 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGamesInput = {
@@ -8616,11 +12088,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGamesInput = {
@@ -8629,11 +12105,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -8642,11 +12122,15 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -8655,11 +12139,15 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -8684,11 +12172,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -8697,11 +12189,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -8710,11 +12206,15 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -8723,11 +12223,15 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    hcIdentityId?: string | null
     slackId?: string | null
     yswsEligible?: boolean
+    verificationStatus?: string | null
     pumpkins?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -8752,11 +12256,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -8765,11 +12273,15 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
     slackId?: NullableStringFieldUpdateOperationsInput | string | null
     yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
     pumpkins?: IntFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -8840,6 +12352,9 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8853,6 +12368,9 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8865,6 +12383,68 @@ export namespace Prisma {
 
   export type GameCreateManyUserInputEnvelope = {
     data: GameCreateManyUserInput | GameCreateManyUserInput[]
+  }
+
+  export type HackatimeLinkCreateWithoutUserInput = {
+    id?: string
+    hackatimeId: number
+    accessToken: string
+    scope?: string | null
+    slackId?: string | null
+    githubUsername?: string | null
+    trustLevel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HackatimeLinkUncheckedCreateWithoutUserInput = {
+    id?: string
+    hackatimeId: number
+    accessToken: string
+    scope?: string | null
+    slackId?: string | null
+    githubUsername?: string | null
+    trustLevel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HackatimeLinkCreateOrConnectWithoutUserInput = {
+    where: HackatimeLinkWhereUniqueInput
+    create: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderCreateWithoutUserInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUncheckedCreateWithoutUserInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateOrConnectWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderCreateManyUserInputEnvelope = {
+    data: OrderCreateManyUserInput | OrderCreateManyUserInput[]
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -8955,10 +12535,248 @@ export namespace Prisma {
     sourceUrl?: StringNullableFilter<"Game"> | string | null
     playUrl?: StringNullableFilter<"Game"> | string | null
     status?: EnumGameStatusFilter<"Game"> | $Enums.GameStatus
+    hackatimeProject?: StringNullableFilter<"Game"> | string | null
+    trackedSeconds?: IntNullableFilter<"Game"> | number | null
+    claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
+  }
+
+  export type HackatimeLinkUpsertWithoutUserInput = {
+    update: XOR<HackatimeLinkUpdateWithoutUserInput, HackatimeLinkUncheckedUpdateWithoutUserInput>
+    create: XOR<HackatimeLinkCreateWithoutUserInput, HackatimeLinkUncheckedCreateWithoutUserInput>
+    where?: HackatimeLinkWhereInput
+  }
+
+  export type HackatimeLinkUpdateToOneWithWhereWithoutUserInput = {
+    where?: HackatimeLinkWhereInput
+    data: XOR<HackatimeLinkUpdateWithoutUserInput, HackatimeLinkUncheckedUpdateWithoutUserInput>
+  }
+
+  export type HackatimeLinkUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HackatimeLinkUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hackatimeId?: IntFieldUpdateOperationsInput | number
+    accessToken?: StringFieldUpdateOperationsInput | string
+    scope?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    trustLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutUserInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OrderScalarWhereInput = {
+    AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    OR?: OrderScalarWhereInput[]
+    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    id?: StringFilter<"Order"> | string
+    itemId?: StringFilter<"Order"> | string
+    itemName?: StringFilter<"Order"> | string
+    pumpkins?: IntFilter<"Order"> | number
+    usd?: FloatFilter<"Order"> | number
+    details?: StringNullableFilter<"Order"> | string | null
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    userId?: StringFilter<"Order"> | string
+  }
+
+  export type UserCreateWithoutOrdersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    games?: GameCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    games?: GameUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOrdersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type UserUpsertWithoutOrdersInput = {
+    update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type UserUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    games?: GameUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutHackatimeInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    games?: GameCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutHackatimeInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    games?: GameUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutHackatimeInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutHackatimeInput, UserUncheckedCreateWithoutHackatimeInput>
+  }
+
+  export type UserUpsertWithoutHackatimeInput = {
+    update: XOR<UserUpdateWithoutHackatimeInput, UserUncheckedUpdateWithoutHackatimeInput>
+    create: XOR<UserCreateWithoutHackatimeInput, UserUncheckedCreateWithoutHackatimeInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutHackatimeInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutHackatimeInput, UserUncheckedUpdateWithoutHackatimeInput>
+  }
+
+  export type UserUpdateWithoutHackatimeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    games?: GameUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutHackatimeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -8990,7 +12808,22 @@ export namespace Prisma {
     sourceUrl?: string | null
     playUrl?: string | null
     status?: $Enums.GameStatus
+    hackatimeProject?: string | null
+    trackedSeconds?: number | null
+    claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateManyUserInput = {
+    id?: string
+    itemId: string
+    itemName: string
+    pumpkins: number
+    usd: number
+    details?: string | null
+    status?: $Enums.OrderStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9066,6 +12899,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9079,6 +12915,9 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9092,7 +12931,46 @@ export namespace Prisma {
     sourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
     playUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumGameStatusFieldUpdateOperationsInput | $Enums.GameStatus
+    hackatimeProject?: NullableStringFieldUpdateOperationsInput | string | null
+    trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    usd?: FloatFieldUpdateOperationsInput | number
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
