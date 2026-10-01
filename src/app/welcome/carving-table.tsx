@@ -1,12 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 import { ArrowRight, ArrowUpRight, PumpkinMark } from "~/app/_components/icons";
 import { Lantern, type PartState } from "~/app/_components/lantern";
 import { PUMPKINS_PER_HOUR } from "~/lib/program";
 import { api } from "~/trpc/react";
+import { finishOnboarding } from "./actions";
 import { KeeperPortrait, TypedLine } from "./keeper";
 
 type Step = "arrive" | "eyes" | "mouth" | "nose" | "lit";
@@ -51,7 +52,6 @@ export function CarvingTable({
   firstGame: string | null;
   returnStatus: string | null;
 }) {
-  const router = useRouter();
   const [step, setStep] = useState<Step>(returnStatus ? "eyes" : "arrive");
   const [done, setDone] = useState<Record<Part, boolean>>({
     eyes: hackatime.linked,
@@ -63,7 +63,6 @@ export function CarvingTable({
   const [lineDone, setLineDone] = useState(false);
   const [finale, setFinale] = useState(false);
 
-  const complete = api.onboarding.complete.useMutation();
   const markTour = api.onboarding.tourSeen.useMutation();
   const create = api.game.create.useMutation({
     onSuccess: (g) => {
@@ -85,10 +84,6 @@ export function CarvingTable({
     setStep(next);
   };
 
-  const enter = async () => {
-    await complete.mutateAsync().catch(() => undefined);
-    router.push("/platform");
-  };
 
   const light = () => {
     go("lit");
@@ -275,10 +270,12 @@ export function CarvingTable({
   } else {
     action = finale ? (
       <div className="wel-actions">
-        <button type="button" className="btn btn-primary" onClick={enter} disabled={complete.isPending}>
-          <span>Go to Scare</span>
-          <ArrowRight className="btn-icon" />
-        </button>
+        <form action={finishOnboarding}>
+          <FinishButton className="btn btn-primary">
+            <span>Go to Scare</span>
+            <ArrowRight className="btn-icon" />
+          </FinishButton>
+        </form>
       </div>
     ) : null;
   }
@@ -299,9 +296,9 @@ export function CarvingTable({
           <span className="wel-brand-tag">setup</span>
         </span>
         {step !== "lit" && (
-          <button type="button" className="link link-quiet wel-skip" onClick={enter}>
-            Skip setup
-          </button>
+          <form action={finishOnboarding}>
+            <FinishButton className="link link-quiet wel-skip">Skip setup</FinishButton>
+          </form>
         )}
       </header>
 
@@ -338,5 +335,15 @@ export function CarvingTable({
         </section>
       </main>
     </div>
+  );
+}
+
+/** Submits the finish form; disabled while the save and redirect are in flight. */
+function FinishButton({ className, children }: { className: string; children: React.ReactNode }) {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" className={className} disabled={pending} aria-busy={pending}>
+      {children}
+    </button>
   );
 }
