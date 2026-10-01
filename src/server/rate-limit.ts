@@ -1,7 +1,7 @@
 import "server-only";
 
 /**
- * Fixed-window limiter held in memory. Scare runs as one process on SQLite, so this is enough;
+ * Fixed-window limiter held in memory. Scare runs as one process, so this is enough;
  * move to a shared store (Redis) before running several instances.
  */
 const hits = new Map<string, { count: number; reset: number }>();

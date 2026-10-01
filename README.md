@@ -6,22 +6,23 @@ This repo is the program site: the landing page and a signed-in dashboard ("your
 
 ## Stack
 
-Next.js 15 (App Router) · tRPC · Prisma (SQLite) · Auth.js with Hack Club Auth (OIDC) · Tailwind v4 · bun
+Next.js 15 (App Router) · tRPC · Prisma (Postgres) · Auth.js with Hack Club Auth (OIDC) · Tailwind v4 · bun
 
 ## Run it
 
 ```sh
 bun install
 cp .env.example .env        # then fill in the values below
-bunx prisma db push
 bun run dev
 ```
+
+The app talks to Postgres through node-postgres (`@prisma/adapter-pg`). Prisma's own engine can't negotiate TLS 1.3 on macOS, which the dev database requires, so `prisma db push` and `prisma studio` fail locally with "bad protocol version". They work on Linux, which is how the container syncs the schema at startup. To change the dev schema from a Mac, run `prisma db push` from Linux or a Docker container.
 
 ### Environment
 
 | Variable | What it is |
 | --- | --- |
-| `DATABASE_URL` | SQLite file, e.g. `file:./db.sqlite` |
+| `DATABASE_URL` | Postgres connection string. Local dev uses the shared dev database; production has its own |
 | `AUTH_SECRET` | Random secret for Auth.js (`npx auth secret`) |
 | `AUTH_HACKCLUB_ID` / `AUTH_HACKCLUB_SECRET` | OAuth app from [auth.hackclub.com](https://auth.hackclub.com/developer/apps). Redirect URI: `http://localhost:3000/api/auth/callback/hackclub` (add your production URL's callback too) |
 
@@ -66,9 +67,8 @@ Participants link Hackatime from Profile (or from the project form) so they can 
 
 The `Dockerfile` builds a production image that listens on port `3000`.
 
-- Mount a persistent volume (PVC) at `/data`. The SQLite database lives at `/data/scare.db`; without the volume it's wiped on every restart.
-- Set `AUTH_SECRET`, `AUTH_URL`, `AUTH_HACKCLUB_ID` / `AUTH_HACKCLUB_SECRET` and `HACKATIME_CLIENT_ID` / `HACKATIME_CLIENT_SECRET`. `DATABASE_URL` defaults to `file:/data/scare.db`.
-- Run exactly one replica: SQLite and the in-memory rate limiter don't work across instances.
+- Set `DATABASE_URL` (the production Postgres), `AUTH_SECRET`, `AUTH_URL`, `AUTH_HACKCLUB_ID` / `AUTH_HACKCLUB_SECRET` and `HACKATIME_CLIENT_ID` / `HACKATIME_CLIENT_SECRET`.
+- Run one replica: the rate limiter is in memory, so it doesn't hold across instances.
 - On start the container runs `prisma db push`, which refuses changes that would drop data. Apply those by hand.
 
 ## Where things live
