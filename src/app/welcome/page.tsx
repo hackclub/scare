@@ -10,7 +10,7 @@ import { hackatimeConfigured } from "~/server/hackatime";
 import { TRPCReactProvider } from "~/trpc/react";
 import { CarvingTable } from "./carving-table";
 
-export const metadata: Metadata = { title: "Welcome — Scare" };
+export const metadata: Metadata = { title: "Welcome | Scare" };
 export const dynamic = "force-dynamic";
 
 /** Same person, same lantern: the face is seeded from who they are. */

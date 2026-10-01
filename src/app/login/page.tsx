@@ -13,7 +13,7 @@ import { SilenceAmbience } from "~/app/_components/silence-ambience";
 import { SiteFooter } from "~/app/_components/site-footer";
 import { auth } from "~/server/auth";
 
-export const metadata: Metadata = { title: "Sign in — Scare" };
+export const metadata: Metadata = { title: "Sign in | Scare" };
 
 /** Auth.js error codes, plus our own "Unconfigured", in plain words. */
 const ERRORS: Record<string, string> = {

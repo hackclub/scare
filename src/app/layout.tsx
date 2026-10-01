@@ -8,9 +8,9 @@ import Script from "next/script";
 import { TabHaunt } from "./_components/tab-haunt";
 
 export const metadata: Metadata = {
-  title: "Scare — ship a horror game, get paid in Pumpkins",
+  title: "Scare - Make a horror game, get games, candy, and more!",
   description:
-    "Scare is a Hack Club YSWS. Build a horror game, ship it by Halloween, and get paid in Pumpkins for Steam games, candy, costume grants and hardware grants.",
+    "Make a horror game and ship it before Halloween. Every hour you put in earns 10 Pumpkins, which you can trade for Steam games, candy and more. A Hack Club YSWS.",
   icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
 };
 

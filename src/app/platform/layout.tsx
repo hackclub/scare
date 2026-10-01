@@ -18,7 +18,7 @@ import { PlatformNav } from "./_components/platform-nav";
 import { Who } from "./_components/who";
 
 export const metadata: Metadata = {
-  title: { default: "Platform — Scare", template: "%s — Scare" },
+  title: { default: "Platform | Scare", template: "%s | Scare" },
 };
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
