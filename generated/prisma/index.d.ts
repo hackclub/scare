@@ -58,6 +58,11 @@ export type HackatimeLink = $Result.DefaultSelection<Prisma.$HackatimeLinkPayloa
  * 
  */
 export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
+/**
+ * Model Suggestion
+ * An item a participant would like in the shop. Admins triage these at /admin/suggestions.
+ */
+export type Suggestion = $Result.DefaultSelection<Prisma.$SuggestionPayload>
 
 /**
  * Enums
@@ -89,6 +94,15 @@ export const OrderStatus: {
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
+
+export const SuggestionStatus: {
+  NEW: 'NEW',
+  ADDED: 'ADDED',
+  DECLINED: 'DECLINED'
+};
+
+export type SuggestionStatus = (typeof SuggestionStatus)[keyof typeof SuggestionStatus]
+
 }
 
 export type GameStatus = $Enums.GameStatus
@@ -102,6 +116,10 @@ export const ReviewStatus: typeof $Enums.ReviewStatus
 export type OrderStatus = $Enums.OrderStatus
 
 export const OrderStatus: typeof $Enums.OrderStatus
+
+export type SuggestionStatus = $Enums.SuggestionStatus
+
+export const SuggestionStatus: typeof $Enums.SuggestionStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -310,6 +328,16 @@ export class PrismaClient<
     * ```
     */
   get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.suggestion`: Exposes CRUD operations for the **Suggestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Suggestions
+    * const suggestions = await prisma.suggestion.findMany()
+    * ```
+    */
+  get suggestion(): Prisma.SuggestionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -759,7 +787,8 @@ export namespace Prisma {
     User: 'User',
     Order: 'Order',
     HackatimeLink: 'HackatimeLink',
-    VerificationToken: 'VerificationToken'
+    VerificationToken: 'VerificationToken',
+    Suggestion: 'Suggestion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -778,7 +807,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "game" | "screenshot" | "adminAudit" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
+      modelProps: "game" | "screenshot" | "adminAudit" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken" | "suggestion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1448,6 +1477,80 @@ export namespace Prisma {
           }
         }
       }
+      Suggestion: {
+        payload: Prisma.$SuggestionPayload<ExtArgs>
+        fields: Prisma.SuggestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SuggestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SuggestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          findFirst: {
+            args: Prisma.SuggestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SuggestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          findMany: {
+            args: Prisma.SuggestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          create: {
+            args: Prisma.SuggestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          createMany: {
+            args: Prisma.SuggestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SuggestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          delete: {
+            args: Prisma.SuggestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          update: {
+            args: Prisma.SuggestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SuggestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SuggestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SuggestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SuggestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          aggregate: {
+            args: Prisma.SuggestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSuggestion>
+          }
+          groupBy: {
+            args: Prisma.SuggestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SuggestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SuggestionCountArgs<ExtArgs>
+            result: $Utils.Optional<SuggestionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1553,6 +1656,7 @@ export namespace Prisma {
     order?: OrderOmit
     hackatimeLink?: HackatimeLinkOmit
     verificationToken?: VerificationTokenOmit
+    suggestion?: SuggestionOmit
   }
 
   /* Types for Logging */
@@ -1637,6 +1741,7 @@ export namespace Prisma {
     sessions: number
     games: number
     orders: number
+    suggestions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1644,6 +1749,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     games?: boolean | UserCountOutputTypeCountGamesArgs
     orders?: boolean | UserCountOutputTypeCountOrdersArgs
+    suggestions?: boolean | UserCountOutputTypeCountSuggestionsArgs
   }
 
   // Custom InputTypes
@@ -1683,6 +1789,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSuggestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuggestionWhereInput
   }
 
 
@@ -7686,6 +7799,7 @@ export namespace Prisma {
     games?: boolean | User$gamesArgs<ExtArgs>
     hackatime?: boolean | User$hackatimeArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    suggestions?: boolean | User$suggestionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7741,6 +7855,7 @@ export namespace Prisma {
     games?: boolean | User$gamesArgs<ExtArgs>
     hackatime?: boolean | User$hackatimeArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    suggestions?: boolean | User$suggestionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7754,6 +7869,7 @@ export namespace Prisma {
       games: Prisma.$GamePayload<ExtArgs>[]
       hackatime: Prisma.$HackatimeLinkPayload<ExtArgs> | null
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      suggestions: Prisma.$SuggestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8167,6 +8283,7 @@ export namespace Prisma {
     games<T extends User$gamesArgs<ExtArgs> = {}>(args?: Subset<T, User$gamesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     hackatime<T extends User$hackatimeArgs<ExtArgs> = {}>(args?: Subset<T, User$hackatimeArgs<ExtArgs>>): Prisma__HackatimeLinkClient<$Result.GetResult<Prisma.$HackatimeLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    suggestions<T extends User$suggestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$suggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8708,6 +8825,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * User.suggestions
+   */
+  export type User$suggestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    where?: SuggestionWhereInput
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    cursor?: SuggestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
   }
 
   /**
@@ -12056,6 +12197,1129 @@ export namespace Prisma {
 
 
   /**
+   * Model Suggestion
+   */
+
+  export type AggregateSuggestion = {
+    _count: SuggestionCountAggregateOutputType | null
+    _min: SuggestionMinAggregateOutputType | null
+    _max: SuggestionMaxAggregateOutputType | null
+  }
+
+  export type SuggestionMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    link: string | null
+    why: string | null
+    status: $Enums.SuggestionStatus | null
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
+    createdAt: Date | null
+    userId: string | null
+  }
+
+  export type SuggestionMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    link: string | null
+    why: string | null
+    status: $Enums.SuggestionStatus | null
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
+    createdAt: Date | null
+    userId: string | null
+  }
+
+  export type SuggestionCountAggregateOutputType = {
+    id: number
+    name: number
+    link: number
+    why: number
+    status: number
+    adminNote: number
+    handledAt: number
+    handledBy: number
+    createdAt: number
+    userId: number
+    _all: number
+  }
+
+
+  export type SuggestionMinAggregateInputType = {
+    id?: true
+    name?: true
+    link?: true
+    why?: true
+    status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
+    createdAt?: true
+    userId?: true
+  }
+
+  export type SuggestionMaxAggregateInputType = {
+    id?: true
+    name?: true
+    link?: true
+    why?: true
+    status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
+    createdAt?: true
+    userId?: true
+  }
+
+  export type SuggestionCountAggregateInputType = {
+    id?: true
+    name?: true
+    link?: true
+    why?: true
+    status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
+    createdAt?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type SuggestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Suggestion to aggregate.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Suggestions
+    **/
+    _count?: true | SuggestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SuggestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SuggestionMaxAggregateInputType
+  }
+
+  export type GetSuggestionAggregateType<T extends SuggestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSuggestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSuggestion[P]>
+      : GetScalarType<T[P], AggregateSuggestion[P]>
+  }
+
+
+
+
+  export type SuggestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuggestionWhereInput
+    orderBy?: SuggestionOrderByWithAggregationInput | SuggestionOrderByWithAggregationInput[]
+    by: SuggestionScalarFieldEnum[] | SuggestionScalarFieldEnum
+    having?: SuggestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SuggestionCountAggregateInputType | true
+    _min?: SuggestionMinAggregateInputType
+    _max?: SuggestionMaxAggregateInputType
+  }
+
+  export type SuggestionGroupByOutputType = {
+    id: string
+    name: string
+    link: string | null
+    why: string | null
+    status: $Enums.SuggestionStatus
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
+    createdAt: Date
+    userId: string
+    _count: SuggestionCountAggregateOutputType | null
+    _min: SuggestionMinAggregateOutputType | null
+    _max: SuggestionMaxAggregateOutputType | null
+  }
+
+  type GetSuggestionGroupByPayload<T extends SuggestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SuggestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SuggestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SuggestionGroupByOutputType[P]>
+            : GetScalarType<T[P], SuggestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SuggestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    link?: boolean
+    why?: boolean
+    status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    link?: boolean
+    why?: boolean
+    status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    link?: boolean
+    why?: boolean
+    status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectScalar = {
+    id?: boolean
+    name?: boolean
+    link?: boolean
+    why?: boolean
+    status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
+    createdAt?: boolean
+    userId?: boolean
+  }
+
+  export type SuggestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "link" | "why" | "status" | "adminNote" | "handledAt" | "handledBy" | "createdAt" | "userId", ExtArgs["result"]["suggestion"]>
+  export type SuggestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SuggestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SuggestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SuggestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Suggestion"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      link: string | null
+      why: string | null
+      status: $Enums.SuggestionStatus
+      adminNote: string | null
+      handledAt: Date | null
+      handledBy: string | null
+      createdAt: Date
+      userId: string
+    }, ExtArgs["result"]["suggestion"]>
+    composites: {}
+  }
+
+  type SuggestionGetPayload<S extends boolean | null | undefined | SuggestionDefaultArgs> = $Result.GetResult<Prisma.$SuggestionPayload, S>
+
+  type SuggestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SuggestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SuggestionCountAggregateInputType | true
+    }
+
+  export interface SuggestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Suggestion'], meta: { name: 'Suggestion' } }
+    /**
+     * Find zero or one Suggestion that matches the filter.
+     * @param {SuggestionFindUniqueArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SuggestionFindUniqueArgs>(args: SelectSubset<T, SuggestionFindUniqueArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Suggestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SuggestionFindUniqueOrThrowArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SuggestionFindUniqueOrThrowArgs>(args: SelectSubset<T, SuggestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindFirstArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SuggestionFindFirstArgs>(args?: SelectSubset<T, SuggestionFindFirstArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindFirstOrThrowArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SuggestionFindFirstOrThrowArgs>(args?: SelectSubset<T, SuggestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Suggestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Suggestions
+     * const suggestions = await prisma.suggestion.findMany()
+     * 
+     * // Get first 10 Suggestions
+     * const suggestions = await prisma.suggestion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SuggestionFindManyArgs>(args?: SelectSubset<T, SuggestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Suggestion.
+     * @param {SuggestionCreateArgs} args - Arguments to create a Suggestion.
+     * @example
+     * // Create one Suggestion
+     * const Suggestion = await prisma.suggestion.create({
+     *   data: {
+     *     // ... data to create a Suggestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends SuggestionCreateArgs>(args: SelectSubset<T, SuggestionCreateArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Suggestions.
+     * @param {SuggestionCreateManyArgs} args - Arguments to create many Suggestions.
+     * @example
+     * // Create many Suggestions
+     * const suggestion = await prisma.suggestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SuggestionCreateManyArgs>(args?: SelectSubset<T, SuggestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Suggestions and returns the data saved in the database.
+     * @param {SuggestionCreateManyAndReturnArgs} args - Arguments to create many Suggestions.
+     * @example
+     * // Create many Suggestions
+     * const suggestion = await prisma.suggestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Suggestions and only return the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SuggestionCreateManyAndReturnArgs>(args?: SelectSubset<T, SuggestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Suggestion.
+     * @param {SuggestionDeleteArgs} args - Arguments to delete one Suggestion.
+     * @example
+     * // Delete one Suggestion
+     * const Suggestion = await prisma.suggestion.delete({
+     *   where: {
+     *     // ... filter to delete one Suggestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SuggestionDeleteArgs>(args: SelectSubset<T, SuggestionDeleteArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Suggestion.
+     * @param {SuggestionUpdateArgs} args - Arguments to update one Suggestion.
+     * @example
+     * // Update one Suggestion
+     * const suggestion = await prisma.suggestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SuggestionUpdateArgs>(args: SelectSubset<T, SuggestionUpdateArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Suggestions.
+     * @param {SuggestionDeleteManyArgs} args - Arguments to filter Suggestions to delete.
+     * @example
+     * // Delete a few Suggestions
+     * const { count } = await prisma.suggestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SuggestionDeleteManyArgs>(args?: SelectSubset<T, SuggestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Suggestions
+     * const suggestion = await prisma.suggestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SuggestionUpdateManyArgs>(args: SelectSubset<T, SuggestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggestions and returns the data updated in the database.
+     * @param {SuggestionUpdateManyAndReturnArgs} args - Arguments to update many Suggestions.
+     * @example
+     * // Update many Suggestions
+     * const suggestion = await prisma.suggestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Suggestions and only return the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SuggestionUpdateManyAndReturnArgs>(args: SelectSubset<T, SuggestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Suggestion.
+     * @param {SuggestionUpsertArgs} args - Arguments to update or create a Suggestion.
+     * @example
+     * // Update or create a Suggestion
+     * const suggestion = await prisma.suggestion.upsert({
+     *   create: {
+     *     // ... data to create a Suggestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Suggestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SuggestionUpsertArgs>(args: SelectSubset<T, SuggestionUpsertArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Suggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionCountArgs} args - Arguments to filter Suggestions to count.
+     * @example
+     * // Count the number of Suggestions
+     * const count = await prisma.suggestion.count({
+     *   where: {
+     *     // ... the filter for the Suggestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SuggestionCountArgs>(
+      args?: Subset<T, SuggestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SuggestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Suggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SuggestionAggregateArgs>(args: Subset<T, SuggestionAggregateArgs>): Prisma.PrismaPromise<GetSuggestionAggregateType<T>>
+
+    /**
+     * Group by Suggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SuggestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SuggestionGroupByArgs['orderBy'] }
+        : { orderBy?: SuggestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SuggestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSuggestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Suggestion model
+   */
+  readonly fields: SuggestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Suggestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SuggestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Suggestion model
+   */
+  interface SuggestionFieldRefs {
+    readonly id: FieldRef<"Suggestion", 'String'>
+    readonly name: FieldRef<"Suggestion", 'String'>
+    readonly link: FieldRef<"Suggestion", 'String'>
+    readonly why: FieldRef<"Suggestion", 'String'>
+    readonly status: FieldRef<"Suggestion", 'SuggestionStatus'>
+    readonly adminNote: FieldRef<"Suggestion", 'String'>
+    readonly handledAt: FieldRef<"Suggestion", 'DateTime'>
+    readonly handledBy: FieldRef<"Suggestion", 'String'>
+    readonly createdAt: FieldRef<"Suggestion", 'DateTime'>
+    readonly userId: FieldRef<"Suggestion", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Suggestion findUnique
+   */
+  export type SuggestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion findUniqueOrThrow
+   */
+  export type SuggestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion findFirst
+   */
+  export type SuggestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suggestions.
+     */
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion findFirstOrThrow
+   */
+  export type SuggestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suggestions.
+     */
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion findMany
+   */
+  export type SuggestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Suggestions to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion create
+   */
+  export type SuggestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Suggestion.
+     */
+    data: XOR<SuggestionCreateInput, SuggestionUncheckedCreateInput>
+  }
+
+  /**
+   * Suggestion createMany
+   */
+  export type SuggestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Suggestions.
+     */
+    data: SuggestionCreateManyInput | SuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Suggestion createManyAndReturn
+   */
+  export type SuggestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Suggestions.
+     */
+    data: SuggestionCreateManyInput | SuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Suggestion update
+   */
+  export type SuggestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Suggestion.
+     */
+    data: XOR<SuggestionUpdateInput, SuggestionUncheckedUpdateInput>
+    /**
+     * Choose, which Suggestion to update.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion updateMany
+   */
+  export type SuggestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Suggestions.
+     */
+    data: XOR<SuggestionUpdateManyMutationInput, SuggestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Suggestions to update
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Suggestion updateManyAndReturn
+   */
+  export type SuggestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data used to update Suggestions.
+     */
+    data: XOR<SuggestionUpdateManyMutationInput, SuggestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Suggestions to update
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Suggestion upsert
+   */
+  export type SuggestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Suggestion to update in case it exists.
+     */
+    where: SuggestionWhereUniqueInput
+    /**
+     * In case the Suggestion found by the `where` argument doesn't exist, create a new Suggestion with this data.
+     */
+    create: XOR<SuggestionCreateInput, SuggestionUncheckedCreateInput>
+    /**
+     * In case the Suggestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SuggestionUpdateInput, SuggestionUncheckedUpdateInput>
+  }
+
+  /**
+   * Suggestion delete
+   */
+  export type SuggestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+    /**
+     * Filter which Suggestion to delete.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion deleteMany
+   */
+  export type SuggestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Suggestions to delete
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Suggestion without action
+   */
+  export type SuggestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuggestionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12213,6 +13477,22 @@ export namespace Prisma {
   };
 
   export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
+
+
+  export const SuggestionScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    link: 'link',
+    why: 'why',
+    status: 'status',
+    adminNote: 'adminNote',
+    handledAt: 'handledAt',
+    handledBy: 'handledBy',
+    createdAt: 'createdAt',
+    userId: 'userId'
+  };
+
+  export type SuggestionScalarFieldEnum = (typeof SuggestionScalarFieldEnum)[keyof typeof SuggestionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12391,6 +13671,20 @@ export namespace Prisma {
    * Reference to a field of type 'OrderStatus[]'
    */
   export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SuggestionStatus'
+   */
+  export type EnumSuggestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SuggestionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SuggestionStatus[]'
+   */
+  export type ListEnumSuggestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SuggestionStatus[]'>
     
   /**
    * Deep Input Types
@@ -12845,6 +14139,7 @@ export namespace Prisma {
     games?: GameListRelationFilter
     hackatime?: XOR<HackatimeLinkNullableScalarRelationFilter, HackatimeLinkWhereInput> | null
     orders?: OrderListRelationFilter
+    suggestions?: SuggestionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12865,6 +14160,7 @@ export namespace Prisma {
     games?: GameOrderByRelationAggregateInput
     hackatime?: HackatimeLinkOrderByWithRelationInput
     orders?: OrderOrderByRelationAggregateInput
+    suggestions?: SuggestionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12888,6 +14184,7 @@ export namespace Prisma {
     games?: GameListRelationFilter
     hackatime?: XOR<HackatimeLinkNullableScalarRelationFilter, HackatimeLinkWhereInput> | null
     orders?: OrderListRelationFilter
+    suggestions?: SuggestionListRelationFilter
   }, "id" | "email" | "hcIdentityId">
 
   export type UserOrderByWithAggregationInput = {
@@ -13148,6 +14445,86 @@ export namespace Prisma {
     identifier?: StringWithAggregatesFilter<"VerificationToken"> | string
     token?: StringWithAggregatesFilter<"VerificationToken"> | string
     expires?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
+  }
+
+  export type SuggestionWhereInput = {
+    AND?: SuggestionWhereInput | SuggestionWhereInput[]
+    OR?: SuggestionWhereInput[]
+    NOT?: SuggestionWhereInput | SuggestionWhereInput[]
+    id?: StringFilter<"Suggestion"> | string
+    name?: StringFilter<"Suggestion"> | string
+    link?: StringNullableFilter<"Suggestion"> | string | null
+    why?: StringNullableFilter<"Suggestion"> | string | null
+    status?: EnumSuggestionStatusFilter<"Suggestion"> | $Enums.SuggestionStatus
+    adminNote?: StringNullableFilter<"Suggestion"> | string | null
+    handledAt?: DateTimeNullableFilter<"Suggestion"> | Date | string | null
+    handledBy?: StringNullableFilter<"Suggestion"> | string | null
+    createdAt?: DateTimeFilter<"Suggestion"> | Date | string
+    userId?: StringFilter<"Suggestion"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SuggestionOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    link?: SortOrderInput | SortOrder
+    why?: SortOrderInput | SortOrder
+    status?: SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    handledAt?: SortOrderInput | SortOrder
+    handledBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SuggestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SuggestionWhereInput | SuggestionWhereInput[]
+    OR?: SuggestionWhereInput[]
+    NOT?: SuggestionWhereInput | SuggestionWhereInput[]
+    name?: StringFilter<"Suggestion"> | string
+    link?: StringNullableFilter<"Suggestion"> | string | null
+    why?: StringNullableFilter<"Suggestion"> | string | null
+    status?: EnumSuggestionStatusFilter<"Suggestion"> | $Enums.SuggestionStatus
+    adminNote?: StringNullableFilter<"Suggestion"> | string | null
+    handledAt?: DateTimeNullableFilter<"Suggestion"> | Date | string | null
+    handledBy?: StringNullableFilter<"Suggestion"> | string | null
+    createdAt?: DateTimeFilter<"Suggestion"> | Date | string
+    userId?: StringFilter<"Suggestion"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SuggestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    link?: SortOrderInput | SortOrder
+    why?: SortOrderInput | SortOrder
+    status?: SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    handledAt?: SortOrderInput | SortOrder
+    handledBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    _count?: SuggestionCountOrderByAggregateInput
+    _max?: SuggestionMaxOrderByAggregateInput
+    _min?: SuggestionMinOrderByAggregateInput
+  }
+
+  export type SuggestionScalarWhereWithAggregatesInput = {
+    AND?: SuggestionScalarWhereWithAggregatesInput | SuggestionScalarWhereWithAggregatesInput[]
+    OR?: SuggestionScalarWhereWithAggregatesInput[]
+    NOT?: SuggestionScalarWhereWithAggregatesInput | SuggestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Suggestion"> | string
+    name?: StringWithAggregatesFilter<"Suggestion"> | string
+    link?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    why?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    status?: EnumSuggestionStatusWithAggregatesFilter<"Suggestion"> | $Enums.SuggestionStatus
+    adminNote?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    handledAt?: DateTimeNullableWithAggregatesFilter<"Suggestion"> | Date | string | null
+    handledBy?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Suggestion"> | Date | string
+    userId?: StringWithAggregatesFilter<"Suggestion"> | string
   }
 
   export type GameCreateInput = {
@@ -13651,6 +15028,7 @@ export namespace Prisma {
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13671,6 +15049,7 @@ export namespace Prisma {
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13691,6 +15070,7 @@ export namespace Prisma {
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13711,6 +15091,7 @@ export namespace Prisma {
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13999,6 +15380,96 @@ export namespace Prisma {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuggestionCreateInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutSuggestionsInput
+  }
+
+  export type SuggestionUncheckedCreateInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
+    userId: string
+  }
+
+  export type SuggestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSuggestionsNestedInput
+  }
+
+  export type SuggestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SuggestionCreateManyInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
+    userId: string
+  }
+
+  export type SuggestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuggestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -14565,6 +16036,12 @@ export namespace Prisma {
     none?: OrderWhereInput
   }
 
+  export type SuggestionListRelationFilter = {
+    every?: SuggestionWhereInput
+    some?: SuggestionWhereInput
+    none?: SuggestionWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -14578,6 +16055,10 @@ export namespace Prisma {
   }
 
   export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SuggestionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14814,6 +16295,62 @@ export namespace Prisma {
     expires?: SortOrder
   }
 
+  export type EnumSuggestionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SuggestionStatus | EnumSuggestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSuggestionStatusFilter<$PrismaModel> | $Enums.SuggestionStatus
+  }
+
+  export type SuggestionCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    link?: SortOrder
+    why?: SortOrder
+    status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type SuggestionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    link?: SortOrder
+    why?: SortOrder
+    status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type SuggestionMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    link?: SortOrder
+    why?: SortOrder
+    status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type EnumSuggestionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SuggestionStatus | EnumSuggestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSuggestionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SuggestionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSuggestionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSuggestionStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateNestedOneWithoutGamesInput = {
     create?: XOR<UserCreateWithoutGamesInput, UserUncheckedCreateWithoutGamesInput>
     connectOrCreate?: UserCreateOrConnectWithoutGamesInput
@@ -14980,6 +16517,13 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type SuggestionCreateNestedManyWithoutUserInput = {
+    create?: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput> | SuggestionCreateWithoutUserInput[] | SuggestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SuggestionCreateOrConnectWithoutUserInput | SuggestionCreateOrConnectWithoutUserInput[]
+    createMany?: SuggestionCreateManyUserInputEnvelope
+    connect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -15012,6 +16556,13 @@ export namespace Prisma {
     connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
     createMany?: OrderCreateManyUserInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type SuggestionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput> | SuggestionCreateWithoutUserInput[] | SuggestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SuggestionCreateOrConnectWithoutUserInput | SuggestionCreateOrConnectWithoutUserInput[]
+    createMany?: SuggestionCreateManyUserInputEnvelope
+    connect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -15084,6 +16635,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type SuggestionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput> | SuggestionCreateWithoutUserInput[] | SuggestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SuggestionCreateOrConnectWithoutUserInput | SuggestionCreateOrConnectWithoutUserInput[]
+    upsert?: SuggestionUpsertWithWhereUniqueWithoutUserInput | SuggestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SuggestionCreateManyUserInputEnvelope
+    set?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    disconnect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    delete?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    connect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    update?: SuggestionUpdateWithWhereUniqueWithoutUserInput | SuggestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SuggestionUpdateManyWithWhereWithoutUserInput | SuggestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SuggestionScalarWhereInput | SuggestionScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -15150,6 +16715,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type SuggestionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput> | SuggestionCreateWithoutUserInput[] | SuggestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SuggestionCreateOrConnectWithoutUserInput | SuggestionCreateOrConnectWithoutUserInput[]
+    upsert?: SuggestionUpsertWithWhereUniqueWithoutUserInput | SuggestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SuggestionCreateManyUserInputEnvelope
+    set?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    disconnect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    delete?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    connect?: SuggestionWhereUniqueInput | SuggestionWhereUniqueInput[]
+    update?: SuggestionUpdateWithWhereUniqueWithoutUserInput | SuggestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SuggestionUpdateManyWithWhereWithoutUserInput | SuggestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SuggestionScalarWhereInput | SuggestionScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutOrdersInput = {
     create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
@@ -15188,6 +16767,24 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutHackatimeInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutHackatimeInput, UserUpdateWithoutHackatimeInput>, UserUncheckedUpdateWithoutHackatimeInput>
+  }
+
+  export type UserCreateNestedOneWithoutSuggestionsInput = {
+    create?: XOR<UserCreateWithoutSuggestionsInput, UserUncheckedCreateWithoutSuggestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSuggestionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumSuggestionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SuggestionStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutSuggestionsNestedInput = {
+    create?: XOR<UserCreateWithoutSuggestionsInput, UserUncheckedCreateWithoutSuggestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSuggestionsInput
+    upsert?: UserUpsertWithoutSuggestionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSuggestionsInput, UserUpdateWithoutSuggestionsInput>, UserUncheckedUpdateWithoutSuggestionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -15498,6 +17095,23 @@ export namespace Prisma {
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumSuggestionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SuggestionStatus | EnumSuggestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSuggestionStatusFilter<$PrismaModel> | $Enums.SuggestionStatus
+  }
+
+  export type NestedEnumSuggestionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SuggestionStatus | EnumSuggestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SuggestionStatus[] | ListEnumSuggestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSuggestionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SuggestionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSuggestionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSuggestionStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutGamesInput = {
     id?: string
     name?: string | null
@@ -15515,6 +17129,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGamesInput = {
@@ -15534,6 +17149,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGamesInput = {
@@ -15592,6 +17208,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGamesInput = {
@@ -15611,6 +17228,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ScreenshotUpsertWithoutGameInput = {
@@ -15775,6 +17393,7 @@ export namespace Prisma {
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -15794,6 +17413,7 @@ export namespace Prisma {
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -15829,6 +17449,7 @@ export namespace Prisma {
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -15848,6 +17469,7 @@ export namespace Prisma {
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -15867,6 +17489,7 @@ export namespace Prisma {
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -15886,6 +17509,7 @@ export namespace Prisma {
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -15921,6 +17545,7 @@ export namespace Prisma {
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -15940,6 +17565,7 @@ export namespace Prisma {
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -16133,6 +17759,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SuggestionCreateWithoutUserInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SuggestionUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SuggestionCreateOrConnectWithoutUserInput = {
+    where: SuggestionWhereUniqueInput
+    create: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SuggestionCreateManyUserInputEnvelope = {
+    data: SuggestionCreateManyUserInput | SuggestionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -16308,6 +17968,38 @@ export namespace Prisma {
     userId?: StringFilter<"Order"> | string
   }
 
+  export type SuggestionUpsertWithWhereUniqueWithoutUserInput = {
+    where: SuggestionWhereUniqueInput
+    update: XOR<SuggestionUpdateWithoutUserInput, SuggestionUncheckedUpdateWithoutUserInput>
+    create: XOR<SuggestionCreateWithoutUserInput, SuggestionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SuggestionUpdateWithWhereUniqueWithoutUserInput = {
+    where: SuggestionWhereUniqueInput
+    data: XOR<SuggestionUpdateWithoutUserInput, SuggestionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SuggestionUpdateManyWithWhereWithoutUserInput = {
+    where: SuggestionScalarWhereInput
+    data: XOR<SuggestionUpdateManyMutationInput, SuggestionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SuggestionScalarWhereInput = {
+    AND?: SuggestionScalarWhereInput | SuggestionScalarWhereInput[]
+    OR?: SuggestionScalarWhereInput[]
+    NOT?: SuggestionScalarWhereInput | SuggestionScalarWhereInput[]
+    id?: StringFilter<"Suggestion"> | string
+    name?: StringFilter<"Suggestion"> | string
+    link?: StringNullableFilter<"Suggestion"> | string | null
+    why?: StringNullableFilter<"Suggestion"> | string | null
+    status?: EnumSuggestionStatusFilter<"Suggestion"> | $Enums.SuggestionStatus
+    adminNote?: StringNullableFilter<"Suggestion"> | string | null
+    handledAt?: DateTimeNullableFilter<"Suggestion"> | Date | string | null
+    handledBy?: StringNullableFilter<"Suggestion"> | string | null
+    createdAt?: DateTimeFilter<"Suggestion"> | Date | string
+    userId?: StringFilter<"Suggestion"> | string
+  }
+
   export type UserCreateWithoutOrdersInput = {
     id?: string
     name?: string | null
@@ -16325,6 +18017,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -16344,6 +18037,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -16379,6 +18073,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -16398,6 +18093,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
     hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutHackatimeInput = {
@@ -16417,6 +18113,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     games?: GameCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHackatimeInput = {
@@ -16436,6 +18133,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     games?: GameUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    suggestions?: SuggestionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHackatimeInput = {
@@ -16471,6 +18169,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     games?: GameUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHackatimeInput = {
@@ -16489,6 +18188,103 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    suggestions?: SuggestionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutSuggestionsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    games?: GameCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkCreateNestedOneWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSuggestionsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    hcIdentityId?: string | null
+    slackId?: string | null
+    yswsEligible?: boolean
+    verificationStatus?: string | null
+    pumpkins?: number
+    onboardedAt?: Date | string | null
+    tourSeenAt?: Date | string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    games?: GameUncheckedCreateNestedManyWithoutUserInput
+    hackatime?: HackatimeLinkUncheckedCreateNestedOneWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSuggestionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSuggestionsInput, UserUncheckedCreateWithoutSuggestionsInput>
+  }
+
+  export type UserUpsertWithoutSuggestionsInput = {
+    update: XOR<UserUpdateWithoutSuggestionsInput, UserUncheckedUpdateWithoutSuggestionsInput>
+    create: XOR<UserCreateWithoutSuggestionsInput, UserUncheckedCreateWithoutSuggestionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSuggestionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSuggestionsInput, UserUncheckedUpdateWithoutSuggestionsInput>
+  }
+
+  export type UserUpdateWithoutSuggestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    games?: GameUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUpdateOneWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSuggestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    hcIdentityId?: NullableStringFieldUpdateOperationsInput | string | null
+    slackId?: NullableStringFieldUpdateOperationsInput | string | null
+    yswsEligible?: BoolFieldUpdateOperationsInput | boolean
+    verificationStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    pumpkins?: IntFieldUpdateOperationsInput | number
+    onboardedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tourSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    games?: GameUncheckedUpdateManyWithoutUserNestedInput
+    hackatime?: HackatimeLinkUncheckedUpdateOneWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -16550,6 +18346,18 @@ export namespace Prisma {
     handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SuggestionCreateManyUserInput = {
+    id?: string
+    name: string
+    link?: string | null
+    why?: string | null
+    status?: $Enums.SuggestionStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
+    createdAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -16732,6 +18540,42 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuggestionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuggestionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuggestionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    why?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSuggestionStatusFieldUpdateOperationsInput | $Enums.SuggestionStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

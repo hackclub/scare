@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { after } from "next/server";
+import { Suspense } from "react";
+
+import { PageLoading } from "~/app/_components/page-loading";
 import { ArrowUpRight } from "~/app/_components/icons";
 import { SignInButton, SignOutButton } from "~/app/_components/auth-buttons";
 import { auth } from "~/server/auth";
@@ -44,6 +48,44 @@ export default async function Profile({
   searchParams: Promise<{ hackatime?: string }>;
 }) {
   const { hackatime } = await searchParams;
+
+  return (
+    <>
+      <PageHead
+        title="Profile"
+        lead={
+          <>
+            Your profile information for Scare. This uses data from{" "}
+            <a href="https://auth.hackclub.com" className="link" target="_blank" rel="noreferrer">
+              Hack Club Auth
+            </a>{" "}
+            and{" "}
+            <a href="https://hackatime.hackclub.com" className="link" target="_blank" rel="noreferrer">
+              Hackatime
+            </a>
+            .
+          </>
+        }
+        actions={
+          <a href={HACKCLUB_AUTH.verify} className="btn btn-ghost">
+            <span>Edit on Hack Club Auth</span>
+            <ArrowUpRight className="btn-icon" />
+          </a>
+        }
+      />
+
+      <HackatimeNotice status={hackatime} />
+
+      {/* The identity is read live from Hack Club Auth, which can be slow. Stream it in so the
+          rest of the page doesn't wait on it. */}
+      <Suspense fallback={<PageLoading label="Reading your Hack Club identity" />}>
+        <ProfileBody />
+      </Suspense>
+    </>
+  );
+}
+
+async function ProfileBody() {
   const session = (await auth())!;
   const [result, link] = await Promise.all([
     getIdentity(session.user.id),
@@ -86,133 +128,101 @@ export default async function Profile({
       fresh.yswsEligible !== s.yswsEligible ||
       fresh.slackId !== s.slackId)
   ) {
-    await db.user.update({
-      where: { id: session.user.id },
-      data: fresh,
-    });
+    // Written after the response is out; the page already shows the fresh values.
+    const userId = session.user.id;
+    after(() => db.user.update({ where: { id: userId }, data: fresh }));
   }
 
-  return (
-    <>
-      <PageHead
-        title="Profile"
-        lead={
-          <>
-            Your profile information for Scare. This uses data from{" "}
-            <a href="https://auth.hackclub.com" className="link" target="_blank" rel="noreferrer">
-              Hack Club Auth
-            </a>{" "}
-            and{" "}
-            <a href="https://hackatime.hackclub.com" className="link" target="_blank" rel="noreferrer">
-              Hackatime
-            </a>
-            .
-          </>
-        }
-        actions={
-          <a href={HACKCLUB_AUTH.verify} className="btn btn-ghost">
-            <span>Edit on Hack Club Auth</span>
-            <ArrowUpRight className="btn-icon" />
-          </a>
-        }
-      />
-
-      <HackatimeNotice status={hackatime} />
-
-      {!result.ok ? (
-        <div className="pf-profile pf-profile-error">
-          <section className="frame pf-error" role="alert">
+  return !result.ok ? (
+    <div className="pf-profile pf-profile-error">
+      <section className="frame pf-error" role="alert">
+        <div className="frame-head">
+          <span>Couldn&rsquo;t load your identity</span>
+        </div>
+        <div className="pf-next-body">
+          <p className="pf-next-text">
+            {result.reason === "unavailable"
+              ? "Hack Club Auth didn't answer. Try again in a minute."
+              : "Your Hack Club session has expired. Sign in again to reconnect it."}
+          </p>
+          {result.reason !== "unavailable" && (
+            <SignInButton redirectTo="/platform/profile">
+              Sign in again
+            </SignInButton>
+          )}
+        </div>
+      </section>
+      {hackatimeFrame}
+    </div>
+  ) : (
+    (() => {
+      const i = result.me.identity;
+      const name = displayName(i);
+      return (
+        <div className="pf-profile">
+          <section className="frame" aria-labelledby="identity-title">
             <div className="frame-head">
-              <span>Couldn&rsquo;t load your identity</span>
+              <span id="identity-title">Hack Club identity</span>
+              <span>{result.me.scopes.length} scopes granted</span>
             </div>
-            <div className="pf-next-body">
-              <p className="pf-next-text">
-                {result.reason === "unavailable"
-                  ? "Hack Club Auth didn't answer. Try again in a minute."
-                  : "Your Hack Club session has expired. Sign in again to reconnect it."}
-              </p>
-              {result.reason !== "unavailable" && (
-                <SignInButton redirectTo="/platform/profile">
-                  Sign in again
-                </SignInButton>
-              )}
+            <dl className="ledger pf-ledger">
+              <Row
+                label="Name"
+                value={name ? <Secret value={name} label="name" /> : null}
+              />
+              <Row
+                label="Email"
+                value={
+                  i.primary_email ? (
+                    <Secret value={i.primary_email} label="email" />
+                  ) : null
+                }
+              />
+              <Row
+                label="Slack ID"
+                value={
+                  i.slack_id ? (
+                    <Secret value={i.slack_id} label="Slack ID" mono />
+                  ) : null
+                }
+              />
+              <Row
+                label="Verification"
+                value={
+                  <VerificationBadge status={i.verification_status ?? null} />
+                }
+              />
+              <Row
+                label="YSWS eligible"
+                value={
+                  i.ysws_eligible === undefined
+                    ? null
+                    : i.ysws_eligible
+                      ? "Yes"
+                      : "No"
+                }
+              />
+            </dl>
+          </section>
+
+          {hackatimeFrame}
+
+          <section className="frame" aria-labelledby="session-title">
+            <div className="frame-head">
+              <span id="session-title">Session</span>
+            </div>
+            <div className="pf-next-body pf-session">
+              <p className="pf-next-text">Signed in with Hack Club.</p>
+              <div className="pf-session-actions">
+                <Link href="/welcome" className="btn btn-ghost">
+                  Onboarding
+                </Link>
+                <SignOutButton variant="ghost" />
+              </div>
             </div>
           </section>
-          {hackatimeFrame}
         </div>
-      ) : (
-        (() => {
-          const i = result.me.identity;
-          const name = displayName(i);
-          return (
-            <div className="pf-profile">
-              <section className="frame" aria-labelledby="identity-title">
-                <div className="frame-head">
-                  <span id="identity-title">Hack Club identity</span>
-                  <span>{result.me.scopes.length} scopes granted</span>
-                </div>
-                <dl className="ledger pf-ledger">
-                  <Row
-                    label="Name"
-                    value={name ? <Secret value={name} label="name" /> : null}
-                  />
-                  <Row
-                    label="Email"
-                    value={
-                      i.primary_email ? (
-                        <Secret value={i.primary_email} label="email" />
-                      ) : null
-                    }
-                  />
-                  <Row
-                    label="Slack ID"
-                    value={
-                      i.slack_id ? (
-                        <Secret value={i.slack_id} label="Slack ID" mono />
-                      ) : null
-                    }
-                  />
-                  <Row
-                    label="Verification"
-                    value={
-                      <VerificationBadge
-                        status={i.verification_status ?? null}
-                      />
-                    }
-                  />
-                  <Row
-                    label="YSWS eligible"
-                    value={
-                      i.ysws_eligible === undefined
-                        ? null
-                        : i.ysws_eligible
-                          ? "Yes"
-                          : "No"
-                    }
-                  />
-                </dl>
-              </section>
-
-              {hackatimeFrame}
-
-              <section className="frame" aria-labelledby="session-title">
-                <div className="frame-head">
-                  <span id="session-title">Session</span>
-                </div>
-                <div className="pf-next-body pf-session">
-                  <p className="pf-next-text">Signed in with Hack Club.</p>
-                  <div className="pf-session-actions">
-                    <Link href="/welcome" className="btn btn-ghost">
-                      Carve again
-                    </Link>
-                    <SignOutButton variant="ghost" />
-                  </div>
-                </div>
-              </section>
-            </div>
-          );
-        })()
-      )}
-    </>
+      );
+    })()
   );
 }

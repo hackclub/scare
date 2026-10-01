@@ -240,6 +240,19 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.SuggestionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  link: 'link',
+  why: 'why',
+  status: 'status',
+  adminNote: 'adminNote',
+  handledAt: 'handledAt',
+  handledBy: 'handledBy',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -283,6 +296,12 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.SuggestionStatus = exports.$Enums.SuggestionStatus = {
+  NEW: 'NEW',
+  ADDED: 'ADDED',
+  DECLINED: 'DECLINED'
+};
+
 exports.Prisma.ModelName = {
   Game: 'Game',
   Screenshot: 'Screenshot',
@@ -292,7 +311,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Order: 'Order',
   HackatimeLink: 'HackatimeLink',
-  VerificationToken: 'VerificationToken'
+  VerificationToken: 'VerificationToken',
+  Suggestion: 'Suggestion'
 };
 
 /**

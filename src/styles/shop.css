@@ -1,0 +1,609 @@
+/*
+ * The Pumpkin Shop: one wallet strip, shelf tabs, a quiet grid of items, and a sticky
+ * panel for whatever you picked. Same frames and glyph type as the rest of the platform;
+ * each shelf adds one hue (--hue) for its icon, edge, label and meter. Prices stay pumpkin.
+ */
+
+.sh {
+  display: grid;
+  gap: 20px;
+}
+/* The shop is a grid plus a panel; give it more room than the platform's reading width. */
+.pf-content:has(.sh) {
+  max-width: 1680px;
+}
+
+.sh [data-shelf] {
+  --hue: var(--ink);
+}
+.sh [data-shelf="steam"] {
+  --hue: #8fb8ff;
+}
+.sh [data-shelf="gear"] {
+  --hue: #5fdcc8;
+}
+.sh [data-shelf="friends"] {
+  --hue: #ffd84d;
+}
+.sh [data-shelf="candy"] {
+  --hue: #ff8cc6;
+}
+.sh [data-shelf="costume"] {
+  --hue: #b99aff;
+}
+.sh [data-shelf="hardware"] {
+  --hue: #9ee86f;
+}
+
+/* ------------------------------------------------------------ wallet */
+
+.sh-wallet {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px 40px;
+  padding: 20px 24px;
+  border: 1px dotted var(--ink-30);
+  background: linear-gradient(90deg, var(--crypt), var(--void));
+}
+.sh-wallet-balance {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  column-gap: 14px;
+}
+.sh-wallet-icon {
+  grid-row: span 2;
+  width: 28px;
+  height: 24px;
+  color: var(--ink);
+}
+.sh-wallet-num {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--hot);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 14px rgb(255 138 31 / 0.35);
+}
+.sh-wallet-label {
+  display: grid;
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sh-wallet-label span {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: var(--ink-60);
+}
+.sh-wallet-goal {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.sh-wallet-goal-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-80);
+}
+.sh-wallet-rate {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  color: var(--hot);
+  white-space: nowrap;
+}
+.sh-wallet-rate span {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+
+/* Glyph meter: what you have in #, what's left in dots. */
+.sh-meter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.sh-meter-on {
+  color: var(--ink);
+}
+.sh-meter-off {
+  color: var(--ink-30);
+}
+
+/* ------------------------------------------------------------ tabs */
+
+.sh-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px dotted var(--ink-30);
+  mask-image: linear-gradient(90deg, var(--void) calc(100% - 32px), transparent);
+}
+.sh-tabs::after {
+  content: "";
+  flex: none;
+  width: 24px;
+}
+.sh-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 10px 12px 12px;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-80);
+  cursor: pointer;
+  box-shadow: inset 0 -1px 0 transparent;
+  transition: color 0.2s, box-shadow 0.2s;
+}
+.sh-tab:hover {
+  color: var(--hot);
+}
+.sh-tab[aria-selected="true"] {
+  color: var(--hot);
+  box-shadow: inset 0 -2px 0 var(--hue);
+}
+.sh-tab-swatch {
+  width: 7px;
+  height: 7px;
+  background: var(--hue);
+}
+.sh-tab-count {
+  font-size: 11px;
+  color: var(--ink-60);
+}
+
+/* ------------------------------------------------------------ grid */
+
+.sh-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  align-items: start;
+  gap: 20px;
+}
+.sh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Featured: fewer, bigger tiles that also say what the thing is. */
+.sh-groups {
+  display: grid;
+  gap: 32px;
+}
+.sh-group {
+  display: grid;
+  gap: 12px;
+}
+.sh-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hue);
+}
+.sh-group-blurb {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-60);
+}
+/* At most three across, so six picks always make clean rows. */
+.sh-grid[data-view="featured"] {
+  grid-template-columns: repeat(auto-fill, minmax(max(220px, (100% - 32px) / 3), 1fr));
+  gap: 16px;
+}
+.sh-grid[data-view="featured"] .sh-tile {
+  padding: 20px;
+}
+.sh-tile-desc {
+  margin-top: -6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-80);
+}
+.sh-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  border: 1px dotted color-mix(in srgb, var(--hue) 34%, var(--void));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hue) 7%, var(--crypt)), var(--crypt) 60%);
+  box-shadow: inset 0 2px 0 color-mix(in srgb, var(--hue) 70%, transparent);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease-out),
+    background-color 0.2s var(--ease-out),
+    transform 0.25s var(--ease-out);
+}
+.sh-tile:hover {
+  border-color: color-mix(in srgb, var(--hue) 70%, var(--void));
+  transform: translateY(-2px);
+}
+.sh-tile[aria-pressed="true"] {
+  border-style: solid;
+  border-color: var(--hue);
+  background: color-mix(in srgb, var(--hue) 11%, var(--crypt));
+  box-shadow:
+    inset 0 2px 0 var(--hue),
+    0 0 24px -8px color-mix(in srgb, var(--hue) 60%, transparent);
+}
+.sh-tile-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.sh-tile-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--hue);
+}
+.sh-tile-shelf {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--hue) 80%, var(--void));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sh-tile .sh-meter-on,
+.sh-checkout .sh-meter-on {
+  color: var(--hue);
+}
+.sh-tile .sh-meter-off,
+.sh-checkout .sh-meter-off {
+  color: color-mix(in srgb, var(--hue) 28%, var(--void));
+}
+.sh-tile-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--hot);
+}
+.sh-tile-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: auto;
+}
+.sh-tile-cost {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--hot);
+  font-variant-numeric: tabular-nums;
+}
+.sh-tile-unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-60);
+  white-space: nowrap;
+}
+/* Always meter over status, so every tile's foot is the same height and prices line up. */
+.sh-tile-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px dotted color-mix(in srgb, var(--hue) 18%, var(--void));
+}
+.sh-tile-short,
+.sh-tile-ok {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.sh-tile-short {
+  color: var(--ink-60);
+}
+.sh-tile-ok {
+  color: var(--hot);
+}
+
+/* The last tile: not an item, an invitation. Plain Pumpkin Ink, dashed instead of dotted. */
+.sh-suggest-tile {
+  justify-content: center;
+  gap: 8px;
+  min-height: 160px;
+  border-style: dashed;
+  border-color: var(--ink-30);
+  background: none;
+  box-shadow: none;
+}
+.sh-suggest-tile .sh-tile-icon {
+  color: var(--ink);
+}
+.sh-suggest-tile:hover {
+  border-color: var(--ink-60);
+}
+.sh-suggest-tile[aria-pressed="true"] {
+  border-style: solid;
+  border-color: var(--ink);
+  background: var(--ink-05);
+  box-shadow: none;
+}
+.sh-suggest-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-60);
+}
+
+/* ------------------------------------------------------------ side panel */
+
+.sh-side {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  gap: 16px;
+  scroll-margin-top: 16px;
+}
+.sh-checkout[data-shelf] {
+  box-shadow: inset 0 2px 0 var(--hue);
+}
+.sh-checkout-shelf {
+  color: var(--hue);
+}
+.sh-checkout-empty {
+  margin: 0;
+  padding: 20px;
+  font-size: 14px;
+  color: var(--ink-60);
+}
+.sh-checkout-body {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+.sh-checkout-name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--hot);
+}
+.sh-checkout-desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-80);
+}
+.sh-checkout-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 6px 0 0;
+}
+.sh-checkout-price .sh-tile-cost {
+  font-size: 32px;
+}
+.sh-checkout-short {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-top: 4px;
+}
+.sh-checkout-short p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-80);
+}
+.sh-checkout-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+.sh-pick {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.sh-pick legend {
+  margin-bottom: 4px;
+  padding: 0;
+}
+.sh-pick-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px dotted var(--ink-30);
+  font-size: 14px;
+  color: var(--ink-80);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+.sh-pick-option::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border: 1px solid var(--ink-60);
+}
+.sh-pick-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.sh-pick-option:hover {
+  border-color: var(--ink-60);
+  color: var(--hot);
+}
+.sh-pick-option:has(input:checked) {
+  border-style: solid;
+  border-color: var(--hue);
+  background: color-mix(in srgb, var(--hue) 8%, transparent);
+  color: var(--hot);
+}
+.sh-pick-option:has(input:checked)::before {
+  border-color: var(--hue);
+  background: var(--hue);
+}
+.sh-pick-option:has(input:focus-visible) {
+  outline: 2px solid var(--hot);
+  outline-offset: 2px;
+}
+.sh-spend {
+  width: 100%;
+}
+.sh-checkout-fine {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-60);
+}
+/* Scoped so they beat `button.link { font: inherit }`. */
+.sh .sh-close {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sh-orders-list {
+  margin: 0;
+  padding: 4px 20px 8px;
+  list-style: none;
+}
+.sh-order {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding: 12px 0;
+  border-bottom: 1px dotted var(--ink-15);
+}
+.sh-order:last-child {
+  border-bottom: 0;
+}
+.sh-order-name {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hot);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sh-order-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-60);
+}
+.sh-order-done {
+  color: var(--hot);
+}
+.sh-suggestions {
+  border-top: 1px dotted var(--ink-15);
+}
+.sh-suggestion-note {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: var(--ink-60);
+}
+.sh .sh-order-cancel {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sh-order-confirm {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+}
+
+/* ------------------------------------------------------------ responsive */
+
+@media (max-width: 1000px) {
+  .sh-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sh-side {
+    position: static;
+  }
+  .sh-wallet {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .sh-wallet-rate {
+    grid-column: 1 / -1;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .sh-wallet {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .sh-wallet-num {
+    font-size: 32px;
+  }
+  .sh-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .sh-tile {
+    padding: 12px;
+    gap: 10px;
+  }
+  .sh-tile-cost {
+    font-size: 20px;
+  }
+  .sh-tile .sh-meter {
+    display: none;
+  }
+  .sh-tile-price {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .sh-tile-hours {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-tile:hover {
+    transform: none;
+  }
+}

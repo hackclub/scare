@@ -229,6 +229,41 @@ export async function rejectOrder(_: ActionState, form: FormData): Promise<Actio
   );
 }
 
+/* ------------------------------------------------------------ suggestions */
+
+async function resolveSuggestion(form: FormData, status: "ADDED" | "DECLINED"): Promise<ActionState> {
+  const admin = await requireAdminAction();
+  if (!admin) return SLOW;
+  const input = parse(z.object({ suggestionId: id, note }), form);
+  if (isError(input)) return input;
+
+  return run(() =>
+    db.$transaction(async (tx) => {
+      const { count } = await tx.suggestion.updateMany({
+        where: { id: input.suggestionId, status: "NEW" },
+        data: { status, adminNote: input.note ?? null, handledAt: new Date(), handledBy: admin.identity },
+      });
+      if (count === 0) throw new Error("Someone already handled that suggestion.");
+      const s = await tx.suggestion.findUniqueOrThrow({ where: { id: input.suggestionId }, select: { name: true } });
+      await audit(tx, admin, status === "ADDED" ? "suggestion.add" : "suggestion.decline", {
+        type: "suggestion",
+        id: input.suggestionId,
+      }, { name: s.name, note: input.note ?? null });
+      revalidatePath("/admin", "layout");
+      return status === "ADDED" ? `Marked "${s.name}" as added.` : `Declined "${s.name}".`;
+    }),
+  );
+}
+
+/** The item is in the shop now (add it to the catalog first). The suggester sees "Added". */
+export async function addSuggestion(_: ActionState, form: FormData): Promise<ActionState> {
+  return resolveSuggestion(form, "ADDED");
+}
+
+export async function declineSuggestion(_: ActionState, form: FormData): Promise<ActionState> {
+  return resolveSuggestion(form, "DECLINED");
+}
+
 /* ------------------------------------------------------------ users */
 
 export async function adjustPumpkins(_: ActionState, form: FormData): Promise<ActionState> {

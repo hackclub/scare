@@ -82,7 +82,8 @@ export async function GET(req: NextRequest, { params }: Ctx) {
   return new Response(new Uint8Array(shot.data), {
     headers: {
       "Content-Type": shot.mime,
-      "Cache-Control": "private, max-age=3600",
+      // The URL carries ?v=<updatedAt>, so a replaced screenshot gets a new URL.
+      "Cache-Control": "private, max-age=31536000, immutable",
       "X-Content-Type-Options": "nosniff",
       "Content-Security-Policy": "default-src 'none'",
     },

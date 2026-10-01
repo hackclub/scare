@@ -2,194 +2,220 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
-    output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // A horror game a participant is making or has shipped.
 model Game {
-    id        String     @id @default(cuid())
-    title     String
-    pitch     String
-    engine    String?
-    sourceUrl String?
-    playUrl   String?
-    status    GameStatus @default(BREWING)
-    // Time: a linked Hackatime project, the last total read from it, and the
-    // participant's own figure when they've edited it (null = use Hackatime's).
-    hackatimeProject String?
-    trackedSeconds   Int?
-    claimedSeconds   Int?
-    shippedAt DateTime?
-    // Review, set by an admin after shipping. Approving credits awardedPumpkins once.
-    reviewStatus    ReviewStatus?
-    reviewNote      String?
-    reviewedAt      DateTime?
-    reviewedBy      String?
-    awardedPumpkins Int?
-    // Mirror in the program's Airtable (YSWS Project Submission), created on ship.
-    // Indexed, not @unique: the container's `prisma db push` refuses to add a unique constraint
-    // to an existing table, and the sync already guards against two games sharing a record.
-    airtableRecordId String?
-    airtableSyncedAt DateTime?
-    airtableError    String?
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
+  id               String        @id @default(cuid())
+  title            String
+  pitch            String
+  engine           String?
+  sourceUrl        String?
+  playUrl          String?
+  status           GameStatus    @default(BREWING)
+  // Time: a linked Hackatime project, the last total read from it, and the
+  // participant's own figure when they've edited it (null = use Hackatime's).
+  hackatimeProject String?
+  trackedSeconds   Int?
+  claimedSeconds   Int?
+  shippedAt        DateTime?
+  // Review, set by an admin after shipping. Approving credits awardedPumpkins once.
+  reviewStatus     ReviewStatus?
+  reviewNote       String?
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  awardedPumpkins  Int?
+  // Mirror in the program's Airtable (YSWS Project Submission), created on ship.
+  // Indexed, not @unique: the container's `prisma db push` refuses to add a unique constraint
+  // to an existing table, and the sync already guards against two games sharing a record.
+  airtableRecordId String?
+  airtableSyncedAt DateTime?
+  airtableError    String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
-    screenshot Screenshot?
+  screenshot Screenshot?
 
-    @@index([userId])
-    @@index([airtableRecordId])
+  @@index([userId])
+  @@index([airtableRecordId])
 }
 
 // A game's screenshot, required to ship. Kept out of Game so listing games never loads image bytes.
 model Screenshot {
-    id        String   @id @default(cuid())
-    mime      String
-    size      Int
-    data      Bytes
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  mime      String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-    gameId String @unique
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId String @unique
 }
 
 enum GameStatus {
-    BREWING
-    SHIPPED
+  BREWING
+  SHIPPED
 }
 
 enum ReviewStatus {
-    PENDING
-    APPROVED
-    REJECTED
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 // Every admin action, who did it and to what. Written in the same transaction as the change.
 model AdminAudit {
-    id            String   @id @default(cuid())
-    actorUserId   String
-    actorIdentity String
-    action        String
-    targetType    String
-    targetId      String
-    detail        Json?
-    createdAt     DateTime @default(now())
+  id            String   @id @default(cuid())
+  actorUserId   String
+  actorIdentity String
+  action        String
+  targetType    String
+  targetId      String
+  detail        Json?
+  createdAt     DateTime @default(now())
 
-    @@index([createdAt])
-    @@index([targetType, targetId])
+  @@index([createdAt])
+  @@index([targetType, targetId])
 }
 
 // Necessary for Auth.js
 model Account {
-    id                       String  @id @default(cuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String?
-    access_token             String?
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String?
-    session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    refresh_token_expires_in Int?
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refresh_token_expires_in Int?
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    // From Hack Club Auth (/api/v1/me). Phone, birthday and addresses are never stored here;
-    // they're read live from Hack Club Auth when needed.
-    hcIdentityId       String?   @unique
-    slackId            String?
-    yswsEligible       Boolean   @default(false)
-    verificationStatus String?
-    // Scare's currency. Earn rates are not set yet; the shop platform will own this.
-    pumpkins      Int       @default(0)
-    // First-run onboarding (the Carving Table): set when finished or skipped.
-    onboardedAt   DateTime?
-    tourSeenAt    DateTime?
-    accounts      Account[]
-    sessions      Session[]
-    games         Game[]
-    hackatime     HackatimeLink?
-    orders        Order[]
+  id                 String         @id @default(cuid())
+  name               String?
+  email              String?        @unique
+  emailVerified      DateTime?
+  image              String?
+  // From Hack Club Auth (/api/v1/me). Phone, birthday and addresses are never stored here;
+  // they're read live from Hack Club Auth when needed.
+  hcIdentityId       String?        @unique
+  slackId            String?
+  yswsEligible       Boolean        @default(false)
+  verificationStatus String?
+  // Scare's currency. Earn rates are not set yet; the shop platform will own this.
+  pumpkins           Int            @default(0)
+  // First-run onboarding (the Carving Table): set when finished or skipped.
+  onboardedAt        DateTime?
+  tourSeenAt         DateTime?
+  accounts           Account[]
+  sessions           Session[]
+  games              Game[]
+  hackatime          HackatimeLink?
+  orders             Order[]
+  suggestions        Suggestion[]
 }
 
 // A Pumpkin Shop order. Price and name are copied from the catalog at the time of purchase,
 // so later catalog edits never change what someone already paid.
 model Order {
-    id        String      @id @default(cuid())
-    itemId    String
-    itemName  String
-    pumpkins  Int
-    usd       Float
-    details   String?
-    status    OrderStatus @default(PENDING)
-    adminNote String?
-    handledAt DateTime?
-    handledBy String?
-    createdAt DateTime    @default(now())
-    updatedAt DateTime    @updatedAt
+  id        String      @id @default(cuid())
+  itemId    String
+  itemName  String
+  pumpkins  Int
+  usd       Float
+  details   String?
+  status    OrderStatus @default(PENDING)
+  adminNote String?
+  handledAt DateTime?
+  handledBy String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
-    @@index([userId])
+  @@index([userId])
 }
 
 enum OrderStatus {
-    PENDING
-    FULFILLED
-    CANCELLED
-    REJECTED
+  PENDING
+  FULFILLED
+  CANCELLED
+  REJECTED
 }
 
 // A Hackatime account linked to a Scare user, for pulling coding time.
 model HackatimeLink {
-    id             String   @id @default(cuid())
-    hackatimeId    Int      @unique
-    accessToken    String
-    scope          String?
-    slackId        String?
-    githubUsername String?
-    trustLevel     String?
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+  id             String   @id @default(cuid())
+  hackatimeId    Int      @unique
+  accessToken    String
+  scope          String?
+  slackId        String?
+  githubUsername String?
+  trustLevel     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
+}
+
+/// An item a participant would like in the shop. Admins triage these at /admin/suggestions.
+model Suggestion {
+  id        String           @id @default(cuid())
+  name      String
+  link      String?
+  why       String?
+  status    SuggestionStatus @default(NEW)
+  adminNote String?
+  handledAt DateTime?
+  handledBy String?
+  createdAt DateTime         @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([status, createdAt])
+}
+
+enum SuggestionStatus {
+  NEW
+  ADDED
+  DECLINED
 }

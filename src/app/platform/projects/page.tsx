@@ -12,6 +12,8 @@ export default async function Projects({
 }) {
   const { new: startNew, hackatime } = await searchParams;
   void api.game.mine.prefetch();
+  // The board asks this before it asks Hackatime for projects; have it ready so they don't queue.
+  void api.hackatime.status.prefetch();
 
   return (
     <HydrateClient>

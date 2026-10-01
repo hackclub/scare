@@ -21,9 +21,10 @@ export const revalidate = 0;
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const admin = await requireAdmin();
 
-  const [ships, orders] = await Promise.all([
+  const [ships, orders, suggestions] = await Promise.all([
     db.game.count({ where: { status: "SHIPPED", OR: [{ reviewStatus: null }, { reviewStatus: "PENDING" }] } }),
     db.order.count({ where: { status: "PENDING" } }),
+    db.suggestion.count({ where: { status: "NEW" } }),
   ]);
 
   return (
@@ -35,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <span className="pf-brand-word">SCARE</span>
           <span className="pf-brand-tag ad-tag">admin</span>
         </Link>
-        <AdminNav counts={{ ships, orders }} />
+        <AdminNav counts={{ ships, orders, suggestions }} />
         <div className="pf-rail-foot">
           <p className="ad-who">
             Signed in as <span className="pf-mono">{admin.identity}</span>

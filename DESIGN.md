@@ -12,6 +12,12 @@ colors:
   ink: "#ff8a1f"
   hot: "#ffd9a3"
   blood: "#ff5b3a"
+  shelf-steam: "#8fb8ff"
+  shelf-gear: "#5fdcc8"
+  shelf-friends: "#ffd84d"
+  shelf-candy: "#ff8cc6"
+  shelf-costume: "#b99aff"
+  shelf-hardware: "#9ee86f"
 typography:
   display:
     fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
@@ -85,6 +91,16 @@ typography:
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: "0.1em"
+  price:
+    fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
+    fontSize: "24px"
+    fontWeight: 400
+    lineHeight: 1
+  price-lg:
+    fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
+    fontSize: "32px"
+    fontWeight: 400
+    lineHeight: 1
   readout:
     fontFamily: "Departure Mono, ui-monospace, Menlo, monospace"
     fontSize: "26px"
@@ -202,7 +218,9 @@ The ink ramp is the neutral scale. Each step is Pumpkin Ink at lower density, so
 - **Warm Glow** (`ink-80`): Default body text color (9.6:1).
 
 ### Named Rules
-**The One Ink Rule.** There is exactly one hue. Every color except `blood` is Pumpkin Ink at a density step. A new state, category or emphasis gets a denser or sparser step, never a new hue.
+**The One Ink Rule.** There is exactly one hue. Every color except `blood` is Pumpkin Ink at a density step. A new state, category or emphasis gets a denser or sparser step, never a new hue. The one exception is the shop's shelf hues (below), and they stay inside the shop.
+
+**The Shelf Hue Rule.** In the shop, each shelf has one hue (`shelf-*`) that tells shelves apart at a glance. It colors only the shelf's markers: tile icon, 2px top edge, tinted dotted border and wash, shelf label, meter, tab swatch and underline, and the selected state. Item names stay Candle Core and prices stay Pumpkin, because Pumpkins are the currency everywhere.
 
 **The Blood Is For Errors Rule.** `blood` appears only where something is wrong. If it is on screen, the user has a problem to fix.
 
@@ -352,4 +370,17 @@ First-run flow told by **the Keeper**, a hooded ASCII figure carrying a lantern 
 - **Finale line:** "Welcome to Scare - we are looking forward to your creation." then **Go to Scare**.
 - **Voice:** the Keeper talks like a person, not a narrator: plain, casual, a little deadpan. No atmospheric scene-setting, no em dashes, no triads.
 - **Progress** under the lantern: Eyes / Mouth / Nose, with hint text (blank: what it's for; sketch: "not yet"; carved: "done" in Candle Core).
+
+## Shop (`/platform/shop`, styles in `src/styles/shop.css`)
+
+- **Wallet strip:** balance in Departure 40px Candle Core with a soft glow, "about N hours of building", the next affordable goal ("15 more for …") with a 20-cell glyph meter, and the earn rate as a compact readout.
+- **Shelves:** Steam games, Gear, Candy, Desk friends, Costume grants, Hardware grants, each with its shelf hue. Shelves and the items on them are ordered most popular first (catalog order); dollar tiers of the same grant stay in dollar order.
+- **Everything** groups tiles by shelf: each group has a heading (hue swatch, shelf name in its hue, the shelf's one-line blurb in Smolder) and its own grid, 32px between groups. Tiles drop their shelf label there, since the heading carries it.
+- **Width:** the shop page widens the platform column to 1680px (the other pages keep 1120px), so the grid uses wide screens instead of leaving them empty.
+- **Featured** is the default tab: six hand-picked items (`featured: true` in the catalog) on bigger tiles, at most three across, that also show the item's description. Pick them as a price ladder, from a cheap first win to one big goal.
+- **Shelf tabs:** Featured, Everything, then one tab per shelf with a 7px hue swatch. Every tab has a count. The selected tab gets a 2px underline in its hue (Pumpkin Ink for Featured and Everything). The row scrolls sideways and fades at the right edge when it doesn't fit. Tiles show their shelf label only on Featured.
+- **Item tiles:** a Crypt tile washed and edged in its shelf hue, with a 20px pixel icon (per item when it has one: mouse, keyboard, macropad, keychain, handheld, gadget, laptop, duck, shark; otherwise the shelf's), name, price (price role, 24px), and a footer meter (`#` for what you have, `.` for the rest) in the shelf hue, with "N to go" or "You can get this" always on the line below it, so every foot is the same height and prices line up across a row. Selecting a tile turns its border solid in its hue with a soft glow. No per-item tags or buttons.
+- **Variants:** an item with options (gaming mouse, keyboard, costume grants: Spirit Halloween, Amazon or a general grant) shows them in checkout as a stacked list of dotted rows with a square marker. The first is preselected, and the chosen row goes solid in the shelf hue. Physical items add "Ships to the address on your Hack Club account." to the fine print.
+- **Suggest an item:** the last tile of every view is a dashed Pumpkin Ink tile ("Suggest an item", a plus icon, one line of hint) instead of a product. It opens a form in the side panel in place of checkout: what it is, an optional link, an optional why, and "Send suggestion". The person's last five suggestions sit under the form with their status (Waiting, Added in Candle Core, Not this time) and the admin's note.
+- **Side panel:** sticky beside the grid (below it at ≤1000px). Empty: "Pick something". Selected: name, description, price (price-lg, 32px), a 20-cell meter, then either the one detail it needs plus "Spend N Pumpkins", or how many Pumpkins and hours are still needed with a link to Projects. Your orders sit beneath it, compact.
 

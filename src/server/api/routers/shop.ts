@@ -3,6 +3,13 @@ import { z } from "zod";
 
 import { findItem } from "~/lib/shop-catalog";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { rateLimit } from "~/server/rate-limit";
+
+/** Open (not yet triaged) suggestions one person can have at once. */
+const OPEN_SUGGESTIONS = 10;
+
+/** An empty optional field is stored as null. */
+const blank = (v: string | undefined) => (v === undefined || v === "" ? null : v);
 
 export const shopRouter = createTRPCRouter({
   orders: protectedProcedure.query(({ ctx }) =>
@@ -21,6 +28,9 @@ export const shopRouter = createTRPCRouter({
       const details = input.details ?? "";
       if (item.ask && !details) {
         throw new TRPCError({ code: "BAD_REQUEST", message: item.ask.missing });
+      }
+      if (item.pick && !item.pick.options.includes(details)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Pick one of the options first." });
       }
       if (item.ask?.url && !z.string().url().safeParse(details).success) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Paste the full link, starting with https://" });
@@ -46,6 +56,50 @@ export const shopRouter = createTRPCRouter({
             details: details || null,
           },
         });
+      });
+    }),
+
+  /** Your own suggestions, newest first, so you can see what happened to them. */
+  suggestions: protectedProcedure.query(({ ctx }) =>
+    ctx.db.suggestion.findMany({
+      where: { userId: ctx.session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { id: true, name: true, status: true, adminNote: true },
+    }),
+  ),
+
+  /** Suggest something for the shop. It goes to /admin/suggestions. */
+  suggest: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().trim().min(2, "Say what the item is.").max(80, "Keep the name under 80 characters."),
+        link: z
+          .string()
+          .trim()
+          .max(500)
+          .url("Paste the full link, starting with https://")
+          .refine((u) => /^https?:\/\//i.test(u), "Paste the full link, starting with https://")
+          .optional()
+          .or(z.literal("")),
+        why: z.string().trim().max(300, "Keep it under 300 characters.").optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      if (!rateLimit(`suggest:${userId}`, 5, 60 * 60_000).ok) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "That's a lot of ideas. Try again in an hour." });
+      }
+      const open = await ctx.db.suggestion.count({ where: { userId, status: "NEW" } });
+      if (open >= OPEN_SUGGESTIONS) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: `You have ${OPEN_SUGGESTIONS} suggestions waiting already. We'll get to them.`,
+        });
+      }
+      return ctx.db.suggestion.create({
+        data: { userId, name: input.name, link: blank(input.link), why: blank(input.why) },
+        select: { id: true, name: true },
       });
     }),
 

@@ -139,6 +139,7 @@ model User {
   games              Game[]
   hackatime          HackatimeLink?
   orders             Order[]
+  suggestions        Suggestion[]
 }
 
 // A Pumpkin Shop order. Price and name are copied from the catalog at the time of purchase,
@@ -192,4 +193,29 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+/// An item a participant would like in the shop. Admins triage these at /admin/suggestions.
+model Suggestion {
+  id        String           @id @default(cuid())
+  name      String
+  link      String?
+  why       String?
+  status    SuggestionStatus @default(NEW)
+  adminNote String?
+  handledAt DateTime?
+  handledBy String?
+  createdAt DateTime         @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([status, createdAt])
+}
+
+enum SuggestionStatus {
+  NEW
+  ADDED
+  DECLINED
 }

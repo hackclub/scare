@@ -9,7 +9,7 @@ export const metadata = { title: "Overview" };
 export default async function AdminOverview() {
   await requireAdmin();
 
-  const [users, onboarded, linked, brewing, shippedPending, approved, rejected, pendingOrders, balances, awarded, recent] =
+  const [users, onboarded, linked, brewing, shippedPending, approved, rejected, pendingOrders, newSuggestions, balances, awarded, recent] =
     await Promise.all([
       db.user.count(),
       db.user.count({ where: { onboardedAt: { not: null } } }),
@@ -19,6 +19,7 @@ export default async function AdminOverview() {
       db.game.count({ where: { reviewStatus: "APPROVED" } }),
       db.game.count({ where: { reviewStatus: "REJECTED" } }),
       db.order.count({ where: { status: "PENDING" } }),
+      db.suggestion.count({ where: { status: "NEW" } }),
       db.user.aggregate({ _sum: { pumpkins: true } }),
       db.game.aggregate({ _sum: { awardedPumpkins: true } }),
       db.adminAudit.findMany({ orderBy: { createdAt: "desc" }, take: 6 }),
@@ -26,7 +27,7 @@ export default async function AdminOverview() {
 
   return (
     <>
-      <PageHead title="Admin" lead="Everything that needs a person: ship reviews, orders, balances." />
+      <PageHead title="Admin" lead="Everything that needs a person: ship reviews, orders, suggestions, balances." />
 
       <div className="ad-grid">
         <section className="frame" aria-labelledby="todo-title">
@@ -43,6 +44,11 @@ export default async function AdminOverview() {
               <span className="pf-list-title">Orders to fulfill</span>
               <span className="ad-big">{pendingOrders}</span>
               <Link href="/admin/orders" className="pf-head-link">Open</Link>
+            </li>
+            <li className="pf-list-row ad-todo">
+              <span className="pf-list-title">Shop suggestions to read</span>
+              <span className="ad-big">{newSuggestions}</span>
+              <Link href="/admin/suggestions" className="pf-head-link">Read</Link>
             </li>
           </ul>
         </section>

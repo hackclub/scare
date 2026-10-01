@@ -7,7 +7,15 @@ import { db } from "~/server/db";
 export const metadata = { title: "Audit log" };
 
 const link = (type: string, id: string) =>
-  type === "user" ? `/admin/users/${id}` : type === "order" ? `/admin/orders` : type === "game" ? `/admin/ships?view=approved` : null;
+  type === "user"
+    ? `/admin/users/${id}`
+    : type === "order"
+      ? `/admin/orders`
+      : type === "suggestion"
+        ? `/admin/suggestions`
+        : type === "game"
+          ? `/admin/ships?view=approved`
+          : null;
 
 export default async function Audit() {
   await requireAdmin();
