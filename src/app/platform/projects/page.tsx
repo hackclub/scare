@@ -17,7 +17,7 @@ export default async function Projects({
     <HydrateClient>
       <PageHead
         title="Projects"
-        lead="Create a project for something you're working on and ship it easily."
+        lead="Make a horror game, create a project for it, and get Pumpkins for shipping."
       />
       <HackatimeNotice status={hackatime} />
       <GameBoard startAdding={startNew === "1" || hackatime === "linked"} />
