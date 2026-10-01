@@ -8,6 +8,7 @@ import { Hud } from "./_components/hud";
 import { HackClubFlag } from "./_components/hack-club-flag";
 import { ArrowDown, Check, Heart } from "./_components/icons";
 import { Lantern } from "./_components/lantern";
+import { ShopPreview } from "./_components/shop-preview";
 import { SiteFooter } from "./_components/site-footer";
 import { MorphText } from "./_components/morph-text";
 import { DEADLINE_LABEL, LINKS, PUMPKINS_PER_HOUR } from "~/lib/program";
@@ -19,18 +20,19 @@ const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
     title: "Make",
     body: (
       <>
-        Build a horror game. Any engine, any size: Godot, Unity, PICO-8, a
-        browser tab. If it&rsquo;s trying to scare someone, it counts.
+        Build something scary in any engine. Godot, Unity, PICO-8, one HTML
+        file. Track it with Hackatime so your hours show up.
       </>
     ),
   },
   {
     art: "ship",
-    title: "Ship",
+    title: "Submit",
     body: (
       <>
-        Put it where other people can play it: itch.io, a web build, a
-        download. Ideas don&rsquo;t ship. Playable games do.
+        Create a project and submit what you built where it&rsquo;s playable
+        (ie. Itch!). Someone at Hack Club plays it, gets scared, and reviews
+        it.
       </>
     ),
   },
@@ -39,8 +41,9 @@ const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
     title: "Earn",
     body: (
       <>
-        Every hour you put into a game you ship earns{" "}
-        <strong>{PUMPKINS_PER_HOUR} Pumpkins</strong>, Scare&rsquo;s currency.
+        Once it&rsquo;s approved, every hour you put in pays{" "}
+        <strong>{PUMPKINS_PER_HOUR} Pumpkins</strong> - which you can use for
+        games, costumes, candy, laptops, and more! All for free.
       </>
     ),
   },
@@ -49,21 +52,23 @@ const STEPS: { art: ArtName; title: string; body: React.ReactNode }[] = [
     title: "Spend",
     body: (
       <>
-        Trade your Pumpkins in the Pumpkin Shop for Steam games, candy,
-        costume grants and hardware grants.
+        You can spend it on anything in our 20+ item shop or suggest something
+        you want - all for building a cool game!
       </>
     ),
   },
 ];
 
-const REWARDS = ["Steam games", "Costume grants", "Candy", "Hardware grants"];
-const WORKS = ["Horror games", "Custom costumes", "Halloween-themed projects"];
+const REWARDS = ["Steam games", "Candy", "A Switch Lite", "Rubber ducks", "Costume grants", "A huge Blåhaj"];
+const WORKS = ["Horror games", "LED costumes", "Horror websites"];
 
-const RULES: React.ReactNode[] = [
-  <>It&rsquo;s a horror game. Creepy, tense, gross, unsettling: your call.</>,
-  <>Someone else can play it, from a link that works.</>,
-  <>You ship it before the lights go out on {DEADLINE_LABEL}.</>,
-  <>Your Hack Club account is verified for YSWS. You&rsquo;ll see this after you sign in.</>,
+const RULES: { label: string; tip?: string }[] = [
+  { label: "Horror games" },
+  {
+    label: "Custom Halloween Costumes",
+    tip: "Costumes must include some technical aspects that involve custom hardware/code",
+  },
+  { label: "Horror websites" },
 ];
 
 const FAQ: { q: string; a: React.ReactNode }[] = [
@@ -71,39 +76,53 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     q: "I've never made a game. Can I still do this?",
     a: (
       <>
-        Yes, and it&rsquo;s a good first game. Keep it small: one room, one
-        monster, one scare. Godot is free and friendly. PICO-8 and Bitsy are
-        tiny. A single HTML file with a canvas works too.
+        Yes. Keep it small: one room, one monster, one bad feeling. Godot is
+        free. PICO-8 and Bitsy are tiny. A canvas in an HTML file works too.
       </>
     ),
   },
   {
-    q: "Does it have to be 3D, or long?",
+    q: "Does it have to be long?",
     a: (
       <>
-        No. A two-minute game that makes someone jump beats a two-hour one
-        nobody finishes. Text adventures, pixel art and flat 2D all count.
+        No. Two minutes that make someone jump beat two hours nobody
+        finishes. Text adventures and flat 2D count.
       </>
     ),
   },
   {
-    q: "What are Pumpkins?",
+    q: "How are my hours counted?",
     a: (
       <>
-        Scare&rsquo;s currency. You earn {PUMPKINS_PER_HOUR} for every hour you
-        put into a horror game you ship, and spend them in the Pumpkin Shop on
-        Steam games, candy, costume grants and hardware grants.
+        Link Hackatime and pick your project, and its tracked time comes with
+        it. You can edit the number if Hackatime missed some. A reviewer checks
+        it before anything is paid.
+      </>
+    ),
+  },
+  {
+    q: "What happens after I ship?",
+    a: (
+      <>
+        Someone from Hack Club plays it. If it holds up, it&rsquo;s approved and
+        your Pumpkins land. If something&rsquo;s off, it comes back with a note,
+        and you fix it and ship again.
+      </>
+    ),
+  },
+  {
+    q: "What can I get with Pumpkins?",
+    a: (
+      <>
+        Steam grants, candy, a Flipper Zero, a Switch Lite, rubber ducks in
+        three worrying sizes, and costume and hardware grants. Don&rsquo;t see
+        what you want? Suggest it from the shop.
       </>
     ),
   },
   {
     q: "When does it end?",
-    a: (
-      <>
-        Halloween, {DEADLINE_LABEL}. The countdown at the top of the page is
-        live.
-      </>
-    ),
+    a: <>Halloween, {DEADLINE_LABEL}. The countdown up top is real.</>,
   },
   {
     q: "What's Hack Club? What's a YSWS?",
@@ -112,10 +131,8 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
         <a href={LINKS.hackClub} className="link">
           Hack Club
         </a>{" "}
-        is a nonprofit community of teenagers who make things with code. YSWS
-        means You Ship, We Ship: you ship a project, and Hack Club ships you
-        something back. For Scare, that&rsquo;s Steam games, candy,
-        costume grants and hardware grants.
+        is a nonprofit for teenagers who make things. YSWS means You Ship, We
+        Ship: you ship a project, and we ship you something back.
       </>
     ),
   },
@@ -123,8 +140,8 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     q: "Do I need an account?",
     a: (
       <>
-        You sign in with your Hack Club account. If you don&rsquo;t have one
-        yet, you can make one on the way in.
+        You sign in with Hack Club. No account yet? You can make one on the way
+        in.
       </>
     ),
   },
@@ -164,8 +181,8 @@ export default async function Home({
               Ran with <Heart className="hero-heart" title="love" /> by Barnav
             </p>
             <p className="hero-lead">
-              Make a <Glitch>horror</Glitch> game, get Steam games, costumes,
-              and candy for free.
+              Make a <Glitch>Horror</Glitch> game. Get free video games, candy,
+              hardware, and more!
             </p>
 
             {signin === "unavailable" && (
@@ -243,12 +260,8 @@ export default async function Home({
         </section>
 
         {/* ------------------------------------------------------ pumpkins */}
-        <section
-          id="pumpkins"
-          className="band band-split"
-          aria-labelledby="pumpkins-title"
-        >
-          <div className="split-copy">
+        <section id="pumpkins" className="band" aria-labelledby="pumpkins-title">
+          <div className="band-head">
             <GlyphText
               as="h2"
               id="pumpkins-title"
@@ -260,50 +273,11 @@ export default async function Home({
               className="band-title"
             />
             <p className="band-lead">
-              Pumpkins are what you earn at Scare, and you earn them by
-              shipping horror games.
+              Pumpkins are Scare&rsquo;s currency. You earn {PUMPKINS_PER_HOUR} for every
+              hour of code you ship!
             </p>
-
-            <div className="frame frame-ledger">
-              <div className="frame-head">
-                <span>Ledger</span>
-                <span>Pumpkins</span>
-              </div>
-              <dl className="ledger">
-                <div>
-                  <dt>Currency</dt>
-                  <dd>Pumpkins</dd>
-                </div>
-                <div>
-                  <dt>How you earn them</dt>
-                  <dd>Ship a horror game</dd>
-                </div>
-                <div>
-                  <dt>Earn rate</dt>
-                  <dd>{PUMPKINS_PER_HOUR} per hour</dd>
-                </div>
-                <div>
-                  <dt>What they buy</dt>
-                  <dd>Games, grants, candy</dd>
-                </div>
-                <div>
-                  <dt>The Pumpkin Shop</dt>
-                  <dd>Open</dd>
-                </div>
-                <div>
-                  <dt>Last day to ship</dt>
-                  <dd>{DEADLINE_LABEL}</dd>
-                </div>
-              </dl>
-            </div>
           </div>
-
-          <figure className="shop">
-            <Ascii name="shop" className="shop-art" />
-            <figcaption className="shop-caption">
-              The shop is open. Sign in to spend your Pumpkins.
-            </figcaption>
-          </figure>
+          <ShopPreview />
         </section>
 
         {/* --------------------------------------------------------- rules */}
@@ -324,34 +298,41 @@ export default async function Home({
               className="band-title"
             />
             <p className="band-sub">
-              Your game has to pass all of these. More rules are coming.
+              Build something scary! Jumpscares, shadows, the like!
             </p>
           </div>
 
           <div className="frame">
             <div className="frame-head">
               <span>Checklist</span>
-              <span>4 rules · 1 pending</span>
+              <span>{RULES.length} kinds</span>
             </div>
             <ul className="rules">
               {RULES.map((r, i) => (
-                <li key={i} className="rule">
+                <li key={r.label} className="rule">
                   <span className="rule-box" aria-hidden="true">
                     [<Check className="rule-check" />]
                   </span>
-                  <span>{r}</span>
+                  {r.tip ? (
+                    <span
+                      className="rule-tip"
+                      tabIndex={0}
+                      aria-describedby={`rule-tip-${i}`}
+                    >
+                      {r.label}
+                      <span
+                        id={`rule-tip-${i}`}
+                        role="tooltip"
+                        className="rule-tip-body"
+                      >
+                        {r.tip}
+                      </span>
+                    </span>
+                  ) : (
+                    <span>{r.label}</span>
+                  )}
                 </li>
               ))}
-              <li className="rule rule-pending">
-                <span className="rule-box" aria-hidden="true">
-                  [&nbsp;]
-                </span>
-                <span>
-                  The full requirements, like team size and how games get
-                  reviewed, are still being written.{" "}
-                  <span className="tba">Posted soon</span>
-                </span>
-              </li>
             </ul>
           </div>
         </section>
@@ -375,10 +356,9 @@ export default async function Home({
             />
             <p className="band-sub">
               Still stuck? Ask in the{" "}
-              <a href={LINKS.slack} className="link">
-                Hack Club Slack
+              <a href={LINKS.slackChannel} className="link" target="_blank" rel="noreferrer">
+                #scare channel
               </a>
-              .
             </p>
           </div>
 
@@ -409,7 +389,7 @@ export default async function Home({
           <GlyphText
             as="h2"
             id="close-title"
-            text="LIGHTS OUT"
+            text="SCARE ENDS IN..."
             bold
             shadow
             scale={2}
@@ -419,7 +399,7 @@ export default async function Home({
           />
           <Countdown variant="glyph" />
           <p className="close-lead">
-            When the clock hits zero, the candle goes out. Ship before it does.
+            Scare ends on Halloween... all games must be in by then!
           </p>
           {cta}
         </section>

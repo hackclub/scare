@@ -58,6 +58,7 @@ A game needs a screenshot to ship (`game.ship` refuses without one). Uploads go 
 
 - Rates live in `src/lib/program.ts`: `PUMPKINS_PER_HOUR = 10`, `USD_PER_HOUR = 4`, so one Pumpkin is worth $0.40.
 - The catalog is `src/lib/shop-catalog.ts`. Each item has a dollar cost (`usd`); its Pumpkin price is computed from it (`pumpkinsFor`), so changing a dollar amount reprices the item. Items can ask for one free-text detail (`ask`), offer variants (`pick`, stored as the order's details and checked on the server), and be marked `ships` (physical, sent to the address on the buyer's Hack Club account). Steam items are grants, so they ask for nothing. Shelves and items are listed most popular first, which is the order the shop shows them in; `featured: true` puts an item on the Featured tab, which sorts by price. Dollar amounts for the physical items are estimates.
+- Item photos live in `public/shop/` and are mapped to items in `src/lib/shop-images.ts`. They're from Wikimedia Commons (CC0, CC BY or CC BY-SA, each credited on the landing page); keep the credit when you swap one, or use a photo you own. A new item without a photo just shows no image.
 - Orders (`Order` model) copy the item name and price at purchase time. Buying holds Pumpkins with a single conditional decrement, so a balance can't be overspent; cancelling a pending order refunds it. Fulfilling or rejecting orders is not built yet (do it in the DB for now).
 - `User.pumpkins` is the balance. Nothing credits it automatically yet: which hours count (shipped only, Hackatime vs. edited, after review) is still open.
 
@@ -116,6 +117,5 @@ The `Dockerfile` builds a production image that listens on port `3000`.
 
 ## Still to decide
 
-- Pumpkins per shipped game
-- The shop catalog and prices
-- Full submission requirements (team size, review process)
+- Team size (the landing page doesn't mention it yet)
+- Final dollar costs for the physical shop items (current ones are estimates)

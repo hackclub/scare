@@ -1,7 +1,8 @@
 /*
  * The Pumpkin Shop: one wallet strip, shelf tabs, a quiet grid of items, and a sticky
  * panel for whatever you picked. Same frames and glyph type as the rest of the platform;
- * each shelf adds one hue (--hue) for its icon, edge, label and meter. Prices stay pumpkin.
+ * each shelf adds one hue (--hue, set in globals.css) for its icon, edge, label and meter.
+ * Prices stay pumpkin.
  */
 
 .sh {
@@ -13,27 +14,6 @@
   max-width: 1680px;
 }
 
-.sh [data-shelf] {
-  --hue: var(--ink);
-}
-.sh [data-shelf="steam"] {
-  --hue: #8fb8ff;
-}
-.sh [data-shelf="gear"] {
-  --hue: #5fdcc8;
-}
-.sh [data-shelf="friends"] {
-  --hue: #ffd84d;
-}
-.sh [data-shelf="candy"] {
-  --hue: #ff8cc6;
-}
-.sh [data-shelf="costume"] {
-  --hue: #b99aff;
-}
-.sh [data-shelf="hardware"] {
-  --hue: #9ee86f;
-}
 
 /* ------------------------------------------------------------ wallet */
 

@@ -218,7 +218,7 @@ The ink ramp is the neutral scale. Each step is Pumpkin Ink at lower density, so
 - **Warm Glow** (`ink-80`): Default body text color (9.6:1).
 
 ### Named Rules
-**The One Ink Rule.** There is exactly one hue. Every color except `blood` is Pumpkin Ink at a density step. A new state, category or emphasis gets a denser or sparser step, never a new hue. The one exception is the shop's shelf hues (below), and they stay inside the shop.
+**The One Ink Rule.** There is exactly one hue. Every color except `blood` is Pumpkin Ink at a density step. A new state, category or emphasis gets a denser or sparser step, never a new hue. The one exception is the shop's shelf hues (below), and they appear only on shop items: in the shop, and in the landing page's shop preview.
 
 **The Shelf Hue Rule.** In the shop, each shelf has one hue (`shelf-*`) that tells shelves apart at a glance. It colors only the shelf's markers: tile icon, 2px top edge, tinted dotted border and wash, shelf label, meter, tab swatch and underline, and the selected state. Item names stay Candle Core and prices stay Pumpkin, because Pumpkins are the currency everywhere.
 
@@ -259,7 +259,7 @@ A full-bleed character-grid page with a sticky HUD and long, spacious bands.
 - **HUD:** Sticky, 60px tall (56px at ≤900px), Void at 92% opacity, dotted Ember underline. Brand lockup left (pixel pumpkin, Hack Club flag, dotted rule, SCARE), bracketed section nav centered, countdown and sign-in right. At ≤1100px the countdown hides; at ≤900px the nav hides.
 - **Gutter:** `clamp(16px, 4vw, 48px)` on every horizontal edge; 16px minimum at phone width.
 - **Hero:** Two columns (copy 1fr, lantern 1.1fr), `min-height: calc(100svh - HUD)`. The lantern column stretches to full height (min 560px). At ≤900px it stacks with the lantern first at `min(46svh, 440px)`.
-- **Bands:** Max 1440px, vertical padding `clamp(96px, 12vw, 168px)`, separated by a dotted Charred rule. Heading block gets `clamp(48px, 6vw, 80px)` below. Three band layouts: full-width frame (the deal), split 1.1fr/0.9fr (Pumpkins ledger + ASCII shop), and aside 5fr/7fr with a sticky heading on the left and the frame on the right (rules, FAQ). All collapse to one column at ≤900px.
+- **Bands:** Max 1440px, vertical padding `clamp(96px, 12vw, 168px)`, separated by a dotted Charred rule. Heading block gets `clamp(48px, 6vw, 80px)` below. Three band layouts: full-width frame (the deal, and the Pumpkins band's shop preview), split 1.1fr/0.9fr, and aside 5fr/7fr with a sticky heading on the left and the frame on the right (rules, FAQ). All collapse to one column at ≤900px.
 - **Dashboard (haunt):** Max 1280px; a 260–340px status sidebar of panels beside the game board, 40px gap. At ≤900px the board comes first and the panels reflow into an auto-fit grid (min 240px).
 - **Rhythm:** Inside frames, rows sit at 22px vertical padding with 20px side padding (16px at ≤640px). Panels pad 24px. Common gaps are 12, 16, 24 and 40px.
 - **Mobile (≤640px):** Glyph headings drop to the narrow scale, the step grid collapses to number + content, hero and close buttons go full width, forms go single column.
@@ -327,7 +327,7 @@ Departure Mono 13px, 0.1em, uppercase, Warm Glow, each link wrapped in Ember `[ 
 A canvas scene: a 3D pumpkin, shaded per cell with the density ramp ` .'\`:-=+*%#@` (plus `| / \` for the stem and cuts) and an 8-tone single-ink palette from ember (rgb 74 32 10) through Pumpkin Ink to candle core (rgb 255 222 168), with glow on the top two tones. Cells are 8–16px tall at a 0.62 width ratio. It springs toward the pointer with a little overshoot, drifts on its own after 3.5s idle, flickers with occasional gusts, and throws a pool of light on the floor. Click recarves a new seeded face (triangle, angry, round, crescent or slit eyes; teeth, grin, zigzag or O mouths) behind a knife sweep. The only chrome on it is a Recarve control pinned bottom-right: a 36px dashed-Ember ghost button on 72% Void with a pixel knife icon; hover turns it Candle Core and nudges the knife. No numeric readouts sit on the scene. Under reduced motion it renders one still, three-quarter pose and recarves without the sweep. Touch input does not steer it.
 
 ### ASCII pictures
-Hand-set `pre` art in Departure Mono (line-height 1.15), `aria-hidden`, always next to words that carry the meaning: the four deal steps (Smolder, turning Candle Core on row hover), the boarded-up Pumpkin Shop, the empty-state tombstone.
+Hand-set `pre` art in Departure Mono (line-height 1.15), `aria-hidden`, always next to words that carry the meaning: the four deal steps (Smolder, turning Candle Core on row hover), the empty-state tombstone.
 
 ## Do's and Don'ts
 
@@ -370,6 +370,14 @@ First-run flow told by **the Keeper**, a hooded ASCII figure carrying a lantern 
 - **Finale line:** "Welcome to Scare - we are looking forward to your creation." then **Go to Scare**.
 - **Voice:** the Keeper talks like a person, not a narrator: plain, casual, a little deadpan. No atmospheric scene-setting, no em dashes, no triads.
 - **Progress** under the lantern: Eyes / Mouth / Nose, with hint text (blank: what it's for; sketch: "not yet"; carved: "done" in Candle Core).
+
+## Landing shop preview (`src/app/_components/shop-preview.tsx`)
+
+- The Pumpkins band shows the live catalog as a frame ("Pumpkin Shop", item count) holding one row of shop tiles that drifts left at about 26px a second, interleaved by shelf so neighbours never share a hue. Edges fade into the frame.
+- Tiles match the shop's (shelf hue edge, icon and label, Candle Core name, price role 24px) but aren't buttons, and they open with a real photo of the item: 16:10, bled to the tile edges under a 2px shelf-hue line, slightly desaturated, fading into the tile at the bottom. Logos (Steam) are shown whole instead of cropped.
+- The footer has the suggestion line, a folded "Photo credits" list (author and licence, linked to each Commons file), and "Open the shop".
+- It's a real scroll area (`shop-drift.tsx`): trackpad and shift-wheel scroll it, touch swipes it, the mouse drags it (grab cursor), and arrow keys move it when focused. The scrollbar is hidden; the edge fade says there's more. Either way it loops seamlessly.
+- It drifts whenever a mouse isn't over it and nobody is dragging it, picking up the moment the pointer leaves or a drag ends. After a touch swipe it waits about a second for momentum to settle. It stops while off screen, and with reduced motion it never drifts but still scrolls.
 
 ## Shop (`/platform/shop`, styles in `src/styles/shop.css`)
 

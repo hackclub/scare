@@ -147,7 +147,7 @@ const ITEMS: Omit<ShopItem, "sample">[] = [
   {
     id: "gear-chromebook",
     shelf: "gear",
-    name: "Lenovo 300e Chromebook",
+    name: "Lenovo 300e Laptop",
     description: "An 11.6\" touchscreen 2-in-1 for building anywhere.",
     usd: 120,
     ask: null,

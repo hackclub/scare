@@ -4,53 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import {
-  Candy,
-  Chip,
-  Controller,
-  Duck,
-  Gadget,
-  Handheld,
-  Keyboard,
-  Keychain,
-  Laptop,
-  Macropad,
-  Mouse,
-  Plus,
-  PumpkinPlain,
-  Shark,
-  WitchHat,
-} from "~/app/_components/icons";
+import { Plus, PumpkinPlain } from "~/app/_components/icons";
+import { iconFor } from "~/app/_components/shop-icons";
 import { PUMPKINS_PER_HOUR } from "~/lib/program";
-import { type ItemIcon, type Shelf, type ShopItem } from "~/lib/shop-catalog";
+import { type Shelf, type ShopItem } from "~/lib/shop-catalog";
 import { api } from "~/trpc/react";
 
 type Item = ShopItem & { pumpkins: number };
-
-type Icon = (p: { className?: string }) => React.ReactElement;
-
-const SHELF_ICON: Record<Shelf, Icon> = {
-  steam: Controller,
-  gear: Macropad,
-  friends: Duck,
-  candy: Candy,
-  costume: WitchHat,
-  hardware: Chip,
-};
-
-const ITEM_ICON: Record<ItemIcon, Icon> = {
-  mouse: Mouse,
-  keyboard: Keyboard,
-  macropad: Macropad,
-  keychain: Keychain,
-  handheld: Handheld,
-  gadget: Gadget,
-  laptop: Laptop,
-  duck: Duck,
-  shark: Shark,
-};
-
-const iconFor = (item: Item) => (item.icon ? ITEM_ICON[item.icon] : SHELF_ICON[item.shelf]);
 
 const hours = (p: number) =>
   (p / PUMPKINS_PER_HOUR).toLocaleString(undefined, { maximumFractionDigits: 1 });

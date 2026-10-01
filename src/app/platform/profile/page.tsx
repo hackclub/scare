@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { after } from "next/server";
 import { Suspense } from "react";
@@ -86,7 +87,9 @@ export default async function Profile({
 }
 
 async function ProfileBody() {
-  const session = (await auth())!;
+  // Pages render alongside the layout, so its redirect can't be relied on here.
+  const session = await auth();
+  if (!session) redirect("/login");
   const [result, link] = await Promise.all([
     getIdentity(session.user.id),
     db.hackatimeLink.findUnique({

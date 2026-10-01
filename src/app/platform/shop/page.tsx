@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import "~/styles/shop.css";
 
 import { CATALOG, SHELVES } from "~/lib/shop-catalog";
@@ -10,7 +11,9 @@ import { ShopFloor } from "./shop-floor";
 export const metadata = { title: "Shop" };
 
 export default async function Shop() {
-  const session = (await auth())!;
+  // Pages render alongside the layout, so its redirect can't be relied on here.
+  const session = await auth();
+  if (!session) redirect("/login");
   const user = await getPlatformUser(session.user.id);
   void api.shop.orders.prefetch();
 

@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { Countdown } from "~/app/_components/countdown";
@@ -16,7 +17,9 @@ export const metadata = { title: "Home" };
 type Step = { title: string; body: string; href: string; cta: string; external?: boolean };
 
 export default async function PlatformHome() {
-  const session = (await auth())!;
+  // Pages render alongside the layout, so its redirect can't be relied on here.
+  const session = await auth();
+  if (!session) redirect("/login");
   const [user, games] = await Promise.all([
     getPlatformUser(session.user.id),
     db.game.findMany({
