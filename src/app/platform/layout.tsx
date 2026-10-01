@@ -1,4 +1,5 @@
 import "~/styles/platform.css";
+import "~/styles/admin.css";
 
 import { type Metadata } from "next";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { Countdown } from "~/app/_components/countdown";
 import { SiteFooter } from "~/app/_components/site-footer";
 import { PumpkinPlain } from "~/app/_components/icons";
 import { SilenceAmbience } from "~/app/_components/silence-ambience";
+import { getAdmin } from "~/server/admin";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { getPlatformUser } from "~/server/user";
@@ -25,9 +27,10 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const session = await auth();
   if (!session) redirect("/login");
 
-  const [user, gameCount] = await Promise.all([
+  const [user, gameCount, admin] = await Promise.all([
     getPlatformUser(session.user.id),
     db.game.count({ where: { userId: session.user.id } }),
+    getAdmin(),
   ]);
 
   // First visit: the Keeper wants a word before the platform opens.
@@ -48,6 +51,11 @@ export default async function PlatformLayout({ children }: { children: React.Rea
 
           <div className="pf-rail-foot">
             <Who name={user?.name ?? session.user.name ?? null} />
+            {admin && (
+              <Link href="/admin" className="btn btn-ghost pf-admin-link">
+                Admin
+              </Link>
+            )}
             <SignOutButton variant="ghost" className="pf-signout" />
           </div>
         </aside>

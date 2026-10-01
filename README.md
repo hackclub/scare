@@ -61,6 +61,29 @@ A game needs a screenshot to ship (`game.ship` refuses without one). Uploads go 
 - Orders (`Order` model) copy the item name and price at purchase time. Buying holds Pumpkins with a single conditional decrement, so a balance can't be overspent; cancelling a pending order refunds it. Fulfilling or rejecting orders is not built yet (do it in the DB for now).
 - `User.pumpkins` is the balance. Nothing credits it automatically yet: which hours count (shipped only, Hackatime vs. edited, after review) is still open.
 
+### Admin (`/admin`)
+
+For reviewing ships, handling orders and managing balances.
+
+- **Access:** `ADMIN_IDENTITY_IDS`, a comma-separated list of Hack Club identity IDs (`ident!xxxx`, shown on Profile). It's matched against the identity stored from Hack Club Auth, which users can't edit. Empty or unset means no admins.
+- **Gating:** every admin page, server action and admin image read re-checks the allowlist on the server (`src/server/admin.ts`). Anyone else gets a plain 404. Pages are `noindex` and never cached, and actions are rate limited (60 a minute per admin).
+- **Audit:** every action writes an `AdminAudit` row in the same transaction as the change: who, what, target and detail. `/admin/audit` lists them.
+- **Ships:** approve (awards Pumpkins once, suggested at 10/hour from counted time) or send back with a note (the game returns to brewing, and the participant sees the note).
+- **Orders:** fulfill, or reject (refunds the Pumpkins). Both only act on pending orders.
+- **Users:** search, view games/orders/history, adjust Pumpkins with a reason (can't go below zero), reset onboarding.
+
+### Airtable
+
+Shipped games are mirrored to the program base's "YSWS Project Submission" table (`src/server/airtable.ts`), which is how they reach Hack Club's Unified YSWS database.
+
+- Env: `AIRTABLE_PAT` (scoped to the one base), `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_ID`.
+- Shipping creates the record as **Pending**, sent after the response so Airtable can never block shipping. Approving sets **Accepted**; sending back sets **Resubmission Requested** with the note as the reason. Editing a shipped game updates it.
+- Fields: code/play URL, description, screenshot, Hackatime ID, GitHub username, project name and hours (override + justification when the hours were edited). Name, email, birthday and address are read live from Hack Club Auth at sync time and never stored in Scare. Fields are written by ID, so renaming an Airtable column doesn't break the sync.
+- Screenshots go up through a signed link that expires after 3 days (HMAC with `AUTH_SECRET`), because the image route is otherwise private. Airtable has to reach the site to fetch it, so this only works on the public domain, not localhost.
+- Your approval note goes into the Unified Justification. It's written to "Justification - Additional Justification" (shown under `[ADDITIONAL JUSTIFICATION]`) and, when the hours were overridden, also appended to the override justification, since the formula uses only that field in that case. Send-back notes go to "Resubmission Request Reason".
+- Scare **never** ticks "Automation - Submit to Unified YSWS". A person does that in Airtable.
+- Sync failures are stored on the game and shown on its admin card, with a Resync button. Before creating a record, Scare reuses one with the same code URL if it was made but its ID never got saved, so a retry can't duplicate.
+
 ### Routes
 
 - `/`: landing page
@@ -68,7 +91,8 @@ A game needs a screenshot to ship (`game.ship` refuses without one). Uploads go 
 - `/welcome`: first-run onboarding, the Carving Table. The platform redirects here until `User.onboardedAt` is set (finishing or skipping sets it); Profile → "Carve again" replays it
 - `/platform`: home (next step, status, your games)
 - `/platform/projects`: register and ship games
-- `/platform/shop`: the Pumpkin Shop, locked until it opens
+- `/platform/shop`: the Pumpkin Shop
+- `/admin`: admin dashboard (allowlisted identities only; 404 for everyone else)
 - `/platform/profile`: live Hack Club identity, sign out
 - `/haunt`: redirects to `/platform`
 

@@ -30,14 +30,11 @@ export function TimeField({
   onChange,
   error,
   next = "/platform/projects",
-  frozen,
 }: {
   value: TimeValue;
   onChange: (v: TimeValue) => void;
   error?: string;
   next?: string;
-  /** A shipped game's total, frozen at shipping. Shown instead of the live total for that project. */
-  frozen?: { project: string; seconds: number };
 }) {
   const id = useId();
   const status = api.hackatime.status.useQuery(undefined, {
@@ -50,9 +47,7 @@ export function TimeField({
     retry: 1,
   });
 
-  const found = projects.data?.find((p) => p.name === value.project);
-  const isFrozen = !!found && frozen?.project === found.name;
-  const selected = found && isFrozen ? { ...found, seconds: frozen.seconds } : found;
+  const selected = projects.data?.find((p) => p.name === value.project);
   const tracked = selected ? toHours(selected.seconds) : null;
   const edited =
     value.hours.trim() !== "" &&
@@ -166,10 +161,8 @@ export function TimeField({
         <p id={`${id}-help`} className="time-note">
           {selected
             ? edited
-              ? `Edited. Hackatime tracked ${formatDuration(selected.seconds)} on ${selected.name}${isFrozen ? " by the time you shipped" : ""}.`
-              : isFrozen
-                ? `Frozen at ${formatDuration(selected.seconds)} from ${selected.name} when you shipped.`
-                : `Pulled from ${selected.name}. Change it if Hackatime missed time.`
+              ? `Edited. Hackatime tracked ${formatDuration(selected.seconds)} on ${selected.name}.`
+              : `Pulled from ${selected.name}. Change it if Hackatime missed time.`
             : "Roughly how long you've spent on it."}
         </p>
         {error && (

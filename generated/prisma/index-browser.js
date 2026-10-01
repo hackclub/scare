@@ -133,6 +133,14 @@ exports.Prisma.GameScalarFieldEnum = {
   trackedSeconds: 'trackedSeconds',
   claimedSeconds: 'claimedSeconds',
   shippedAt: 'shippedAt',
+  reviewStatus: 'reviewStatus',
+  reviewNote: 'reviewNote',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  awardedPumpkins: 'awardedPumpkins',
+  airtableRecordId: 'airtableRecordId',
+  airtableSyncedAt: 'airtableSyncedAt',
+  airtableError: 'airtableError',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
@@ -146,6 +154,17 @@ exports.Prisma.ScreenshotScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   gameId: 'gameId'
+};
+
+exports.Prisma.AdminAuditScalarFieldEnum = {
+  id: 'id',
+  actorUserId: 'actorUserId',
+  actorIdentity: 'actorIdentity',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  detail: 'detail',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -194,6 +213,9 @@ exports.Prisma.OrderScalarFieldEnum = {
   usd: 'usd',
   details: 'details',
   status: 'status',
+  adminNote: 'adminNote',
+  handledAt: 'handledAt',
+  handledBy: 'handledBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
@@ -223,6 +245,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -232,9 +259,21 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.GameStatus = exports.$Enums.GameStatus = {
   BREWING: 'BREWING',
   SHIPPED: 'SHIPPED'
+};
+
+exports.ReviewStatus = exports.$Enums.ReviewStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
@@ -247,6 +286,7 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
 exports.Prisma.ModelName = {
   Game: 'Game',
   Screenshot: 'Screenshot',
+  AdminAudit: 'AdminAudit',
   Account: 'Account',
   Session: 'Session',
   User: 'User',

@@ -9,8 +9,10 @@ const ALLOWED = SCREENSHOT_ACCEPT.split(",");
 
 /** Quick checks before uploading; the server checks the actual bytes again. */
 function precheck(file: File) {
-  if (file.type === "image/gif") return "GIFs aren't allowed. Use a PNG or JPG screenshot.";
-  if (file.type && !ALLOWED.includes(file.type)) return "That isn't a PNG, JPG or WebP image.";
+  if (file.type === "image/gif")
+    return "GIFs aren't allowed. Use a PNG or JPG screenshot.";
+  if (file.type && !ALLOWED.includes(file.type))
+    return "That isn't a PNG, JPG or WebP image.";
   if (file.size > SCREENSHOT_MAX_BYTES) return "Screenshots can be up to 5 MB.";
   return null;
 }
@@ -21,18 +23,20 @@ export function screenshotSrc(gameId: string, updatedAt: Date | string) {
 
 /**
  * Pick and upload a screenshot for a game. Shows the current one when there is one.
- * `required` marks it as needed to ship.
+ * `required` marks it as needed to ship; `readOnly` only shows it (shipped games are locked).
  */
 export function ScreenshotField({
   gameId,
   current,
   required = false,
   compact = false,
+  readOnly = false,
 }: {
   gameId: string;
   current: { updatedAt: Date | string } | null;
   required?: boolean;
   compact?: boolean;
+  readOnly?: boolean;
 }) {
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
@@ -48,7 +52,10 @@ export function ScreenshotField({
     try {
       const body = new FormData();
       body.set("file", file);
-      const res = await fetch(`/api/games/${gameId}/screenshot`, { method: "POST", body });
+      const res = await fetch(`/api/games/${gameId}/screenshot`, {
+        method: "POST",
+        body,
+      });
       const json = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) setErr(json.error ?? "That upload didn't work. Try again.");
       else await utils.game.mine.invalidate();
@@ -71,34 +78,46 @@ export function ScreenshotField({
           loading="lazy"
         />
       ) : (
-        !compact && (
+        !compact &&
+        !readOnly && (
           <div className="shot-empty" aria-hidden="true">
             <span>No screenshot yet</span>
           </div>
         )
       )}
-      <div className="shot-row">
-        <label htmlFor={id} className={`btn ${current ? "btn-ghost" : required ? "btn-primary" : "btn-ghost"} shot-btn`}>
-          <span>{busy ? "Uploading…" : current ? "Replace screenshot" : "Add a screenshot"}</span>
-        </label>
-        <input
-          ref={input}
-          id={id}
-          type="file"
-          accept={SCREENSHOT_ACCEPT}
-          className="sr-only"
-          disabled={busy}
-          aria-invalid={!!err}
-          aria-describedby={`${id}-help${err ? ` ${id}-err` : ""}`}
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void upload(f);
-          }}
-        />
-        <span id={`${id}-help`} className="shot-help">
-          A screenshot of your project in action - up to 5MB.
-        </span>
-      </div>
+      {!readOnly && (
+        <div className="shot-row">
+          <label
+            htmlFor={id}
+            className={`btn ${current ? "btn-ghost" : required ? "btn-primary" : "btn-ghost"} shot-btn`}
+          >
+            <span>
+              {busy
+                ? "Uploading…"
+                : current
+                  ? "Replace screenshot"
+                  : "Add a screenshot"}
+            </span>
+          </label>
+          <input
+            ref={input}
+            id={id}
+            type="file"
+            accept={SCREENSHOT_ACCEPT}
+            className="sr-only"
+            disabled={busy}
+            aria-invalid={!!err}
+            aria-describedby={`${id}-help${err ? ` ${id}-err` : ""}`}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void upload(f);
+            }}
+          />
+          <span id={`${id}-help`} className="shot-help">
+            A screenshot of your project in action - up to 5MB.
+          </span>
+        </div>
+      )}
       {err && (
         <p id={`${id}-err`} className="field-error" role="alert">
           {err}

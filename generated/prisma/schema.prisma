@@ -13,21 +13,31 @@ datasource db {
 
 // A horror game a participant is making or has shipped.
 model Game {
-  id               String     @id @default(cuid())
+  id               String        @id @default(cuid())
   title            String
   pitch            String
   engine           String?
   sourceUrl        String?
   playUrl          String?
-  status           GameStatus @default(BREWING)
+  status           GameStatus    @default(BREWING)
   // Time: a linked Hackatime project, the last total read from it, and the
   // participant's own figure when they've edited it (null = use Hackatime's).
   hackatimeProject String?
   trackedSeconds   Int?
   claimedSeconds   Int?
   shippedAt        DateTime?
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  // Review, set by an admin after shipping. Approving credits awardedPumpkins once.
+  reviewStatus     ReviewStatus?
+  reviewNote       String?
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  awardedPumpkins  Int?
+  // Mirror in the program's Airtable (YSWS Project Submission), created on ship.
+  airtableRecordId String?       @unique
+  airtableSyncedAt DateTime?
+  airtableError    String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
@@ -53,6 +63,27 @@ model Screenshot {
 enum GameStatus {
   BREWING
   SHIPPED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// Every admin action, who did it and to what. Written in the same transaction as the change.
+model AdminAudit {
+  id            String   @id @default(cuid())
+  actorUserId   String
+  actorIdentity String
+  action        String
+  targetType    String
+  targetId      String
+  detail        Json?
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([targetType, targetId])
 }
 
 // Necessary for Auth.js
@@ -117,6 +148,9 @@ model Order {
   usd       Float
   details   String?
   status    OrderStatus @default(PENDING)
+  adminNote String?
+  handledAt DateTime?
+  handledBy String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 

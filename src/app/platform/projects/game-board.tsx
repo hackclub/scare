@@ -71,7 +71,7 @@ function Empty({ quiet = false }: { quiet?: boolean }) {
   return (
     <div className={`empty ${quiet ? "empty-quiet" : ""}`}>
       <Ascii name="tomb" className="empty-art" />
-      <p>No games here yet. Every haunt starts empty.</p>
+      <p>You don&rsquo;t have any projects yet... make one- it doesn&rsquo;t matter how rough it is!</p>
     </div>
   );
 }
@@ -249,7 +249,6 @@ function GameRow({ game }: { game: Game }) {
   const [confirmRemove, setConfirmRemove] = useState(false);
   const [editingTime, setEditingTime] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [editingShip, setEditingShip] = useState(false);
   const ship = api.game.ship.useMutation({
     onSuccess: async () => {
       await utils.game.mine.invalidate();
@@ -275,7 +274,19 @@ function GameRow({ game }: { game: Game }) {
           )}
         </div>
         <p className="game-pitch">{game.pitch}</p>
-        {!shipping && <ScreenshotField gameId={game.id} current={game.screenshot} compact={!game.screenshot} />}
+        {!shipped && game.reviewStatus === "REJECTED" && (
+          <p className="game-review-note" role="note">
+            <strong>Sent back.</strong> {game.reviewNote ?? "Check it over and ship it again."}
+          </p>
+        )}
+        {!shipping && (
+          <ScreenshotField
+            gameId={game.id}
+            current={game.screenshot}
+            compact={!game.screenshot}
+            readOnly={shipped}
+          />
+        )}
         <GameTime game={game} />
         {editingTime && !shipped && (
           <EditTime game={game} onDone={() => setEditingTime(false)} />
@@ -309,17 +320,16 @@ function GameRow({ game }: { game: Game }) {
         <div className="game-actions">
           <p className="game-status">
             <span className="status-dot" aria-hidden="true" />
-            Shipped
+            {game.reviewStatus === "APPROVED"
+              ? `Approved · +${game.awardedPumpkins ?? 0} Pumpkins`
+              : "Shipped · in review"}
           </p>
           <button
             type="button"
             className="link"
             aria-expanded={showDetails}
             aria-controls={`ship-details-${game.id}`}
-            onClick={() => {
-              setShowDetails((v) => !v);
-              setEditingShip(false);
-            }}
+            onClick={() => setShowDetails((v) => !v)}
           >
             {showDetails ? "Hide details" : "View details"}
           </button>
@@ -334,20 +344,10 @@ function GameRow({ game }: { game: Game }) {
 
       {shipped && showDetails && (
         <div id={`ship-details-${game.id}`} className="ship-pane">
-          {editingShip ? (
-            <EditShipped game={game} onDone={() => setEditingShip(false)} />
-          ) : (
-            <>
-              <ShipDetails game={game} />
-              <button
-                type="button"
-                className="link"
-                onClick={() => setEditingShip(true)}
-              >
-                Edit details
-              </button>
-            </>
-          )}
+          <ShipDetails game={game} />
+          <p className="pf-muted">
+            Shipped projects can&rsquo;t be edited. Something wrong? Email support.
+          </p>
         </div>
       )}
 
@@ -521,122 +521,6 @@ function ShipDetails({ game }: { game: Game }) {
         <dd>{formatDate(game.createdAt)}</dd>
       </div>
     </dl>
-  );
-}
-
-/** The details pane in edit mode: everything about a shipped game, including its Hackatime project. */
-function EditShipped({ game, onDone }: { game: Game; onDone: () => void }) {
-  const utils = api.useUtils();
-  const [time, setTime] = useState<TimeValue>({
-    project: game.hackatimeProject,
-    hours:
-      game.claimedSeconds !== null ? String(toHours(game.claimedSeconds)) : "",
-  });
-  const save = api.game.updateShipped.useMutation({
-    onSuccess: async () => {
-      await utils.game.mine.invalidate();
-      onDone();
-    },
-  });
-  const errs = fieldErrors(save.error);
-  const p = `edit-${game.id}`;
-
-  return (
-    <form
-      className="form ship-edit"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const f = new FormData(e.currentTarget);
-        save.mutate({
-          id: game.id,
-          title: text(f, "title"),
-          pitch: text(f, "pitch"),
-          engine: text(f, "engine") || undefined,
-          sourceUrl: text(f, "sourceUrl"),
-          playUrl: text(f, "playUrl"),
-          ...timePayload(time),
-        });
-      }}
-      noValidate
-    >
-      <Field
-        idPrefix={p}
-        label="Name"
-        name="title"
-        defaultValue={game.title}
-        error={errs.title}
-        required
-        maxLength={80}
-      />
-      <Field
-        idPrefix={p}
-        label="Description"
-        name="pitch"
-        note="A quick description of your project."
-        defaultValue={game.pitch}
-        error={errs.pitch}
-        required
-        maxLength={280}
-        multiline
-      />
-      <div className="form-row">
-        <Field
-          idPrefix={p}
-          label="Engine"
-          name="engine"
-          hint="Optional"
-          defaultValue={game.engine ?? ""}
-          maxLength={40}
-        />
-        <Field
-          idPrefix={p}
-          label="Source code"
-          name="sourceUrl"
-          type="url"
-          defaultValue={game.sourceUrl ?? ""}
-          error={errs.sourceUrl}
-          required
-        />
-      </div>
-      <Field
-        idPrefix={p}
-        label="Play link"
-        name="playUrl"
-        type="url"
-        defaultValue={game.playUrl ?? ""}
-        error={errs.playUrl}
-        required
-      />
-      <TimeField
-        value={time}
-        onChange={setTime}
-        frozen={
-          game.hackatimeProject && game.trackedSeconds !== null
-            ? { project: game.hackatimeProject, seconds: game.trackedSeconds }
-            : undefined
-        }
-        error={errs.claimedHours?.[0] ?? errs.hackatimeProject?.[0]}
-      />
-
-      {save.error && !Object.keys(errs).length && (
-        <p className="form-error" role="alert">
-          That didn&rsquo;t save: {save.error.message}
-        </p>
-      )}
-
-      <div className="form-actions">
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={save.isPending}
-        >
-          <span>{save.isPending ? "Saving…" : "Save changes"}</span>
-        </button>
-        <button type="button" className="btn btn-ghost" onClick={onDone}>
-          Cancel
-        </button>
-      </div>
-    </form>
   );
 }
 

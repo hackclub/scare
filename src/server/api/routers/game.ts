@@ -1,10 +1,13 @@
 import { TRPCError } from "@trpc/server";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { type PrismaClient } from "../../../../generated/prisma";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { toTRPC } from "~/server/api/routers/hackatime";
+import { syncShip } from "~/server/airtable";
 import { projectSeconds } from "~/server/hackatime";
+import { originFromHeaders } from "~/server/origin";
 
 /** A Hackatime project to pull time from, and the participant's own figure if they edited it. */
 const timeFields = {
@@ -64,6 +67,15 @@ function claimedFor(
 async function ownGame(db: PrismaClient, userId: string, id: string) {
   const game = await db.game.findFirst({ where: { id, userId } });
   if (!game) throw new TRPCError({ code: "NOT_FOUND" });
+  return game;
+}
+
+const SHIPPED_LOCKED = "Shipped projects can't be edited.";
+
+/** Shipped games are locked: what the reviewer checked is what stays on record. */
+async function ownBrewingGame(db: PrismaClient, userId: string, id: string) {
+  const game = await ownGame(db, userId, id);
+  if (game.status !== "BREWING") throw new TRPCError({ code: "FORBIDDEN", message: SHIPPED_LOCKED });
   return game;
 }
 
@@ -150,7 +162,7 @@ export const gameRouter = createTRPCRouter({
   setTime: protectedProcedure
     .input(z.object({ id: z.string().max(40), ...timeFields }))
     .mutation(async ({ ctx, input }) => {
-      const game = await ownGame(ctx.db, ctx.session.user.id, input.id);
+      const game = await ownBrewingGame(ctx.db, ctx.session.user.id, input.id);
       const time = await resolveTime(
         ctx.session.user.id,
         input.hackatimeProject,
@@ -167,7 +179,7 @@ export const gameRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const game = await ownGame(ctx.db, ctx.session.user.id, input.id);
+      const game = await ownBrewingGame(ctx.db, ctx.session.user.id, input.id);
       const shot = await ctx.db.screenshot.findUnique({ where: { gameId: game.id }, select: { id: true } });
       if (!shot) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Add a screenshot before you ship." });
@@ -181,42 +193,24 @@ export const gameRouter = createTRPCRouter({
             game.hackatimeProject,
           ).catch(() => null)) ?? trackedSeconds;
       }
-      return ctx.db.game.update({
-        where: { id: game.id },
+      // Only from brewing, in one statement, so an approved game can't be shipped (and paid) again.
+      const { count } = await ctx.db.game.updateMany({
+        where: { id: game.id, status: "BREWING" },
         data: {
           playUrl: input.playUrl,
           status: "SHIPPED",
           shippedAt: new Date(),
+          // Into the admin review queue (again, if it was sent back).
+          reviewStatus: "PENDING",
           trackedSeconds,
         },
       });
-    }),
-
-  /** Edit a shipped game. The play link stays required, and time stays frozen unless the project changes. */
-  updateShipped: protectedProcedure
-    .input(
-      gameInput.extend({
-        id: z.string().max(40),
-        playUrl: httpUrl("Shipped games need a play link"),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const game = await ownGame(ctx.db, ctx.session.user.id, input.id);
-      if (game.status !== "SHIPPED") throw new TRPCError({ code: "BAD_REQUEST" });
-      const { id, hackatimeProject, claimedHours, ...rest } = input;
-      const project = hackatimeProject ?? null;
-      // Same project: keep the total frozen at shipping. A new project reads its total now.
-      const time =
-        project === game.hackatimeProject
-          ? {
-              trackedSeconds: game.trackedSeconds,
-              claimedSeconds: claimedFor(game.trackedSeconds, claimedHours),
-            }
-          : await resolveTime(ctx.session.user.id, project, claimedHours);
-      return ctx.db.game.update({
-        where: { id },
-        data: { ...rest, engine: rest.engine ?? null, ...time },
-      });
+      if (count === 0) throw new TRPCError({ code: "FORBIDDEN", message: SHIPPED_LOCKED });
+      const shipped = await ctx.db.game.findUniqueOrThrow({ where: { id: game.id } });
+      // Mirror to Airtable once the response is out; a slow or failing Airtable never blocks shipping.
+      const origin = originFromHeaders(ctx.headers);
+      after(() => syncShip(shipped.id, origin, "Pending"));
+      return shipped;
     }),
 
   remove: protectedProcedure

@@ -1175,3 +1175,35 @@ button.pf-brand {
 .ship-form .shot {
   margin-top: 0;
 }
+
+/* Confirming an unlink: the prompt takes its own full-width row under the explanation. */
+.pf-session-confirming {
+  grid-template-columns: minmax(0, 1fr);
+}
+.pf-confirm {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px dotted var(--blood);
+  background: rgb(255 91 58 / 0.05);
+}
+.pf-confirm-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-80);
+}
+.pf-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pf-confirm-yes {
+  border-color: var(--blood);
+  color: var(--blood);
+}
+.pf-confirm-yes:hover:not(:disabled) {
+  border-color: var(--blood);
+  color: var(--hot);
+  background: rgb(255 91 58 / 0.12);
+}

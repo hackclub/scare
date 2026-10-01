@@ -21,6 +21,12 @@ export const env = createEnv({
     HACKATIME_CLIENT_SECRET: z.string().optional(),
     // Optional separate key for encrypting stored OAuth tokens; defaults to AUTH_SECRET
     TOKEN_ENCRYPTION_KEY: z.string().min(16).optional(),
+    // Comma-separated Hack Club identity IDs (ident!xxxx) allowed into /admin. Empty = nobody.
+    ADMIN_IDENTITY_IDS: z.string().optional(),
+    // Airtable: shipped projects are mirrored to the program base's YSWS Project Submission table
+    AIRTABLE_PAT: z.string().optional(),
+    AIRTABLE_BASE_ID: z.string().optional(),
+    AIRTABLE_TABLE_ID: z.string().optional(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -48,6 +54,10 @@ export const env = createEnv({
     HACKATIME_CLIENT_ID: process.env.HACKATIME_CLIENT_ID,
     HACKATIME_CLIENT_SECRET: process.env.HACKATIME_CLIENT_SECRET,
     TOKEN_ENCRYPTION_KEY: process.env.TOKEN_ENCRYPTION_KEY,
+    ADMIN_IDENTITY_IDS: process.env.ADMIN_IDENTITY_IDS,
+    AIRTABLE_PAT: process.env.AIRTABLE_PAT,
+    AIRTABLE_BASE_ID: process.env.AIRTABLE_BASE_ID,
+    AIRTABLE_TABLE_ID: process.env.AIRTABLE_TABLE_ID,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

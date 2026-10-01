@@ -10,13 +10,16 @@ import { env } from "~/env";
  * AUTH_URL, then the forwarded host the proxy saw, and only then the request URL.
  */
 export function publicOrigin(req: NextRequest) {
+  return originFromHeaders(req.headers, req.nextUrl.origin);
+}
+
+/** Same, from bare headers (tRPC context, server actions). */
+export function originFromHeaders(headers: Headers, fallback = "http://localhost:3000") {
   if (env.AUTH_URL) return new URL(env.AUTH_URL).origin;
-  const host = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-  if (host) {
-    const proto =
-      req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ??
-      req.nextUrl.protocol.replace(":", "");
-    return `${proto}://${host}`;
-  }
-  return req.nextUrl.origin;
+  const host = headers.get("x-forwarded-host")?.split(",")[0]?.trim() ?? headers.get("host");
+  if (!host) return fallback;
+  const proto =
+    headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ??
+    (host.startsWith("localhost") || host.startsWith("127.") ? "http" : "https");
+  return `${proto}://${host}`;
 }

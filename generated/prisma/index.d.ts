@@ -24,6 +24,11 @@ export type Game = $Result.DefaultSelection<Prisma.$GamePayload>
  */
 export type Screenshot = $Result.DefaultSelection<Prisma.$ScreenshotPayload>
 /**
+ * Model AdminAudit
+ * 
+ */
+export type AdminAudit = $Result.DefaultSelection<Prisma.$AdminAuditPayload>
+/**
  * Model Account
  * 
  */
@@ -66,6 +71,15 @@ export namespace $Enums {
 export type GameStatus = (typeof GameStatus)[keyof typeof GameStatus]
 
 
+export const ReviewStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
+
+
 export const OrderStatus: {
   PENDING: 'PENDING',
   FULFILLED: 'FULFILLED',
@@ -80,6 +94,10 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 export type GameStatus = $Enums.GameStatus
 
 export const GameStatus: typeof $Enums.GameStatus
+
+export type ReviewStatus = $Enums.ReviewStatus
+
+export const ReviewStatus: typeof $Enums.ReviewStatus
 
 export type OrderStatus = $Enums.OrderStatus
 
@@ -222,6 +240,16 @@ export class PrismaClient<
     * ```
     */
   get screenshot(): Prisma.ScreenshotDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminAudit`: Exposes CRUD operations for the **AdminAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminAudits
+    * const adminAudits = await prisma.adminAudit.findMany()
+    * ```
+    */
+  get adminAudit(): Prisma.AdminAuditDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
@@ -725,6 +753,7 @@ export namespace Prisma {
   export const ModelName: {
     Game: 'Game',
     Screenshot: 'Screenshot',
+    AdminAudit: 'AdminAudit',
     Account: 'Account',
     Session: 'Session',
     User: 'User',
@@ -749,7 +778,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "game" | "screenshot" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
+      modelProps: "game" | "screenshot" | "adminAudit" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -898,6 +927,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ScreenshotCountArgs<ExtArgs>
             result: $Utils.Optional<ScreenshotCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminAudit: {
+        payload: Prisma.$AdminAuditPayload<ExtArgs>
+        fields: Prisma.AdminAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          findMany: {
+            args: Prisma.AdminAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>[]
+          }
+          create: {
+            args: Prisma.AdminAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          createMany: {
+            args: Prisma.AdminAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          update: {
+            args: Prisma.AdminAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminAuditUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminAudit>
+          }
+          groupBy: {
+            args: Prisma.AdminAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminAuditCountAggregateOutputType> | number
           }
         }
       }
@@ -1443,6 +1546,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     game?: GameOmit
     screenshot?: ScreenshotOmit
+    adminAudit?: AdminAuditOmit
     account?: AccountOmit
     session?: SessionOmit
     user?: UserOmit
@@ -1601,11 +1705,13 @@ export namespace Prisma {
   export type GameAvgAggregateOutputType = {
     trackedSeconds: number | null
     claimedSeconds: number | null
+    awardedPumpkins: number | null
   }
 
   export type GameSumAggregateOutputType = {
     trackedSeconds: number | null
     claimedSeconds: number | null
+    awardedPumpkins: number | null
   }
 
   export type GameMinAggregateOutputType = {
@@ -1620,6 +1726,14 @@ export namespace Prisma {
     trackedSeconds: number | null
     claimedSeconds: number | null
     shippedAt: Date | null
+    reviewStatus: $Enums.ReviewStatus | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    awardedPumpkins: number | null
+    airtableRecordId: string | null
+    airtableSyncedAt: Date | null
+    airtableError: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -1637,6 +1751,14 @@ export namespace Prisma {
     trackedSeconds: number | null
     claimedSeconds: number | null
     shippedAt: Date | null
+    reviewStatus: $Enums.ReviewStatus | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    awardedPumpkins: number | null
+    airtableRecordId: string | null
+    airtableSyncedAt: Date | null
+    airtableError: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -1654,6 +1776,14 @@ export namespace Prisma {
     trackedSeconds: number
     claimedSeconds: number
     shippedAt: number
+    reviewStatus: number
+    reviewNote: number
+    reviewedAt: number
+    reviewedBy: number
+    awardedPumpkins: number
+    airtableRecordId: number
+    airtableSyncedAt: number
+    airtableError: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -1664,11 +1794,13 @@ export namespace Prisma {
   export type GameAvgAggregateInputType = {
     trackedSeconds?: true
     claimedSeconds?: true
+    awardedPumpkins?: true
   }
 
   export type GameSumAggregateInputType = {
     trackedSeconds?: true
     claimedSeconds?: true
+    awardedPumpkins?: true
   }
 
   export type GameMinAggregateInputType = {
@@ -1683,6 +1815,14 @@ export namespace Prisma {
     trackedSeconds?: true
     claimedSeconds?: true
     shippedAt?: true
+    reviewStatus?: true
+    reviewNote?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    awardedPumpkins?: true
+    airtableRecordId?: true
+    airtableSyncedAt?: true
+    airtableError?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -1700,6 +1840,14 @@ export namespace Prisma {
     trackedSeconds?: true
     claimedSeconds?: true
     shippedAt?: true
+    reviewStatus?: true
+    reviewNote?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    awardedPumpkins?: true
+    airtableRecordId?: true
+    airtableSyncedAt?: true
+    airtableError?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -1717,6 +1865,14 @@ export namespace Prisma {
     trackedSeconds?: true
     claimedSeconds?: true
     shippedAt?: true
+    reviewStatus?: true
+    reviewNote?: true
+    reviewedAt?: true
+    reviewedBy?: true
+    awardedPumpkins?: true
+    airtableRecordId?: true
+    airtableSyncedAt?: true
+    airtableError?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -1821,6 +1977,14 @@ export namespace Prisma {
     trackedSeconds: number | null
     claimedSeconds: number | null
     shippedAt: Date | null
+    reviewStatus: $Enums.ReviewStatus | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
+    awardedPumpkins: number | null
+    airtableRecordId: string | null
+    airtableSyncedAt: Date | null
+    airtableError: string | null
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -1857,6 +2021,14 @@ export namespace Prisma {
     trackedSeconds?: boolean
     claimedSeconds?: boolean
     shippedAt?: boolean
+    reviewStatus?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    awardedPumpkins?: boolean
+    airtableRecordId?: boolean
+    airtableSyncedAt?: boolean
+    airtableError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -1876,6 +2048,14 @@ export namespace Prisma {
     trackedSeconds?: boolean
     claimedSeconds?: boolean
     shippedAt?: boolean
+    reviewStatus?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    awardedPumpkins?: boolean
+    airtableRecordId?: boolean
+    airtableSyncedAt?: boolean
+    airtableError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -1894,6 +2074,14 @@ export namespace Prisma {
     trackedSeconds?: boolean
     claimedSeconds?: boolean
     shippedAt?: boolean
+    reviewStatus?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    awardedPumpkins?: boolean
+    airtableRecordId?: boolean
+    airtableSyncedAt?: boolean
+    airtableError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -1912,12 +2100,20 @@ export namespace Prisma {
     trackedSeconds?: boolean
     claimedSeconds?: boolean
     shippedAt?: boolean
+    reviewStatus?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    reviewedBy?: boolean
+    awardedPumpkins?: boolean
+    airtableRecordId?: boolean
+    airtableSyncedAt?: boolean
+    airtableError?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
+  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "reviewStatus" | "reviewNote" | "reviewedAt" | "reviewedBy" | "awardedPumpkins" | "airtableRecordId" | "airtableSyncedAt" | "airtableError" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
   export type GameInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     screenshot?: boolean | Game$screenshotArgs<ExtArgs>
@@ -1947,6 +2143,14 @@ export namespace Prisma {
       trackedSeconds: number | null
       claimedSeconds: number | null
       shippedAt: Date | null
+      reviewStatus: $Enums.ReviewStatus | null
+      reviewNote: string | null
+      reviewedAt: Date | null
+      reviewedBy: string | null
+      awardedPumpkins: number | null
+      airtableRecordId: string | null
+      airtableSyncedAt: Date | null
+      airtableError: string | null
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -2386,6 +2590,14 @@ export namespace Prisma {
     readonly trackedSeconds: FieldRef<"Game", 'Int'>
     readonly claimedSeconds: FieldRef<"Game", 'Int'>
     readonly shippedAt: FieldRef<"Game", 'DateTime'>
+    readonly reviewStatus: FieldRef<"Game", 'ReviewStatus'>
+    readonly reviewNote: FieldRef<"Game", 'String'>
+    readonly reviewedAt: FieldRef<"Game", 'DateTime'>
+    readonly reviewedBy: FieldRef<"Game", 'String'>
+    readonly awardedPumpkins: FieldRef<"Game", 'Int'>
+    readonly airtableRecordId: FieldRef<"Game", 'String'>
+    readonly airtableSyncedAt: FieldRef<"Game", 'DateTime'>
+    readonly airtableError: FieldRef<"Game", 'String'>
     readonly createdAt: FieldRef<"Game", 'DateTime'>
     readonly updatedAt: FieldRef<"Game", 'DateTime'>
     readonly userId: FieldRef<"Game", 'String'>
@@ -3937,6 +4149,1036 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ScreenshotInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminAudit
+   */
+
+  export type AggregateAdminAudit = {
+    _count: AdminAuditCountAggregateOutputType | null
+    _min: AdminAuditMinAggregateOutputType | null
+    _max: AdminAuditMaxAggregateOutputType | null
+  }
+
+  export type AdminAuditMinAggregateOutputType = {
+    id: string | null
+    actorUserId: string | null
+    actorIdentity: string | null
+    action: string | null
+    targetType: string | null
+    targetId: string | null
+    createdAt: Date | null
+  }
+
+  export type AdminAuditMaxAggregateOutputType = {
+    id: string | null
+    actorUserId: string | null
+    actorIdentity: string | null
+    action: string | null
+    targetType: string | null
+    targetId: string | null
+    createdAt: Date | null
+  }
+
+  export type AdminAuditCountAggregateOutputType = {
+    id: number
+    actorUserId: number
+    actorIdentity: number
+    action: number
+    targetType: number
+    targetId: number
+    detail: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AdminAuditMinAggregateInputType = {
+    id?: true
+    actorUserId?: true
+    actorIdentity?: true
+    action?: true
+    targetType?: true
+    targetId?: true
+    createdAt?: true
+  }
+
+  export type AdminAuditMaxAggregateInputType = {
+    id?: true
+    actorUserId?: true
+    actorIdentity?: true
+    action?: true
+    targetType?: true
+    targetId?: true
+    createdAt?: true
+  }
+
+  export type AdminAuditCountAggregateInputType = {
+    id?: true
+    actorUserId?: true
+    actorIdentity?: true
+    action?: true
+    targetType?: true
+    targetId?: true
+    detail?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AdminAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminAudit to aggregate.
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminAudits to fetch.
+     */
+    orderBy?: AdminAuditOrderByWithRelationInput | AdminAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminAudits
+    **/
+    _count?: true | AdminAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminAuditMaxAggregateInputType
+  }
+
+  export type GetAdminAuditAggregateType<T extends AdminAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminAudit[P]>
+      : GetScalarType<T[P], AggregateAdminAudit[P]>
+  }
+
+
+
+
+  export type AdminAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminAuditWhereInput
+    orderBy?: AdminAuditOrderByWithAggregationInput | AdminAuditOrderByWithAggregationInput[]
+    by: AdminAuditScalarFieldEnum[] | AdminAuditScalarFieldEnum
+    having?: AdminAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminAuditCountAggregateInputType | true
+    _min?: AdminAuditMinAggregateInputType
+    _max?: AdminAuditMaxAggregateInputType
+  }
+
+  export type AdminAuditGroupByOutputType = {
+    id: string
+    actorUserId: string
+    actorIdentity: string
+    action: string
+    targetType: string
+    targetId: string
+    detail: JsonValue | null
+    createdAt: Date
+    _count: AdminAuditCountAggregateOutputType | null
+    _min: AdminAuditMinAggregateOutputType | null
+    _max: AdminAuditMaxAggregateOutputType | null
+  }
+
+  type GetAdminAuditGroupByPayload<T extends AdminAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    actorUserId?: boolean
+    actorIdentity?: boolean
+    action?: boolean
+    targetType?: boolean
+    targetId?: boolean
+    detail?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["adminAudit"]>
+
+  export type AdminAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    actorUserId?: boolean
+    actorIdentity?: boolean
+    action?: boolean
+    targetType?: boolean
+    targetId?: boolean
+    detail?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["adminAudit"]>
+
+  export type AdminAuditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    actorUserId?: boolean
+    actorIdentity?: boolean
+    action?: boolean
+    targetType?: boolean
+    targetId?: boolean
+    detail?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["adminAudit"]>
+
+  export type AdminAuditSelectScalar = {
+    id?: boolean
+    actorUserId?: boolean
+    actorIdentity?: boolean
+    action?: boolean
+    targetType?: boolean
+    targetId?: boolean
+    detail?: boolean
+    createdAt?: boolean
+  }
+
+  export type AdminAuditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "actorUserId" | "actorIdentity" | "action" | "targetType" | "targetId" | "detail" | "createdAt", ExtArgs["result"]["adminAudit"]>
+
+  export type $AdminAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      actorUserId: string
+      actorIdentity: string
+      action: string
+      targetType: string
+      targetId: string
+      detail: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["adminAudit"]>
+    composites: {}
+  }
+
+  type AdminAuditGetPayload<S extends boolean | null | undefined | AdminAuditDefaultArgs> = $Result.GetResult<Prisma.$AdminAuditPayload, S>
+
+  type AdminAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminAuditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminAuditCountAggregateInputType | true
+    }
+
+  export interface AdminAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminAudit'], meta: { name: 'AdminAudit' } }
+    /**
+     * Find zero or one AdminAudit that matches the filter.
+     * @param {AdminAuditFindUniqueArgs} args - Arguments to find a AdminAudit
+     * @example
+     * // Get one AdminAudit
+     * const adminAudit = await prisma.adminAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminAuditFindUniqueArgs>(args: SelectSubset<T, AdminAuditFindUniqueArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminAudit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminAuditFindUniqueOrThrowArgs} args - Arguments to find a AdminAudit
+     * @example
+     * // Get one AdminAudit
+     * const adminAudit = await prisma.adminAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditFindFirstArgs} args - Arguments to find a AdminAudit
+     * @example
+     * // Get one AdminAudit
+     * const adminAudit = await prisma.adminAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminAuditFindFirstArgs>(args?: SelectSubset<T, AdminAuditFindFirstArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditFindFirstOrThrowArgs} args - Arguments to find a AdminAudit
+     * @example
+     * // Get one AdminAudit
+     * const adminAudit = await prisma.adminAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminAudits
+     * const adminAudits = await prisma.adminAudit.findMany()
+     * 
+     * // Get first 10 AdminAudits
+     * const adminAudits = await prisma.adminAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminAuditWithIdOnly = await prisma.adminAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminAuditFindManyArgs>(args?: SelectSubset<T, AdminAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminAudit.
+     * @param {AdminAuditCreateArgs} args - Arguments to create a AdminAudit.
+     * @example
+     * // Create one AdminAudit
+     * const AdminAudit = await prisma.adminAudit.create({
+     *   data: {
+     *     // ... data to create a AdminAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminAuditCreateArgs>(args: SelectSubset<T, AdminAuditCreateArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminAudits.
+     * @param {AdminAuditCreateManyArgs} args - Arguments to create many AdminAudits.
+     * @example
+     * // Create many AdminAudits
+     * const adminAudit = await prisma.adminAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminAuditCreateManyArgs>(args?: SelectSubset<T, AdminAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminAudits and returns the data saved in the database.
+     * @param {AdminAuditCreateManyAndReturnArgs} args - Arguments to create many AdminAudits.
+     * @example
+     * // Create many AdminAudits
+     * const adminAudit = await prisma.adminAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminAudits and only return the `id`
+     * const adminAuditWithIdOnly = await prisma.adminAudit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminAudit.
+     * @param {AdminAuditDeleteArgs} args - Arguments to delete one AdminAudit.
+     * @example
+     * // Delete one AdminAudit
+     * const AdminAudit = await prisma.adminAudit.delete({
+     *   where: {
+     *     // ... filter to delete one AdminAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminAuditDeleteArgs>(args: SelectSubset<T, AdminAuditDeleteArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminAudit.
+     * @param {AdminAuditUpdateArgs} args - Arguments to update one AdminAudit.
+     * @example
+     * // Update one AdminAudit
+     * const adminAudit = await prisma.adminAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminAuditUpdateArgs>(args: SelectSubset<T, AdminAuditUpdateArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminAudits.
+     * @param {AdminAuditDeleteManyArgs} args - Arguments to filter AdminAudits to delete.
+     * @example
+     * // Delete a few AdminAudits
+     * const { count } = await prisma.adminAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminAuditDeleteManyArgs>(args?: SelectSubset<T, AdminAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminAudits
+     * const adminAudit = await prisma.adminAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminAuditUpdateManyArgs>(args: SelectSubset<T, AdminAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminAudits and returns the data updated in the database.
+     * @param {AdminAuditUpdateManyAndReturnArgs} args - Arguments to update many AdminAudits.
+     * @example
+     * // Update many AdminAudits
+     * const adminAudit = await prisma.adminAudit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminAudits and only return the `id`
+     * const adminAuditWithIdOnly = await prisma.adminAudit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminAuditUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminAuditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminAudit.
+     * @param {AdminAuditUpsertArgs} args - Arguments to update or create a AdminAudit.
+     * @example
+     * // Update or create a AdminAudit
+     * const adminAudit = await prisma.adminAudit.upsert({
+     *   create: {
+     *     // ... data to create a AdminAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminAuditUpsertArgs>(args: SelectSubset<T, AdminAuditUpsertArgs<ExtArgs>>): Prisma__AdminAuditClient<$Result.GetResult<Prisma.$AdminAuditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditCountArgs} args - Arguments to filter AdminAudits to count.
+     * @example
+     * // Count the number of AdminAudits
+     * const count = await prisma.adminAudit.count({
+     *   where: {
+     *     // ... the filter for the AdminAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminAuditCountArgs>(
+      args?: Subset<T, AdminAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminAuditAggregateArgs>(args: Subset<T, AdminAuditAggregateArgs>): Prisma.PrismaPromise<GetAdminAuditAggregateType<T>>
+
+    /**
+     * Group by AdminAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminAuditGroupByArgs['orderBy'] }
+        : { orderBy?: AdminAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminAudit model
+   */
+  readonly fields: AdminAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminAudit model
+   */
+  interface AdminAuditFieldRefs {
+    readonly id: FieldRef<"AdminAudit", 'String'>
+    readonly actorUserId: FieldRef<"AdminAudit", 'String'>
+    readonly actorIdentity: FieldRef<"AdminAudit", 'String'>
+    readonly action: FieldRef<"AdminAudit", 'String'>
+    readonly targetType: FieldRef<"AdminAudit", 'String'>
+    readonly targetId: FieldRef<"AdminAudit", 'String'>
+    readonly detail: FieldRef<"AdminAudit", 'Json'>
+    readonly createdAt: FieldRef<"AdminAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminAudit findUnique
+   */
+  export type AdminAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AdminAudit to fetch.
+     */
+    where: AdminAuditWhereUniqueInput
+  }
+
+  /**
+   * AdminAudit findUniqueOrThrow
+   */
+  export type AdminAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AdminAudit to fetch.
+     */
+    where: AdminAuditWhereUniqueInput
+  }
+
+  /**
+   * AdminAudit findFirst
+   */
+  export type AdminAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AdminAudit to fetch.
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminAudits to fetch.
+     */
+    orderBy?: AdminAuditOrderByWithRelationInput | AdminAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminAudits.
+     */
+    cursor?: AdminAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminAudits.
+     */
+    distinct?: AdminAuditScalarFieldEnum | AdminAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AdminAudit findFirstOrThrow
+   */
+  export type AdminAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AdminAudit to fetch.
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminAudits to fetch.
+     */
+    orderBy?: AdminAuditOrderByWithRelationInput | AdminAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminAudits.
+     */
+    cursor?: AdminAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminAudits.
+     */
+    distinct?: AdminAuditScalarFieldEnum | AdminAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AdminAudit findMany
+   */
+  export type AdminAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AdminAudits to fetch.
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminAudits to fetch.
+     */
+    orderBy?: AdminAuditOrderByWithRelationInput | AdminAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminAudits.
+     */
+    cursor?: AdminAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminAudits.
+     */
+    skip?: number
+    distinct?: AdminAuditScalarFieldEnum | AdminAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AdminAudit create
+   */
+  export type AdminAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AdminAudit.
+     */
+    data: XOR<AdminAuditCreateInput, AdminAuditUncheckedCreateInput>
+  }
+
+  /**
+   * AdminAudit createMany
+   */
+  export type AdminAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminAudits.
+     */
+    data: AdminAuditCreateManyInput | AdminAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminAudit createManyAndReturn
+   */
+  export type AdminAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminAudits.
+     */
+    data: AdminAuditCreateManyInput | AdminAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminAudit update
+   */
+  export type AdminAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AdminAudit.
+     */
+    data: XOR<AdminAuditUpdateInput, AdminAuditUncheckedUpdateInput>
+    /**
+     * Choose, which AdminAudit to update.
+     */
+    where: AdminAuditWhereUniqueInput
+  }
+
+  /**
+   * AdminAudit updateMany
+   */
+  export type AdminAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminAudits.
+     */
+    data: XOR<AdminAuditUpdateManyMutationInput, AdminAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminAudits to update
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * Limit how many AdminAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminAudit updateManyAndReturn
+   */
+  export type AdminAuditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminAudits.
+     */
+    data: XOR<AdminAuditUpdateManyMutationInput, AdminAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminAudits to update
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * Limit how many AdminAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminAudit upsert
+   */
+  export type AdminAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AdminAudit to update in case it exists.
+     */
+    where: AdminAuditWhereUniqueInput
+    /**
+     * In case the AdminAudit found by the `where` argument doesn't exist, create a new AdminAudit with this data.
+     */
+    create: XOR<AdminAuditCreateInput, AdminAuditUncheckedCreateInput>
+    /**
+     * In case the AdminAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminAuditUpdateInput, AdminAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminAudit delete
+   */
+  export type AdminAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
+    /**
+     * Filter which AdminAudit to delete.
+     */
+    where: AdminAuditWhereUniqueInput
+  }
+
+  /**
+   * AdminAudit deleteMany
+   */
+  export type AdminAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminAudits to delete
+     */
+    where?: AdminAuditWhereInput
+    /**
+     * Limit how many AdminAudits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminAudit without action
+   */
+  export type AdminAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminAudit
+     */
+    select?: AdminAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminAudit
+     */
+    omit?: AdminAuditOmit<ExtArgs> | null
   }
 
 
@@ -7517,6 +8759,9 @@ export namespace Prisma {
     usd: number | null
     details: string | null
     status: $Enums.OrderStatus | null
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7530,6 +8775,9 @@ export namespace Prisma {
     usd: number | null
     details: string | null
     status: $Enums.OrderStatus | null
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7543,6 +8791,9 @@ export namespace Prisma {
     usd: number
     details: number
     status: number
+    adminNote: number
+    handledAt: number
+    handledBy: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -7568,6 +8819,9 @@ export namespace Prisma {
     usd?: true
     details?: true
     status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7581,6 +8835,9 @@ export namespace Prisma {
     usd?: true
     details?: true
     status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7594,6 +8851,9 @@ export namespace Prisma {
     usd?: true
     details?: true
     status?: true
+    adminNote?: true
+    handledAt?: true
+    handledBy?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7694,6 +8954,9 @@ export namespace Prisma {
     usd: number
     details: string | null
     status: $Enums.OrderStatus
+    adminNote: string | null
+    handledAt: Date | null
+    handledBy: string | null
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -7726,6 +8989,9 @@ export namespace Prisma {
     usd?: boolean
     details?: boolean
     status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7740,6 +9006,9 @@ export namespace Prisma {
     usd?: boolean
     details?: boolean
     status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7754,6 +9023,9 @@ export namespace Prisma {
     usd?: boolean
     details?: boolean
     status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7768,12 +9040,15 @@ export namespace Prisma {
     usd?: boolean
     details?: boolean
     status?: boolean
+    adminNote?: boolean
+    handledAt?: boolean
+    handledBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "itemName" | "pumpkins" | "usd" | "details" | "status" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "itemName" | "pumpkins" | "usd" | "details" | "status" | "adminNote" | "handledAt" | "handledBy" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -7797,6 +9072,9 @@ export namespace Prisma {
       usd: number
       details: string | null
       status: $Enums.OrderStatus
+      adminNote: string | null
+      handledAt: Date | null
+      handledBy: string | null
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -8231,6 +9509,9 @@ export namespace Prisma {
     readonly usd: FieldRef<"Order", 'Float'>
     readonly details: FieldRef<"Order", 'String'>
     readonly status: FieldRef<"Order", 'OrderStatus'>
+    readonly adminNote: FieldRef<"Order", 'String'>
+    readonly handledAt: FieldRef<"Order", 'DateTime'>
+    readonly handledBy: FieldRef<"Order", 'String'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
     readonly userId: FieldRef<"Order", 'String'>
@@ -10800,6 +12081,14 @@ export namespace Prisma {
     trackedSeconds: 'trackedSeconds',
     claimedSeconds: 'claimedSeconds',
     shippedAt: 'shippedAt',
+    reviewStatus: 'reviewStatus',
+    reviewNote: 'reviewNote',
+    reviewedAt: 'reviewedAt',
+    reviewedBy: 'reviewedBy',
+    awardedPumpkins: 'awardedPumpkins',
+    airtableRecordId: 'airtableRecordId',
+    airtableSyncedAt: 'airtableSyncedAt',
+    airtableError: 'airtableError',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -10819,6 +12108,20 @@ export namespace Prisma {
   };
 
   export type ScreenshotScalarFieldEnum = (typeof ScreenshotScalarFieldEnum)[keyof typeof ScreenshotScalarFieldEnum]
+
+
+  export const AdminAuditScalarFieldEnum: {
+    id: 'id',
+    actorUserId: 'actorUserId',
+    actorIdentity: 'actorIdentity',
+    action: 'action',
+    targetType: 'targetType',
+    targetId: 'targetId',
+    detail: 'detail',
+    createdAt: 'createdAt'
+  };
+
+  export type AdminAuditScalarFieldEnum = (typeof AdminAuditScalarFieldEnum)[keyof typeof AdminAuditScalarFieldEnum]
 
 
   export const AccountScalarFieldEnum: {
@@ -10876,6 +12179,9 @@ export namespace Prisma {
     usd: 'usd',
     details: 'details',
     status: 'status',
+    adminNote: 'adminNote',
+    handledAt: 'handledAt',
+    handledBy: 'handledBy',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -10917,6 +12223,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -10931,6 +12245,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -10995,6 +12318,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ReviewStatus'
+   */
+  export type EnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReviewStatus[]'
+   */
+  export type ListEnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Bytes'
    */
   export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
@@ -11005,6 +12342,20 @@ export namespace Prisma {
    * Reference to a field of type 'Bytes[]'
    */
   export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -11061,6 +12412,14 @@ export namespace Prisma {
     trackedSeconds?: IntNullableFilter<"Game"> | number | null
     claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewStatus?: EnumReviewStatusNullableFilter<"Game"> | $Enums.ReviewStatus | null
+    reviewNote?: StringNullableFilter<"Game"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"Game"> | string | null
+    awardedPumpkins?: IntNullableFilter<"Game"> | number | null
+    airtableRecordId?: StringNullableFilter<"Game"> | string | null
+    airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    airtableError?: StringNullableFilter<"Game"> | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
@@ -11080,6 +12439,14 @@ export namespace Prisma {
     trackedSeconds?: SortOrderInput | SortOrder
     claimedSeconds?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
+    reviewStatus?: SortOrderInput | SortOrder
+    reviewNote?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    awardedPumpkins?: SortOrderInput | SortOrder
+    airtableRecordId?: SortOrderInput | SortOrder
+    airtableSyncedAt?: SortOrderInput | SortOrder
+    airtableError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11089,6 +12456,7 @@ export namespace Prisma {
 
   export type GameWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    airtableRecordId?: string
     AND?: GameWhereInput | GameWhereInput[]
     OR?: GameWhereInput[]
     NOT?: GameWhereInput | GameWhereInput[]
@@ -11102,12 +12470,19 @@ export namespace Prisma {
     trackedSeconds?: IntNullableFilter<"Game"> | number | null
     claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewStatus?: EnumReviewStatusNullableFilter<"Game"> | $Enums.ReviewStatus | null
+    reviewNote?: StringNullableFilter<"Game"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"Game"> | string | null
+    awardedPumpkins?: IntNullableFilter<"Game"> | number | null
+    airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    airtableError?: StringNullableFilter<"Game"> | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     screenshot?: XOR<ScreenshotNullableScalarRelationFilter, ScreenshotWhereInput> | null
-  }, "id">
+  }, "id" | "airtableRecordId">
 
   export type GameOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11121,6 +12496,14 @@ export namespace Prisma {
     trackedSeconds?: SortOrderInput | SortOrder
     claimedSeconds?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
+    reviewStatus?: SortOrderInput | SortOrder
+    reviewNote?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    reviewedBy?: SortOrderInput | SortOrder
+    awardedPumpkins?: SortOrderInput | SortOrder
+    airtableRecordId?: SortOrderInput | SortOrder
+    airtableSyncedAt?: SortOrderInput | SortOrder
+    airtableError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11146,6 +12529,14 @@ export namespace Prisma {
     trackedSeconds?: IntNullableWithAggregatesFilter<"Game"> | number | null
     claimedSeconds?: IntNullableWithAggregatesFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
+    reviewStatus?: EnumReviewStatusNullableWithAggregatesFilter<"Game"> | $Enums.ReviewStatus | null
+    reviewNote?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
+    reviewedBy?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    awardedPumpkins?: IntNullableWithAggregatesFilter<"Game"> | number | null
+    airtableRecordId?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    airtableSyncedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
+    airtableError?: StringNullableWithAggregatesFilter<"Game"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     userId?: StringWithAggregatesFilter<"Game"> | string
@@ -11216,6 +12607,73 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Screenshot"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Screenshot"> | Date | string
     gameId?: StringWithAggregatesFilter<"Screenshot"> | string
+  }
+
+  export type AdminAuditWhereInput = {
+    AND?: AdminAuditWhereInput | AdminAuditWhereInput[]
+    OR?: AdminAuditWhereInput[]
+    NOT?: AdminAuditWhereInput | AdminAuditWhereInput[]
+    id?: StringFilter<"AdminAudit"> | string
+    actorUserId?: StringFilter<"AdminAudit"> | string
+    actorIdentity?: StringFilter<"AdminAudit"> | string
+    action?: StringFilter<"AdminAudit"> | string
+    targetType?: StringFilter<"AdminAudit"> | string
+    targetId?: StringFilter<"AdminAudit"> | string
+    detail?: JsonNullableFilter<"AdminAudit">
+    createdAt?: DateTimeFilter<"AdminAudit"> | Date | string
+  }
+
+  export type AdminAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    actorUserId?: SortOrder
+    actorIdentity?: SortOrder
+    action?: SortOrder
+    targetType?: SortOrder
+    targetId?: SortOrder
+    detail?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdminAuditWhereInput | AdminAuditWhereInput[]
+    OR?: AdminAuditWhereInput[]
+    NOT?: AdminAuditWhereInput | AdminAuditWhereInput[]
+    actorUserId?: StringFilter<"AdminAudit"> | string
+    actorIdentity?: StringFilter<"AdminAudit"> | string
+    action?: StringFilter<"AdminAudit"> | string
+    targetType?: StringFilter<"AdminAudit"> | string
+    targetId?: StringFilter<"AdminAudit"> | string
+    detail?: JsonNullableFilter<"AdminAudit">
+    createdAt?: DateTimeFilter<"AdminAudit"> | Date | string
+  }, "id">
+
+  export type AdminAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    actorUserId?: SortOrder
+    actorIdentity?: SortOrder
+    action?: SortOrder
+    targetType?: SortOrder
+    targetId?: SortOrder
+    detail?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AdminAuditCountOrderByAggregateInput
+    _max?: AdminAuditMaxOrderByAggregateInput
+    _min?: AdminAuditMinOrderByAggregateInput
+  }
+
+  export type AdminAuditScalarWhereWithAggregatesInput = {
+    AND?: AdminAuditScalarWhereWithAggregatesInput | AdminAuditScalarWhereWithAggregatesInput[]
+    OR?: AdminAuditScalarWhereWithAggregatesInput[]
+    NOT?: AdminAuditScalarWhereWithAggregatesInput | AdminAuditScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdminAudit"> | string
+    actorUserId?: StringWithAggregatesFilter<"AdminAudit"> | string
+    actorIdentity?: StringWithAggregatesFilter<"AdminAudit"> | string
+    action?: StringWithAggregatesFilter<"AdminAudit"> | string
+    targetType?: StringWithAggregatesFilter<"AdminAudit"> | string
+    targetId?: StringWithAggregatesFilter<"AdminAudit"> | string
+    detail?: JsonNullableWithAggregatesFilter<"AdminAudit">
+    createdAt?: DateTimeWithAggregatesFilter<"AdminAudit"> | Date | string
   }
 
   export type AccountWhereInput = {
@@ -11481,6 +12939,9 @@ export namespace Prisma {
     usd?: FloatFilter<"Order"> | number
     details?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    adminNote?: StringNullableFilter<"Order"> | string | null
+    handledAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    handledBy?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     userId?: StringFilter<"Order"> | string
@@ -11495,6 +12956,9 @@ export namespace Prisma {
     usd?: SortOrder
     details?: SortOrderInput | SortOrder
     status?: SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    handledAt?: SortOrderInput | SortOrder
+    handledBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11512,6 +12976,9 @@ export namespace Prisma {
     usd?: FloatFilter<"Order"> | number
     details?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    adminNote?: StringNullableFilter<"Order"> | string | null
+    handledAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    handledBy?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     userId?: StringFilter<"Order"> | string
@@ -11526,6 +12993,9 @@ export namespace Prisma {
     usd?: SortOrder
     details?: SortOrderInput | SortOrder
     status?: SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    handledAt?: SortOrderInput | SortOrder
+    handledBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11547,6 +13017,9 @@ export namespace Prisma {
     usd?: FloatWithAggregatesFilter<"Order"> | number
     details?: StringNullableWithAggregatesFilter<"Order"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
+    adminNote?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    handledAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    handledBy?: StringNullableWithAggregatesFilter<"Order"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     userId?: StringWithAggregatesFilter<"Order"> | string
@@ -11689,6 +13162,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutGamesInput
@@ -11707,6 +13188,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -11725,6 +13214,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutGamesNestedInput
@@ -11743,6 +13240,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -11761,6 +13266,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -11778,6 +13291,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11794,6 +13315,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -11866,6 +13395,83 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gameId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdminAuditCreateInput = {
+    id?: string
+    actorUserId: string
+    actorIdentity: string
+    action: string
+    targetType: string
+    targetId: string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AdminAuditUncheckedCreateInput = {
+    id?: string
+    actorUserId: string
+    actorIdentity: string
+    action: string
+    targetType: string
+    targetId: string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AdminAuditUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actorUserId?: StringFieldUpdateOperationsInput | string
+    actorIdentity?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    targetType?: StringFieldUpdateOperationsInput | string
+    targetId?: StringFieldUpdateOperationsInput | string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminAuditUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actorUserId?: StringFieldUpdateOperationsInput | string
+    actorIdentity?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    targetType?: StringFieldUpdateOperationsInput | string
+    targetId?: StringFieldUpdateOperationsInput | string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminAuditCreateManyInput = {
+    id?: string
+    actorUserId: string
+    actorIdentity: string
+    action: string
+    targetType: string
+    targetId: string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AdminAuditUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actorUserId?: StringFieldUpdateOperationsInput | string
+    actorIdentity?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    targetType?: StringFieldUpdateOperationsInput | string
+    targetId?: StringFieldUpdateOperationsInput | string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminAuditUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actorUserId?: StringFieldUpdateOperationsInput | string
+    actorIdentity?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    targetType?: StringFieldUpdateOperationsInput | string
+    targetId?: StringFieldUpdateOperationsInput | string
+    detail?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateInput = {
@@ -12160,6 +13766,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -12173,6 +13782,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -12186,6 +13798,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -12199,6 +13814,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -12212,6 +13830,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -12225,6 +13846,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12237,6 +13861,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -12433,6 +14060,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type EnumReviewStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12471,6 +14105,14 @@ export namespace Prisma {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
     shippedAt?: SortOrder
+    reviewStatus?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedBy?: SortOrder
+    awardedPumpkins?: SortOrder
+    airtableRecordId?: SortOrder
+    airtableSyncedAt?: SortOrder
+    airtableError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12479,6 +14121,7 @@ export namespace Prisma {
   export type GameAvgOrderByAggregateInput = {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
+    awardedPumpkins?: SortOrder
   }
 
   export type GameMaxOrderByAggregateInput = {
@@ -12493,6 +14136,14 @@ export namespace Prisma {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
     shippedAt?: SortOrder
+    reviewStatus?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedBy?: SortOrder
+    awardedPumpkins?: SortOrder
+    airtableRecordId?: SortOrder
+    airtableSyncedAt?: SortOrder
+    airtableError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12510,6 +14161,14 @@ export namespace Prisma {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
     shippedAt?: SortOrder
+    reviewStatus?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedBy?: SortOrder
+    awardedPumpkins?: SortOrder
+    airtableRecordId?: SortOrder
+    airtableSyncedAt?: SortOrder
+    airtableError?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12518,6 +14177,7 @@ export namespace Prisma {
   export type GameSumOrderByAggregateInput = {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
+    awardedPumpkins?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12594,6 +14254,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumReviewStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -12695,6 +14365,86 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBytesFilter<$PrismaModel>
     _max?: NestedBytesFilter<$PrismaModel>
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type AdminAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    actorUserId?: SortOrder
+    actorIdentity?: SortOrder
+    action?: SortOrder
+    targetType?: SortOrder
+    targetId?: SortOrder
+    detail?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    actorUserId?: SortOrder
+    actorIdentity?: SortOrder
+    action?: SortOrder
+    targetType?: SortOrder
+    targetId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdminAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    actorUserId?: SortOrder
+    actorIdentity?: SortOrder
+    action?: SortOrder
+    targetType?: SortOrder
+    targetId?: SortOrder
+    createdAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -12918,6 +14668,9 @@ export namespace Prisma {
     usd?: SortOrder
     details?: SortOrder
     status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12936,6 +14689,9 @@ export namespace Prisma {
     usd?: SortOrder
     details?: SortOrder
     status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12949,6 +14705,9 @@ export namespace Prisma {
     usd?: SortOrder
     details?: SortOrder
     status?: SortOrder
+    adminNote?: SortOrder
+    handledAt?: SortOrder
+    handledBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13095,6 +14854,10 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type NullableEnumReviewStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReviewStatus | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -13484,6 +15247,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedEnumReviewStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13591,6 +15361,16 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReviewStatus | EnumReviewStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ReviewStatus[] | ListEnumReviewStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumReviewStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReviewStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13647,6 +15427,29 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBytesFilter<$PrismaModel>
     _max?: NestedBytesFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -13851,6 +15654,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutGamesInput
@@ -13868,6 +15679,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -13901,6 +15720,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutGamesNestedInput
@@ -13918,6 +15745,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -14181,6 +16016,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     screenshot?: ScreenshotCreateNestedOneWithoutGameInput
@@ -14198,6 +16041,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     screenshot?: ScreenshotUncheckedCreateNestedOneWithoutGameInput
@@ -14250,6 +16101,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14262,6 +16116,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14368,6 +16225,14 @@ export namespace Prisma {
     trackedSeconds?: IntNullableFilter<"Game"> | number | null
     claimedSeconds?: IntNullableFilter<"Game"> | number | null
     shippedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewStatus?: EnumReviewStatusNullableFilter<"Game"> | $Enums.ReviewStatus | null
+    reviewNote?: StringNullableFilter<"Game"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    reviewedBy?: StringNullableFilter<"Game"> | string | null
+    awardedPumpkins?: IntNullableFilter<"Game"> | number | null
+    airtableRecordId?: StringNullableFilter<"Game"> | string | null
+    airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    airtableError?: StringNullableFilter<"Game"> | string | null
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
@@ -14435,6 +16300,9 @@ export namespace Prisma {
     usd?: FloatFilter<"Order"> | number
     details?: StringNullableFilter<"Order"> | string | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    adminNote?: StringNullableFilter<"Order"> | string | null
+    handledAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    handledBy?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     userId?: StringFilter<"Order"> | string
@@ -14657,6 +16525,14 @@ export namespace Prisma {
     trackedSeconds?: number | null
     claimedSeconds?: number | null
     shippedAt?: Date | string | null
+    reviewStatus?: $Enums.ReviewStatus | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    reviewedBy?: string | null
+    awardedPumpkins?: number | null
+    airtableRecordId?: string | null
+    airtableSyncedAt?: Date | string | null
+    airtableError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14669,6 +16545,9 @@ export namespace Prisma {
     usd: number
     details?: string | null
     status?: $Enums.OrderStatus
+    adminNote?: string | null
+    handledAt?: Date | string | null
+    handledBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14748,6 +16627,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     screenshot?: ScreenshotUpdateOneWithoutGameNestedInput
@@ -14765,6 +16652,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     screenshot?: ScreenshotUncheckedUpdateOneWithoutGameNestedInput
@@ -14782,6 +16677,14 @@ export namespace Prisma {
     trackedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     claimedSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewStatus?: NullableEnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    awardedPumpkins?: NullableIntFieldUpdateOperationsInput | number | null
+    airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    airtableError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14794,6 +16697,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14806,6 +16712,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14818,6 +16727,9 @@ export namespace Prisma {
     usd?: FloatFieldUpdateOperationsInput | number
     details?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    handledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -75,7 +75,7 @@ export function HackatimePanel({
           it&rsquo;s yours.
         </p>
       )}
-      <div className="pf-next-body pf-session">
+      <div className={`pf-next-body pf-session ${confirm ? "pf-session-confirming" : ""}`}>
         <p className="pf-next-text">
           Scare reads your Hackatime projects and their time. You can also revoke it from{" "}
           <a href={settingsUrl} className="link">
@@ -84,20 +84,30 @@ export function HackatimePanel({
           .
         </p>
         {confirm ? (
-          <span className="confirm">
-            Unlink Hackatime?{" "}
-            <button
-              type="button"
-              className="link link-danger"
-              onClick={() => unlink.mutate()}
-              disabled={unlink.isPending}
-            >
-              {unlink.isPending ? "Unlinking…" : "Yes, unlink"}
-            </button>{" "}
-            <button type="button" className="link" onClick={() => setConfirm(false)}>
-              Keep it
-            </button>
-          </span>
+          <div className="pf-confirm" role="group" aria-label="Confirm unlinking Hackatime">
+            <p className="pf-confirm-text">
+              Unlink Hackatime? Projects already using its time keep it, but you won&rsquo;t be
+              able to pick Hackatime projects until you link it again.
+            </p>
+            <div className="pf-confirm-actions">
+              <button
+                type="button"
+                className="btn btn-ghost pf-confirm-yes"
+                onClick={() => unlink.mutate()}
+                disabled={unlink.isPending}
+              >
+                {unlink.isPending ? "Unlinking…" : "Yes, unlink"}
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={() => setConfirm(false)} autoFocus>
+                Keep it
+              </button>
+            </div>
+            {unlink.error && (
+              <p className="form-error" role="alert">
+                That didn&rsquo;t work. Try again in a moment.
+              </p>
+            )}
+          </div>
         ) : (
           <button type="button" className="btn btn-ghost" onClick={() => setConfirm(true)}>
             Unlink

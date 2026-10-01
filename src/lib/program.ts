@@ -14,10 +14,10 @@ export const LINKS = {
   /** The #scare channel, for help and questions. */
   slackChannel: "https://hackclub.enterprise.slack.com/archives/C0C5ZFU9292",
   auth: "https://auth.hackclub.com",
-  // TBA: point these at the real pages
-  fulfillmentBounty: "#",
-  privacy: "#",
-  terms: "#",
+  fulfillmentBounty: "https://forms.hackclub.com/bounty",
+  /** Hack Club keeps privacy and terms on one page. */
+  privacy: "https://hackclub.com/privacy-and-terms",
+  terms: "https://hackclub.com/privacy-and-terms",
 } as const;
 
 export function timeLeft(now: number) {

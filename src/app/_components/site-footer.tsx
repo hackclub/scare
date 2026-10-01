@@ -38,19 +38,19 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
       <Byline />
       <p>
         Scare is a{" "}
-        <a href={LINKS.hackClub} className="link">
+        <a href={LINKS.hackClub} className="link" target="_blank" rel="noreferrer">
           Hack Club
         </a>{" "}
         YSWS. Hack Club is a 501(c)(3) nonprofit.
       </p>
       <nav aria-label="Elsewhere" className="foot-links">
-        <a href={LINKS.fulfillmentBounty} className="link">
+        <a href={LINKS.fulfillmentBounty} className="link" target="_blank" rel="noreferrer">
           Fulfillment bounty <ArrowUpRight className="link-icon" />
         </a>
-        <a href={LINKS.privacy} className="link">
+        <a href={LINKS.privacy} className="link" target="_blank" rel="noreferrer">
           Privacy policy <ArrowUpRight className="link-icon" />
         </a>
-        <a href={LINKS.terms} className="link">
+        <a href={LINKS.terms} className="link" target="_blank" rel="noreferrer">
           Terms of service <ArrowUpRight className="link-icon" />
         </a>
       </nav>
