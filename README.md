@@ -62,6 +62,15 @@ Participants link Hackatime from Profile (or from the project form) so they can 
 - `/platform/profile`: live Hack Club identity, sign out
 - `/haunt`: redirects to `/platform`
 
+## Deploy (Orchard)
+
+The `Dockerfile` builds a production image that listens on port `3000`.
+
+- Mount a persistent volume (PVC) at `/data`. The SQLite database lives at `/data/scare.db`; without the volume it's wiped on every restart.
+- Set `AUTH_SECRET`, `AUTH_URL`, `AUTH_HACKCLUB_ID` / `AUTH_HACKCLUB_SECRET` and `HACKATIME_CLIENT_ID` / `HACKATIME_CLIENT_SECRET`. `DATABASE_URL` defaults to `file:/data/scare.db`.
+- Run exactly one replica: SQLite and the in-memory rate limiter don't work across instances.
+- On start the container runs `prisma db push`, which refuses changes that would drop data. Apply those by hand.
+
 ## Where things live
 
 - `src/lib/program.ts`: deadline, links. Change program facts here.

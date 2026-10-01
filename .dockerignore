@@ -1,0 +1,16 @@
+.git
+node_modules
+.next
+# Regenerated inside the image for Linux; the committed client carries a macOS engine.
+generated
+prisma/db.sqlite*
+db.sqlite*
+.env
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.impeccable
+.vercel
+.DS_Store
+Dockerfile
+.dockerignore

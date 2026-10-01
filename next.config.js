@@ -8,15 +8,16 @@ const isProd = process.env.NODE_ENV === "production";
 
 const securityHeaders = [
   // Next.js needs inline scripts/styles; Google Fonts is fetched at build and self-hosted.
+  // plausible.io serves the analytics script and receives its events.
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
+      `script-src 'self' 'unsafe-inline' https://plausible.io${isProd ? "" : " 'unsafe-eval'"}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
-      "connect-src 'self'",
+      "connect-src 'self' https://plausible.io",
       "media-src 'self' blob: data:",
       "object-src 'none'",
       "base-uri 'self'",

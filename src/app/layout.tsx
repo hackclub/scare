@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata, type Viewport } from "next";
 import { Martian_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { TabHaunt } from "./_components/tab-haunt";
@@ -53,6 +54,14 @@ export default function RootLayout({
         </a>
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <TabHaunt />
+        {/* Privacy-friendly analytics by Plausible */}
+        <Script
+          src="https://plausible.io/js/pa-EDIlJn6pUM_C-atCV4RL_.js"
+          strategy="afterInteractive"
+        />
+        <Script id="plausible-init" strategy="afterInteractive">
+          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`}
+        </Script>
       </body>
     </html>
   );
