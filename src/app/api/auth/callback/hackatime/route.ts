@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "~/server/auth";
 import { encrypt } from "~/server/crypto";
 import { db } from "~/server/db";
+import { publicOrigin } from "~/server/origin";
 import { rateLimit } from "~/server/rate-limit";
 import {
   HACKATIME,
@@ -25,6 +26,7 @@ interface Pending {
  */
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
+  const origin = publicOrigin(req);
   let pending: Pending | null = null;
   try {
     pending = JSON.parse(
@@ -35,14 +37,13 @@ export async function GET(req: NextRequest) {
   }
 
   const finish = (status: string) => {
-    // The cookie is client-held, so re-check it before redirecting anywhere.
-    const next = pending?.next?.startsWith("/platform/")
-      ? pending.next
-      : "/platform/profile";
-    const url = new URL(
-      next,
-      req.nextUrl.origin,
-    );
+    // The cookie is client-held, so re-check it before redirecting anywhere. Onboarding
+    // (/welcome) links Hackatime too, and needs to land back on its own step.
+    const next =
+      pending?.next?.startsWith("/platform/") || pending?.next?.startsWith("/welcome")
+        ? pending.next
+        : "/platform/profile";
+    const url = new URL(next, origin);
     url.searchParams.set("hackatime", status);
     const res = NextResponse.redirect(url);
     res.cookies.delete({
@@ -54,7 +55,7 @@ export async function GET(req: NextRequest) {
 
   const session = await auth();
   if (!session)
-    return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/login", origin));
   if (!rateLimit(`hackatime-cb:${session.user.id}`, 10, 60_000).ok) return finish("failed");
 
   if (params.get("error")) return finish("denied");
@@ -71,7 +72,7 @@ export async function GET(req: NextRequest) {
   const token = await exchangeCode(
     code,
     pending.verifier,
-    redirectUri(req.nextUrl.origin),
+    redirectUri(origin),
   );
   if (!token) return finish("failed");
 

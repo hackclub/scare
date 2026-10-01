@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "~/env";
 import { auth } from "~/server/auth";
+import { publicOrigin } from "~/server/origin";
 import { rateLimit } from "~/server/rate-limit";
 import {
   HACKATIME,
@@ -20,8 +21,9 @@ function safeNext(p: string | null) {
 /** Start linking Hackatime to the signed-in Scare account. */
 export async function GET(req: NextRequest) {
   const next = safeNext(req.nextUrl.searchParams.get("next"));
+  const origin = publicOrigin(req);
   const back = (status: string) => {
-    const url = new URL(next, req.nextUrl.origin);
+    const url = new URL(next, origin);
     url.searchParams.set("hackatime", status);
     return NextResponse.redirect(url);
   };
@@ -31,7 +33,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/login?callbackUrl=${encodeURIComponent(next)}`,
-        req.nextUrl.origin,
+        origin,
       ),
     );
   }
@@ -45,7 +47,7 @@ export async function GET(req: NextRequest) {
   const authorize = new URL(HACKATIME.authorize);
   authorize.search = new URLSearchParams({
     client_id: env.HACKATIME_CLIENT_ID!,
-    redirect_uri: redirectUri(req.nextUrl.origin),
+    redirect_uri: redirectUri(origin),
     response_type: "code",
     scope: HACKATIME.scope,
     state,
