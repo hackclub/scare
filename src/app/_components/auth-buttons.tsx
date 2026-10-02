@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { safePath } from "~/lib/safe-url";
 import { authConfigured, signIn, signOut } from "~/server/auth";
 import { ArrowRight } from "./icons";
 
@@ -15,7 +16,7 @@ export function SignInButton({
   /** Where to land after sign-in. Only same-site paths are honored. */
   redirectTo?: string;
 }) {
-  const target = redirectTo.startsWith("/") && !redirectTo.startsWith("//") ? redirectTo : "/platform";
+  const target = safePath(redirectTo);
   return (
     <form
       className={className}

@@ -7,11 +7,37 @@ import Script from "next/script";
 
 import { TabHaunt } from "./_components/tab-haunt";
 
+const TITLE = "Scare - Make a horror game, get games, candy, and more!";
+const DESCRIPTION =
+  "Make a horror game and ship it before Halloween. Every hour you put in earns 10 Pumpkins, which you can trade for Steam games, candy and more. A Hack Club YSWS.";
+/** The link preview card: the carved lantern beside the glyph wordmark (public/og.png, 1200x630). */
+const CARD = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "Scare: a carved ASCII jack-o'-lantern beside the Scare wordmark. Make a horror game, get games, candy, and more.",
+};
+
 export const metadata: Metadata = {
-  title: "Scare - Make a horror game, get games, candy, and more!",
-  description:
-    "Make a horror game and ship it before Halloween. Every hour you put in earns 10 Pumpkins, which you can trade for Steam games, candy and more. A Hack Club YSWS.",
+  // Link previews need absolute image URLs.
+  metadataBase: new URL(process.env.AUTH_URL ?? "https://scare.hackclub.com"),
+  title: TITLE,
+  description: DESCRIPTION,
   icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
+  openGraph: {
+    type: "website",
+    siteName: "Scare",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    images: [CARD],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [CARD],
+  },
 };
 
 export const viewport: Viewport = {

@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { type PrismaClient } from "../../../../generated/prisma";
+import { type Prisma, type PrismaClient } from "../../../../generated/prisma";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { toTRPC } from "~/server/api/routers/hackatime";
 import { syncShip } from "~/server/airtable";
@@ -116,6 +116,30 @@ function normalizeLink(raw: string) {
   }
 }
 
+/**
+ * What a participant sees of their own game. Leaves out who reviewed it (an admin's identity)
+ * and the Airtable bookkeeping, which are for admins only.
+ */
+const participantGame = {
+  id: true,
+  title: true,
+  pitch: true,
+  engine: true,
+  sourceUrl: true,
+  playUrl: true,
+  status: true,
+  hackatimeProject: true,
+  trackedSeconds: true,
+  claimedSeconds: true,
+  shippedAt: true,
+  reviewStatus: true,
+  reviewNote: true,
+  awardedPumpkins: true,
+  createdAt: true,
+  // Only whether there's a screenshot and when it changed; the bytes come from its own route.
+  screenshot: { select: { updatedAt: true } },
+} satisfies Prisma.GameSelect;
+
 /** Caps how many games one account can store. */
 const MAX_GAMES = 25;
 
@@ -132,8 +156,7 @@ export const gameRouter = createTRPCRouter({
     ctx.db.game.findMany({
       where: { userId: ctx.session.user.id },
       orderBy: { createdAt: "desc" },
-      // Only whether there's a screenshot and when it changed; the bytes come from its own route.
-      include: { screenshot: { select: { updatedAt: true } } },
+      select: participantGame,
     }),
   ),
 
@@ -155,6 +178,7 @@ export const gameRouter = createTRPCRouter({
           engine: rest.engine ?? null,
           userId: ctx.session.user.id,
         },
+        select: participantGame,
       });
     }),
 
@@ -168,7 +192,7 @@ export const gameRouter = createTRPCRouter({
         input.hackatimeProject,
         input.claimedHours,
       );
-      return ctx.db.game.update({ where: { id: game.id }, data: time });
+      return ctx.db.game.update({ where: { id: game.id }, data: time, select: participantGame });
     }),
 
   ship: protectedProcedure
@@ -206,7 +230,7 @@ export const gameRouter = createTRPCRouter({
         },
       });
       if (count === 0) throw new TRPCError({ code: "FORBIDDEN", message: SHIPPED_LOCKED });
-      const shipped = await ctx.db.game.findUniqueOrThrow({ where: { id: game.id } });
+      const shipped = await ctx.db.game.findUniqueOrThrow({ where: { id: game.id }, select: participantGame });
       // Mirror to Airtable once the response is out; a slow or failing Airtable never blocks shipping.
       const origin = originFromHeaders(ctx.headers);
       after(() => syncShip(shipped.id, origin, "Pending"));

@@ -11,6 +11,7 @@ import { PumpkinMark } from "~/app/_components/icons";
 import { Lantern } from "~/app/_components/lantern";
 import { SilenceAmbience } from "~/app/_components/silence-ambience";
 import { SiteFooter } from "~/app/_components/site-footer";
+import { safePath } from "~/lib/safe-url";
 import { auth } from "~/server/auth";
 
 export const metadata: Metadata = { title: "Sign in | Scare" };
@@ -27,10 +28,6 @@ const ERRORS: Record<string, string> = {
     "That email is already tied to another Scare account. Sign in the way you did before.",
 };
 const FALLBACK = "Something went wrong signing you in. Try again, and ask in Slack if it keeps happening.";
-
-function safePath(p?: string) {
-  return p?.startsWith("/") && !p.startsWith("//") ? p : "/platform";
-}
 
 export default async function Login({
   searchParams,

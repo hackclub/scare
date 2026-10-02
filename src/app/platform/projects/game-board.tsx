@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Ascii } from "~/app/_components/ascii";
 import { ArrowRight, ArrowUpRight, Plus } from "~/app/_components/icons";
@@ -8,6 +8,7 @@ import { safeHref } from "~/lib/safe-url";
 import { pumpkinsForSeconds } from "~/lib/program";
 import { formatDuration, toHours } from "~/lib/time";
 import { api, type RouterOutputs } from "~/trpc/react";
+import { type Draft } from "./ideas";
 import { ScreenshotField } from "./screenshot";
 import { TimeField, timePayload, type TimeValue } from "./time-field";
 
@@ -25,13 +26,30 @@ function fieldErrors(error: unknown) {
   return e?.data?.zodError?.fieldErrors ?? {};
 }
 
-export function GameBoard({ startAdding = false }: { startAdding?: boolean }) {
+export function GameBoard({
+  startAdding = false,
+  draft = null,
+}: {
+  startAdding?: boolean;
+  /** An idea picked from the side panel: opens the form with it filled in. */
+  draft?: Draft | null;
+}) {
   const [games] = api.game.mine.useSuspenseQuery();
   const [adding, setAdding] = useState(startAdding || games.length === 0);
   const shipped = games.filter((g) => g.status === "SHIPPED").length;
+  const board = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!draft) return;
+    setAdding(true);
+    requestAnimationFrame(() => {
+      board.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      board.current?.querySelector<HTMLInputElement>("#f-title")?.focus({ preventScroll: true });
+    });
+  }, [draft]);
 
   return (
-    <section className="board" aria-labelledby="board-title">
+    <section className="board" aria-labelledby="board-title" ref={board}>
       <div className="board-head">
         <h2 id="board-title" className="board-title">
           {games.length} {games.length === 1 ? "game" : "games"}
@@ -50,7 +68,13 @@ export function GameBoard({ startAdding = false }: { startAdding?: boolean }) {
       </div>
 
       {adding && (
-        <NewGame onDone={() => setAdding(false)} canCancel={games.length > 0} />
+        <NewGame
+          // A new idea remounts the form so its fields pick up the new defaults.
+          key={draft?.n ?? 0}
+          draft={draft}
+          onDone={() => setAdding(false)}
+          canCancel={games.length > 0}
+        />
       )}
 
       {games.length === 0 && !adding ? (
@@ -79,9 +103,11 @@ function Empty({ quiet = false }: { quiet?: boolean }) {
 function NewGame({
   onDone,
   canCancel,
+  draft,
 }: {
   onDone: () => void;
   canCancel: boolean;
+  draft: Draft | null;
 }) {
   const utils = api.useUtils();
   const [time, setTime] = useState<TimeValue>({ project: null, hours: "" });
@@ -118,6 +144,7 @@ function NewGame({
         error={errs.title}
         required
         maxLength={80}
+        defaultValue={draft?.title}
       />
       <Field
         label="Description"
@@ -128,6 +155,7 @@ function NewGame({
         required
         maxLength={280}
         multiline
+        defaultValue={draft?.pitch}
       />
       <div className="form-row">
         <Field

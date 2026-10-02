@@ -379,6 +379,13 @@ First-run flow told by **the Keeper**, a hooded ASCII figure carrying a lantern 
 - It's a real scroll area (`shop-drift.tsx`): trackpad and shift-wheel scroll it, touch swipes it, the mouse drags it (grab cursor), and arrow keys move it when focused. The scrollbar is hidden; the edge fade says there's more. Either way it loops seamlessly.
 - It drifts whenever a mouse isn't over it and nobody is dragging it, picking up the moment the pointer leaves or a drag ends. After a touch swipe it waits about a second for momentum to settle. It stops while off screen, and with reduced motion it never drifts but still scrolls.
 
+## Projects ideas (`/platform/projects`, `ideas.tsx`, data in `src/lib/ideas.ts`)
+
+- Projects is three columns on wide screens: the board, the generator (280-340px) and the idea list (260-320px), side by side so the ideas add no scroll length. The page widens to 1680px for it. At ≤1600px (where the board would get squeezed) both panels move under the board, still side by side; at ≤700px they stack.
+- **Idea generator:** a frame ("Idea generator", the number of combinations) dealing a horror premise from four lists: Where, What's there, How you play, The twist. The title ("The Caller in Apartment 4B") sits in Candle Core at the title size; each part is a row button with a Smolder label and Warm Glow text that turns Candle Core on hover, with a "· reroll" tag. Clicking a row redeals just that part; a new line fades up 4px with a slight blur (none for reduced motion). Actions: "Roll again" (ghost, pixel die) and "Use this idea" (primary), which opens the register form filled in and focuses the name.
+- **Ideas to steal:** six hand-written ideas covering each kind that counts (games, horror websites, LED costumes), each with kind and size in mono, a Candle Core name, one line, and a quiet "Start this" link that fills the form the same way.
+- First render is a fixed deal so server and browser match; it shuffles on mount.
+
 ## Shop (`/platform/shop`, styles in `src/styles/shop.css`)
 
 - **Wallet strip:** balance in Departure 40px Candle Core with a soft glow, "about N hours of building", the next affordable goal ("15 more for …") with a 20-cell glyph meter, and the earn rate as a compact readout.

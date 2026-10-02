@@ -16,6 +16,8 @@ export const shopRouter = createTRPCRouter({
     ctx.db.order.findMany({
       where: { userId: ctx.session.user.id },
       orderBy: { createdAt: "desc" },
+      // Not handledBy: that's the admin's identity.
+      select: { id: true, itemName: true, pumpkins: true, status: true, createdAt: true },
     }),
   ),
 
