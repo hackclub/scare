@@ -1,11 +1,12 @@
 import Link from "next/link";
 
 import { PageHead } from "~/app/platform/_components/page-head";
-import { pumpkinsForSeconds } from "~/lib/program";
 import { formatDuration } from "~/lib/time";
 import { requireAdmin } from "~/server/admin";
 import { db } from "~/server/db";
-import { approveShip, rejectShip, resyncAirtable } from "../actions";
+import { resendAri, resyncAirtable } from "../actions";
+import { type ReviewDetail } from "~/server/airtable";
+import { ARI_DASHBOARD_URL, ariConfigured } from "~/server/ari";
 import { env } from "~/env";
 import { ActionForm } from "../_components/action-form";
 
@@ -37,7 +38,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
 
   // Every earlier send-back, from the audit log, so a re-ship shows what it was asked to fix.
   const rejections = await db.adminAudit.findMany({
-    where: { action: "ship.reject", targetType: "game", targetId: { in: games.map((g) => g.id) } },
+    where: { action: { in: ["ship.reject", "ship.changes"] }, targetType: "game", targetId: { in: games.map((g) => g.id) } },
     orderBy: { createdAt: "asc" },
     select: { id: true, targetId: true, createdAt: true, actorIdentity: true, detail: true },
   });
@@ -46,7 +47,18 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
 
   return (
     <>
-      <PageHead title="Ships" lead="Check each shipped game, then approve it to award Pumpkins or send it back with a note." />
+      <PageHead
+        title="Ships"
+        lead={
+          <>
+            Ships are reviewed in{" "}
+            <a href={ARI_DASHBOARD_URL} className="link" target="_blank" rel="noreferrer noopener">
+              Ari
+            </a>
+            . Decisions land here and in Airtable on their own; submit to Unified from Airtable.
+          </>
+        }
+      />
 
       <nav className="ad-tabs" aria-label="Filter ships">
         {(Object.keys(VIEWS) as View[]).map((v) => (
@@ -62,7 +74,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
         <ul className="ad-cards">
           {games.map((g) => {
             const counted = g.claimedSeconds ?? g.trackedSeconds;
-            const suggested = counted ? pumpkinsForSeconds(counted) : 0;
+            const review = g.reviewDetail as ReviewDetail | null;
             const history = sentBack.get(g.id) ?? [];
             // Reviewed before and back in the queue: only a send-back leads there.
             const reship = g.reviewStatus !== "REJECTED" && (history.length > 0 || (view === "pending" && g.reviewedAt !== null));
@@ -165,6 +177,41 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                         </dd>
                       </div>
                       {g.airtableError && <div><dt>Sync error</dt><dd className="ad-error-text">{g.airtableError}</dd></div>}
+                      {ariConfigured && (
+                        <div>
+                          <dt>Ari</dt>
+                          <dd>
+                            {g.ariShipId ? (
+                              <a className="link pf-mono" href={ARI_DASHBOARD_URL} target="_blank" rel="noreferrer noopener" title="Open Ari">
+                                {g.ariShipId}
+                              </a>
+                            ) : (
+                              "not sent"
+                            )}
+                            {g.ariError && <span className="tba ad-flag">send error</span>}
+                          </dd>
+                        </div>
+                      )}
+                      {review && (
+                        <div>
+                          <dt>Ari review</dt>
+                          <dd>
+                            {review.decision === "approved"
+                              ? `Approved ${g.reviewHours ?? 0}h`
+                              : review.decision === "changes"
+                                ? "Changes requested"
+                                : "Rejected"}
+                            {review.reviewer && <span className="pf-muted"> · {review.reviewer}</span>}
+                          </dd>
+                        </div>
+                      )}
+                      {review?.justification.technical_features && (
+                        <div><dt>Technical</dt><dd>{review.justification.technical_features}</dd></div>
+                      )}
+                      {review?.justification.hours_reasoning && (
+                        <div><dt>Hours reasoning</dt><dd>{review.justification.hours_reasoning}</dd></div>
+                      )}
+                      {g.ariError && <div><dt>Ari error</dt><dd className="ad-error-text">{g.ariError}</dd></div>}
                     </dl>
                   </div>
                 </div>
@@ -174,31 +221,14 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                     <ActionForm action={resyncAirtable} submit={g.airtableRecordId ? "Resync Airtable" : "Send to Airtable"} tone="ghost">
                       <input type="hidden" name="gameId" value={g.id} />
                     </ActionForm>
+                    {ariConfigured && (
+                      <ActionForm action={resendAri} submit={g.ariShipId ? "Resend to Ari" : "Send to Ari"} tone="ghost">
+                        <input type="hidden" name="gameId" value={g.id} />
+                      </ActionForm>
+                    )}
                   </div>
                 )}
 
-                {view === "pending" && (
-                  <div className="ad-decide">
-                    <ActionForm action={approveShip} submit="Approve and award">
-                      <input type="hidden" name="gameId" value={g.id} />
-                      <label className="field">
-                        <span className="field-label">Pumpkins<span className="field-hint">suggested {suggested} at 10/hour</span></span>
-                        <input name="pumpkins" type="number" min={0} step={1} defaultValue={suggested} className="input ad-num" required />
-                      </label>
-                      <label className="field">
-                        <span className="field-label">Note<span className="field-hint">optional</span></span>
-                        <input name="note" className="input" maxLength={1000} />
-                      </label>
-                    </ActionForm>
-                    <ActionForm action={rejectShip} submit="Send back" tone="danger">
-                      <input type="hidden" name="gameId" value={g.id} />
-                      <label className="field">
-                        <span className="field-label">What needs fixing</span>
-                        <input name="note" className="input" maxLength={1000} required />
-                      </label>
-                    </ActionForm>
-                  </div>
-                )}
               </li>
             );
           })}

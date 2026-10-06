@@ -6,6 +6,7 @@ import { type Prisma, type PrismaClient } from "../../../../generated/prisma";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { toTRPC } from "~/server/api/routers/hackatime";
 import { syncShip } from "~/server/airtable";
+import { submitToAri } from "~/server/ari";
 import { projectSeconds } from "~/server/hackatime";
 import { originFromHeaders } from "~/server/origin";
 
@@ -234,6 +235,7 @@ export const gameRouter = createTRPCRouter({
       // Mirror to Airtable once the response is out; a slow or failing Airtable never blocks shipping.
       const origin = originFromHeaders(ctx.headers);
       after(() => syncShip(shipped.id, origin, "Pending"));
+      after(() => submitToAri(shipped.id, origin));
       return shipped;
     }),
 

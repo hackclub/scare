@@ -27,6 +27,9 @@ export const env = createEnv({
     AIRTABLE_PAT: z.string().optional(),
     AIRTABLE_BASE_ID: z.string().optional(),
     AIRTABLE_TABLE_ID: z.string().optional(),
+    ARI_PROGRAM_ID: z.string().optional(),
+    ARI_SIGNING_SECRET: z.string().optional(),
+    ARI_WEBHOOK_SECRET: z.string().optional(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -58,6 +61,9 @@ export const env = createEnv({
     AIRTABLE_PAT: process.env.AIRTABLE_PAT,
     AIRTABLE_BASE_ID: process.env.AIRTABLE_BASE_ID,
     AIRTABLE_TABLE_ID: process.env.AIRTABLE_TABLE_ID,
+    ARI_PROGRAM_ID: process.env.ARI_PROGRAM_ID,
+    ARI_SIGNING_SECRET: process.env.ARI_SIGNING_SECRET,
+    ARI_WEBHOOK_SECRET: process.env.ARI_WEBHOOK_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

@@ -69,7 +69,7 @@ For reviewing ships, handling orders and managing balances.
 - **Access:** `ADMIN_IDENTITY_IDS`, a comma-separated list of Hack Club identity IDs (`ident!xxxx`, shown on Profile). It's matched against the identity stored from Hack Club Auth, which users can't edit. Empty or unset means no admins.
 - **Gating:** every admin page, server action and admin image read re-checks the allowlist on the server (`src/server/admin.ts`). Anyone else gets a plain 404. Pages are `noindex` and never cached, and actions are rate limited (60 a minute per admin).
 - **Audit:** every action writes an `AdminAudit` row in the same transaction as the change: who, what, target and detail. `/admin/audit` lists them.
-- **Ships:** approve (awards Pumpkins once, suggested at 10/hour from counted time) or send back with a note (the game returns to brewing, and the participant sees the note).
+- **Ships:** a read-only queue; reviewing happens in Ari (see below).
 - **Orders:** fulfill, or reject (refunds the Pumpkins). Both only act on pending orders.
 - **Suggestions:** items participants asked for from the shop's "Suggest an item" tile (`Suggestion` model). New ones sort by how many people asked for the same name. Mark one added (after putting it in the catalog) or decline it; an optional note is shown to the person who suggested it. Participants can have 10 open suggestions and send 5 an hour.
 - **Users:** search, view games/orders/history, adjust Pumpkins with a reason (can't go below zero), reset onboarding.
@@ -85,6 +85,21 @@ Shipped games are mirrored to the program base's "YSWS Project Submission" table
 - Your approval note goes into the Unified Justification. It's written to "Justification - Additional Justification" (shown under `[ADDITIONAL JUSTIFICATION]`) and, when the hours were overridden, also appended to the override justification, since the formula uses only that field in that case. Send-back notes go to "Resubmission Request Reason".
 - Scare **never** ticks "Automation - Submit to Unified YSWS". A person does that in Airtable.
 - Sync failures are stored on the game and shown on its admin card, with a Resync button. Before creating a record, Scare reuses one with the same code URL if it was made but its ID never got saved, so a retry can't duplicate.
+
+### Ari (review platform)
+
+Ships are reviewed in [Ari](https://github.com/hackclub/ari.js), Hack Club's review platform (`src/server/ari.ts`). Ari is the only reviewer: `/admin/ships` is a read-only queue showing each game's Ari submission, decision, approved hours and reviewer, with a link to Ari and buttons to resend to Ari or Airtable.
+
+- Env: `ARI_PROGRAM_ID`, `ARI_SIGNING_SECRET` (the ingest signing secret), `ARI_WEBHOOK_SECRET` (Ari's "Outbound signing secret"). Without the first two nothing is sent; without the third the webhook answers 503.
+- **On ship** (after the response, like Airtable): title, description, source and play links, a 90-day signed screenshot link, the Hackatime project, Scare's counted hours as `program_hours`, and the maker's name, email and Slack ID. A game shipped again after a send-back goes as an update. Failures are stored on the game and shown on its admin card, with a "Resend to Ari" button.
+- **Webhook** `POST /api/ari/webhook` (signature checked by the SDK; each delivery id is applied once, recorded in `AriDelivery`):
+  - `review.approved`: approves the game and awards `approved_hours × 10` Pumpkins; the note to the maker becomes the review note.
+  - `review.changes` / `review.rejected`: back to brewing with the reviewer's note, same as a send-back.
+  - `review.reverted` / `review.requeued`: undoes the result. An approval is taken back (as many Pumpkins as the balance still holds; the audit row records any shortfall) and the game returns to the queue.
+  - Anything else is logged to the audit log and acknowledged.
+- `ship.updated` (a reviewer corrected details in Ari) re-syncs the Airtable record.
+- Every decision rewrites the Airtable record: Status (Accepted, Resubmission Requested, Rejected, or Pending after a revert), Ari's approved hours as the override (when they differ from Scare's estimate) with the reasoning, and the review's justification in the matching fields: Specific Technical Features, Deflation Justification, Lapse Links, Alternate Tracking Method, Additional Justification (plus the reviewer's note), Hackatime ID and project. A person then ticks "Submit to Unified YSWS" in Airtable; Scare never does.
+- Decisions appear in `/admin/audit` with the actor `ari`.
 
 ### Routes
 

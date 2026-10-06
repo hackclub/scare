@@ -141,6 +141,11 @@ exports.Prisma.GameScalarFieldEnum = {
   airtableRecordId: 'airtableRecordId',
   airtableSyncedAt: 'airtableSyncedAt',
   airtableError: 'airtableError',
+  ariShipId: 'ariShipId',
+  ariSyncedAt: 'ariSyncedAt',
+  ariError: 'ariError',
+  reviewHours: 'reviewHours',
+  reviewDetail: 'reviewDetail',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
@@ -253,6 +258,13 @@ exports.Prisma.SuggestionScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.AriDeliveryScalarFieldEnum = {
+  id: 'id',
+  event: 'event',
+  gameId: 'gameId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -268,15 +280,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.GameStatus = exports.$Enums.GameStatus = {
   BREWING: 'BREWING',
@@ -312,7 +324,8 @@ exports.Prisma.ModelName = {
   Order: 'Order',
   HackatimeLink: 'HackatimeLink',
   VerificationToken: 'VerificationToken',
-  Suggestion: 'Suggestion'
+  Suggestion: 'Suggestion',
+  AriDelivery: 'AriDelivery'
 };
 
 /**

@@ -63,6 +63,12 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
  * An item a participant would like in the shop. Admins triage these at /admin/suggestions.
  */
 export type Suggestion = $Result.DefaultSelection<Prisma.$SuggestionPayload>
+/**
+ * Model AriDelivery
+ * Ari webhook deliveries already handled. Ari retries a delivery until it gets a 2xx, so
+ * a delivery whose id is here is acknowledged without being applied again.
+ */
+export type AriDelivery = $Result.DefaultSelection<Prisma.$AriDeliveryPayload>
 
 /**
  * Enums
@@ -338,6 +344,16 @@ export class PrismaClient<
     * ```
     */
   get suggestion(): Prisma.SuggestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ariDelivery`: Exposes CRUD operations for the **AriDelivery** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AriDeliveries
+    * const ariDeliveries = await prisma.ariDelivery.findMany()
+    * ```
+    */
+  get ariDelivery(): Prisma.AriDeliveryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -788,7 +804,8 @@ export namespace Prisma {
     Order: 'Order',
     HackatimeLink: 'HackatimeLink',
     VerificationToken: 'VerificationToken',
-    Suggestion: 'Suggestion'
+    Suggestion: 'Suggestion',
+    AriDelivery: 'AriDelivery'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -807,7 +824,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "game" | "screenshot" | "adminAudit" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken" | "suggestion"
+      modelProps: "game" | "screenshot" | "adminAudit" | "account" | "session" | "user" | "order" | "hackatimeLink" | "verificationToken" | "suggestion" | "ariDelivery"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1551,6 +1568,80 @@ export namespace Prisma {
           }
         }
       }
+      AriDelivery: {
+        payload: Prisma.$AriDeliveryPayload<ExtArgs>
+        fields: Prisma.AriDeliveryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AriDeliveryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AriDeliveryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          findFirst: {
+            args: Prisma.AriDeliveryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AriDeliveryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          findMany: {
+            args: Prisma.AriDeliveryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>[]
+          }
+          create: {
+            args: Prisma.AriDeliveryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          createMany: {
+            args: Prisma.AriDeliveryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AriDeliveryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>[]
+          }
+          delete: {
+            args: Prisma.AriDeliveryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          update: {
+            args: Prisma.AriDeliveryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          deleteMany: {
+            args: Prisma.AriDeliveryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AriDeliveryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AriDeliveryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>[]
+          }
+          upsert: {
+            args: Prisma.AriDeliveryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AriDeliveryPayload>
+          }
+          aggregate: {
+            args: Prisma.AriDeliveryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAriDelivery>
+          }
+          groupBy: {
+            args: Prisma.AriDeliveryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AriDeliveryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AriDeliveryCountArgs<ExtArgs>
+            result: $Utils.Optional<AriDeliveryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1657,6 +1748,7 @@ export namespace Prisma {
     hackatimeLink?: HackatimeLinkOmit
     verificationToken?: VerificationTokenOmit
     suggestion?: SuggestionOmit
+    ariDelivery?: AriDeliveryOmit
   }
 
   /* Types for Logging */
@@ -1819,12 +1911,14 @@ export namespace Prisma {
     trackedSeconds: number | null
     claimedSeconds: number | null
     awardedPumpkins: number | null
+    reviewHours: number | null
   }
 
   export type GameSumAggregateOutputType = {
     trackedSeconds: number | null
     claimedSeconds: number | null
     awardedPumpkins: number | null
+    reviewHours: number | null
   }
 
   export type GameMinAggregateOutputType = {
@@ -1847,6 +1941,10 @@ export namespace Prisma {
     airtableRecordId: string | null
     airtableSyncedAt: Date | null
     airtableError: string | null
+    ariShipId: string | null
+    ariSyncedAt: Date | null
+    ariError: string | null
+    reviewHours: number | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -1872,6 +1970,10 @@ export namespace Prisma {
     airtableRecordId: string | null
     airtableSyncedAt: Date | null
     airtableError: string | null
+    ariShipId: string | null
+    ariSyncedAt: Date | null
+    ariError: string | null
+    reviewHours: number | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -1897,6 +1999,11 @@ export namespace Prisma {
     airtableRecordId: number
     airtableSyncedAt: number
     airtableError: number
+    ariShipId: number
+    ariSyncedAt: number
+    ariError: number
+    reviewHours: number
+    reviewDetail: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -1908,12 +2015,14 @@ export namespace Prisma {
     trackedSeconds?: true
     claimedSeconds?: true
     awardedPumpkins?: true
+    reviewHours?: true
   }
 
   export type GameSumAggregateInputType = {
     trackedSeconds?: true
     claimedSeconds?: true
     awardedPumpkins?: true
+    reviewHours?: true
   }
 
   export type GameMinAggregateInputType = {
@@ -1936,6 +2045,10 @@ export namespace Prisma {
     airtableRecordId?: true
     airtableSyncedAt?: true
     airtableError?: true
+    ariShipId?: true
+    ariSyncedAt?: true
+    ariError?: true
+    reviewHours?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -1961,6 +2074,10 @@ export namespace Prisma {
     airtableRecordId?: true
     airtableSyncedAt?: true
     airtableError?: true
+    ariShipId?: true
+    ariSyncedAt?: true
+    ariError?: true
+    reviewHours?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -1986,6 +2103,11 @@ export namespace Prisma {
     airtableRecordId?: true
     airtableSyncedAt?: true
     airtableError?: true
+    ariShipId?: true
+    ariSyncedAt?: true
+    ariError?: true
+    reviewHours?: true
+    reviewDetail?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -2098,6 +2220,11 @@ export namespace Prisma {
     airtableRecordId: string | null
     airtableSyncedAt: Date | null
     airtableError: string | null
+    ariShipId: string | null
+    ariSyncedAt: Date | null
+    ariError: string | null
+    reviewHours: number | null
+    reviewDetail: JsonValue | null
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -2142,6 +2269,11 @@ export namespace Prisma {
     airtableRecordId?: boolean
     airtableSyncedAt?: boolean
     airtableError?: boolean
+    ariShipId?: boolean
+    ariSyncedAt?: boolean
+    ariError?: boolean
+    reviewHours?: boolean
+    reviewDetail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -2169,6 +2301,11 @@ export namespace Prisma {
     airtableRecordId?: boolean
     airtableSyncedAt?: boolean
     airtableError?: boolean
+    ariShipId?: boolean
+    ariSyncedAt?: boolean
+    ariError?: boolean
+    reviewHours?: boolean
+    reviewDetail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -2195,6 +2332,11 @@ export namespace Prisma {
     airtableRecordId?: boolean
     airtableSyncedAt?: boolean
     airtableError?: boolean
+    ariShipId?: boolean
+    ariSyncedAt?: boolean
+    ariError?: boolean
+    reviewHours?: boolean
+    reviewDetail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -2221,12 +2363,17 @@ export namespace Prisma {
     airtableRecordId?: boolean
     airtableSyncedAt?: boolean
     airtableError?: boolean
+    ariShipId?: boolean
+    ariSyncedAt?: boolean
+    ariError?: boolean
+    reviewHours?: boolean
+    reviewDetail?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "reviewStatus" | "reviewNote" | "reviewedAt" | "reviewedBy" | "awardedPumpkins" | "airtableRecordId" | "airtableSyncedAt" | "airtableError" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
+  export type GameOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "pitch" | "engine" | "sourceUrl" | "playUrl" | "status" | "hackatimeProject" | "trackedSeconds" | "claimedSeconds" | "shippedAt" | "reviewStatus" | "reviewNote" | "reviewedAt" | "reviewedBy" | "awardedPumpkins" | "airtableRecordId" | "airtableSyncedAt" | "airtableError" | "ariShipId" | "ariSyncedAt" | "ariError" | "reviewHours" | "reviewDetail" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["game"]>
   export type GameInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     screenshot?: boolean | Game$screenshotArgs<ExtArgs>
@@ -2264,6 +2411,11 @@ export namespace Prisma {
       airtableRecordId: string | null
       airtableSyncedAt: Date | null
       airtableError: string | null
+      ariShipId: string | null
+      ariSyncedAt: Date | null
+      ariError: string | null
+      reviewHours: number | null
+      reviewDetail: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -2711,6 +2863,11 @@ export namespace Prisma {
     readonly airtableRecordId: FieldRef<"Game", 'String'>
     readonly airtableSyncedAt: FieldRef<"Game", 'DateTime'>
     readonly airtableError: FieldRef<"Game", 'String'>
+    readonly ariShipId: FieldRef<"Game", 'String'>
+    readonly ariSyncedAt: FieldRef<"Game", 'DateTime'>
+    readonly ariError: FieldRef<"Game", 'String'>
+    readonly reviewHours: FieldRef<"Game", 'Float'>
+    readonly reviewDetail: FieldRef<"Game", 'Json'>
     readonly createdAt: FieldRef<"Game", 'DateTime'>
     readonly updatedAt: FieldRef<"Game", 'DateTime'>
     readonly userId: FieldRef<"Game", 'String'>
@@ -13320,6 +13477,988 @@ export namespace Prisma {
 
 
   /**
+   * Model AriDelivery
+   */
+
+  export type AggregateAriDelivery = {
+    _count: AriDeliveryCountAggregateOutputType | null
+    _min: AriDeliveryMinAggregateOutputType | null
+    _max: AriDeliveryMaxAggregateOutputType | null
+  }
+
+  export type AriDeliveryMinAggregateOutputType = {
+    id: string | null
+    event: string | null
+    gameId: string | null
+    createdAt: Date | null
+  }
+
+  export type AriDeliveryMaxAggregateOutputType = {
+    id: string | null
+    event: string | null
+    gameId: string | null
+    createdAt: Date | null
+  }
+
+  export type AriDeliveryCountAggregateOutputType = {
+    id: number
+    event: number
+    gameId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AriDeliveryMinAggregateInputType = {
+    id?: true
+    event?: true
+    gameId?: true
+    createdAt?: true
+  }
+
+  export type AriDeliveryMaxAggregateInputType = {
+    id?: true
+    event?: true
+    gameId?: true
+    createdAt?: true
+  }
+
+  export type AriDeliveryCountAggregateInputType = {
+    id?: true
+    event?: true
+    gameId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AriDeliveryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AriDelivery to aggregate.
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AriDeliveries to fetch.
+     */
+    orderBy?: AriDeliveryOrderByWithRelationInput | AriDeliveryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AriDeliveryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AriDeliveries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AriDeliveries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AriDeliveries
+    **/
+    _count?: true | AriDeliveryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AriDeliveryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AriDeliveryMaxAggregateInputType
+  }
+
+  export type GetAriDeliveryAggregateType<T extends AriDeliveryAggregateArgs> = {
+        [P in keyof T & keyof AggregateAriDelivery]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAriDelivery[P]>
+      : GetScalarType<T[P], AggregateAriDelivery[P]>
+  }
+
+
+
+
+  export type AriDeliveryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AriDeliveryWhereInput
+    orderBy?: AriDeliveryOrderByWithAggregationInput | AriDeliveryOrderByWithAggregationInput[]
+    by: AriDeliveryScalarFieldEnum[] | AriDeliveryScalarFieldEnum
+    having?: AriDeliveryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AriDeliveryCountAggregateInputType | true
+    _min?: AriDeliveryMinAggregateInputType
+    _max?: AriDeliveryMaxAggregateInputType
+  }
+
+  export type AriDeliveryGroupByOutputType = {
+    id: string
+    event: string
+    gameId: string | null
+    createdAt: Date
+    _count: AriDeliveryCountAggregateOutputType | null
+    _min: AriDeliveryMinAggregateOutputType | null
+    _max: AriDeliveryMaxAggregateOutputType | null
+  }
+
+  type GetAriDeliveryGroupByPayload<T extends AriDeliveryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AriDeliveryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AriDeliveryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AriDeliveryGroupByOutputType[P]>
+            : GetScalarType<T[P], AriDeliveryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AriDeliverySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event?: boolean
+    gameId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["ariDelivery"]>
+
+  export type AriDeliverySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event?: boolean
+    gameId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["ariDelivery"]>
+
+  export type AriDeliverySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event?: boolean
+    gameId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["ariDelivery"]>
+
+  export type AriDeliverySelectScalar = {
+    id?: boolean
+    event?: boolean
+    gameId?: boolean
+    createdAt?: boolean
+  }
+
+  export type AriDeliveryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "event" | "gameId" | "createdAt", ExtArgs["result"]["ariDelivery"]>
+
+  export type $AriDeliveryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AriDelivery"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      event: string
+      gameId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["ariDelivery"]>
+    composites: {}
+  }
+
+  type AriDeliveryGetPayload<S extends boolean | null | undefined | AriDeliveryDefaultArgs> = $Result.GetResult<Prisma.$AriDeliveryPayload, S>
+
+  type AriDeliveryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AriDeliveryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AriDeliveryCountAggregateInputType | true
+    }
+
+  export interface AriDeliveryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AriDelivery'], meta: { name: 'AriDelivery' } }
+    /**
+     * Find zero or one AriDelivery that matches the filter.
+     * @param {AriDeliveryFindUniqueArgs} args - Arguments to find a AriDelivery
+     * @example
+     * // Get one AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AriDeliveryFindUniqueArgs>(args: SelectSubset<T, AriDeliveryFindUniqueArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AriDelivery that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AriDeliveryFindUniqueOrThrowArgs} args - Arguments to find a AriDelivery
+     * @example
+     * // Get one AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AriDeliveryFindUniqueOrThrowArgs>(args: SelectSubset<T, AriDeliveryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AriDelivery that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryFindFirstArgs} args - Arguments to find a AriDelivery
+     * @example
+     * // Get one AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AriDeliveryFindFirstArgs>(args?: SelectSubset<T, AriDeliveryFindFirstArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AriDelivery that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryFindFirstOrThrowArgs} args - Arguments to find a AriDelivery
+     * @example
+     * // Get one AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AriDeliveryFindFirstOrThrowArgs>(args?: SelectSubset<T, AriDeliveryFindFirstOrThrowArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AriDeliveries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AriDeliveries
+     * const ariDeliveries = await prisma.ariDelivery.findMany()
+     * 
+     * // Get first 10 AriDeliveries
+     * const ariDeliveries = await prisma.ariDelivery.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ariDeliveryWithIdOnly = await prisma.ariDelivery.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AriDeliveryFindManyArgs>(args?: SelectSubset<T, AriDeliveryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AriDelivery.
+     * @param {AriDeliveryCreateArgs} args - Arguments to create a AriDelivery.
+     * @example
+     * // Create one AriDelivery
+     * const AriDelivery = await prisma.ariDelivery.create({
+     *   data: {
+     *     // ... data to create a AriDelivery
+     *   }
+     * })
+     * 
+     */
+    create<T extends AriDeliveryCreateArgs>(args: SelectSubset<T, AriDeliveryCreateArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AriDeliveries.
+     * @param {AriDeliveryCreateManyArgs} args - Arguments to create many AriDeliveries.
+     * @example
+     * // Create many AriDeliveries
+     * const ariDelivery = await prisma.ariDelivery.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AriDeliveryCreateManyArgs>(args?: SelectSubset<T, AriDeliveryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AriDeliveries and returns the data saved in the database.
+     * @param {AriDeliveryCreateManyAndReturnArgs} args - Arguments to create many AriDeliveries.
+     * @example
+     * // Create many AriDeliveries
+     * const ariDelivery = await prisma.ariDelivery.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AriDeliveries and only return the `id`
+     * const ariDeliveryWithIdOnly = await prisma.ariDelivery.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AriDeliveryCreateManyAndReturnArgs>(args?: SelectSubset<T, AriDeliveryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AriDelivery.
+     * @param {AriDeliveryDeleteArgs} args - Arguments to delete one AriDelivery.
+     * @example
+     * // Delete one AriDelivery
+     * const AriDelivery = await prisma.ariDelivery.delete({
+     *   where: {
+     *     // ... filter to delete one AriDelivery
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AriDeliveryDeleteArgs>(args: SelectSubset<T, AriDeliveryDeleteArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AriDelivery.
+     * @param {AriDeliveryUpdateArgs} args - Arguments to update one AriDelivery.
+     * @example
+     * // Update one AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AriDeliveryUpdateArgs>(args: SelectSubset<T, AriDeliveryUpdateArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AriDeliveries.
+     * @param {AriDeliveryDeleteManyArgs} args - Arguments to filter AriDeliveries to delete.
+     * @example
+     * // Delete a few AriDeliveries
+     * const { count } = await prisma.ariDelivery.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AriDeliveryDeleteManyArgs>(args?: SelectSubset<T, AriDeliveryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AriDeliveries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AriDeliveries
+     * const ariDelivery = await prisma.ariDelivery.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AriDeliveryUpdateManyArgs>(args: SelectSubset<T, AriDeliveryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AriDeliveries and returns the data updated in the database.
+     * @param {AriDeliveryUpdateManyAndReturnArgs} args - Arguments to update many AriDeliveries.
+     * @example
+     * // Update many AriDeliveries
+     * const ariDelivery = await prisma.ariDelivery.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AriDeliveries and only return the `id`
+     * const ariDeliveryWithIdOnly = await prisma.ariDelivery.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AriDeliveryUpdateManyAndReturnArgs>(args: SelectSubset<T, AriDeliveryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AriDelivery.
+     * @param {AriDeliveryUpsertArgs} args - Arguments to update or create a AriDelivery.
+     * @example
+     * // Update or create a AriDelivery
+     * const ariDelivery = await prisma.ariDelivery.upsert({
+     *   create: {
+     *     // ... data to create a AriDelivery
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AriDelivery we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AriDeliveryUpsertArgs>(args: SelectSubset<T, AriDeliveryUpsertArgs<ExtArgs>>): Prisma__AriDeliveryClient<$Result.GetResult<Prisma.$AriDeliveryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AriDeliveries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryCountArgs} args - Arguments to filter AriDeliveries to count.
+     * @example
+     * // Count the number of AriDeliveries
+     * const count = await prisma.ariDelivery.count({
+     *   where: {
+     *     // ... the filter for the AriDeliveries we want to count
+     *   }
+     * })
+    **/
+    count<T extends AriDeliveryCountArgs>(
+      args?: Subset<T, AriDeliveryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AriDeliveryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AriDelivery.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AriDeliveryAggregateArgs>(args: Subset<T, AriDeliveryAggregateArgs>): Prisma.PrismaPromise<GetAriDeliveryAggregateType<T>>
+
+    /**
+     * Group by AriDelivery.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AriDeliveryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AriDeliveryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AriDeliveryGroupByArgs['orderBy'] }
+        : { orderBy?: AriDeliveryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AriDeliveryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAriDeliveryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AriDelivery model
+   */
+  readonly fields: AriDeliveryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AriDelivery.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AriDeliveryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AriDelivery model
+   */
+  interface AriDeliveryFieldRefs {
+    readonly id: FieldRef<"AriDelivery", 'String'>
+    readonly event: FieldRef<"AriDelivery", 'String'>
+    readonly gameId: FieldRef<"AriDelivery", 'String'>
+    readonly createdAt: FieldRef<"AriDelivery", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AriDelivery findUnique
+   */
+  export type AriDeliveryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter, which AriDelivery to fetch.
+     */
+    where: AriDeliveryWhereUniqueInput
+  }
+
+  /**
+   * AriDelivery findUniqueOrThrow
+   */
+  export type AriDeliveryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter, which AriDelivery to fetch.
+     */
+    where: AriDeliveryWhereUniqueInput
+  }
+
+  /**
+   * AriDelivery findFirst
+   */
+  export type AriDeliveryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter, which AriDelivery to fetch.
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AriDeliveries to fetch.
+     */
+    orderBy?: AriDeliveryOrderByWithRelationInput | AriDeliveryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AriDeliveries.
+     */
+    cursor?: AriDeliveryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AriDeliveries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AriDeliveries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AriDeliveries.
+     */
+    distinct?: AriDeliveryScalarFieldEnum | AriDeliveryScalarFieldEnum[]
+  }
+
+  /**
+   * AriDelivery findFirstOrThrow
+   */
+  export type AriDeliveryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter, which AriDelivery to fetch.
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AriDeliveries to fetch.
+     */
+    orderBy?: AriDeliveryOrderByWithRelationInput | AriDeliveryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AriDeliveries.
+     */
+    cursor?: AriDeliveryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AriDeliveries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AriDeliveries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AriDeliveries.
+     */
+    distinct?: AriDeliveryScalarFieldEnum | AriDeliveryScalarFieldEnum[]
+  }
+
+  /**
+   * AriDelivery findMany
+   */
+  export type AriDeliveryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter, which AriDeliveries to fetch.
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AriDeliveries to fetch.
+     */
+    orderBy?: AriDeliveryOrderByWithRelationInput | AriDeliveryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AriDeliveries.
+     */
+    cursor?: AriDeliveryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AriDeliveries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AriDeliveries.
+     */
+    skip?: number
+    distinct?: AriDeliveryScalarFieldEnum | AriDeliveryScalarFieldEnum[]
+  }
+
+  /**
+   * AriDelivery create
+   */
+  export type AriDeliveryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AriDelivery.
+     */
+    data: XOR<AriDeliveryCreateInput, AriDeliveryUncheckedCreateInput>
+  }
+
+  /**
+   * AriDelivery createMany
+   */
+  export type AriDeliveryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AriDeliveries.
+     */
+    data: AriDeliveryCreateManyInput | AriDeliveryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AriDelivery createManyAndReturn
+   */
+  export type AriDeliveryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * The data used to create many AriDeliveries.
+     */
+    data: AriDeliveryCreateManyInput | AriDeliveryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AriDelivery update
+   */
+  export type AriDeliveryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AriDelivery.
+     */
+    data: XOR<AriDeliveryUpdateInput, AriDeliveryUncheckedUpdateInput>
+    /**
+     * Choose, which AriDelivery to update.
+     */
+    where: AriDeliveryWhereUniqueInput
+  }
+
+  /**
+   * AriDelivery updateMany
+   */
+  export type AriDeliveryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AriDeliveries.
+     */
+    data: XOR<AriDeliveryUpdateManyMutationInput, AriDeliveryUncheckedUpdateManyInput>
+    /**
+     * Filter which AriDeliveries to update
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * Limit how many AriDeliveries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AriDelivery updateManyAndReturn
+   */
+  export type AriDeliveryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * The data used to update AriDeliveries.
+     */
+    data: XOR<AriDeliveryUpdateManyMutationInput, AriDeliveryUncheckedUpdateManyInput>
+    /**
+     * Filter which AriDeliveries to update
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * Limit how many AriDeliveries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AriDelivery upsert
+   */
+  export type AriDeliveryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AriDelivery to update in case it exists.
+     */
+    where: AriDeliveryWhereUniqueInput
+    /**
+     * In case the AriDelivery found by the `where` argument doesn't exist, create a new AriDelivery with this data.
+     */
+    create: XOR<AriDeliveryCreateInput, AriDeliveryUncheckedCreateInput>
+    /**
+     * In case the AriDelivery was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AriDeliveryUpdateInput, AriDeliveryUncheckedUpdateInput>
+  }
+
+  /**
+   * AriDelivery delete
+   */
+  export type AriDeliveryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+    /**
+     * Filter which AriDelivery to delete.
+     */
+    where: AriDeliveryWhereUniqueInput
+  }
+
+  /**
+   * AriDelivery deleteMany
+   */
+  export type AriDeliveryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AriDeliveries to delete
+     */
+    where?: AriDeliveryWhereInput
+    /**
+     * Limit how many AriDeliveries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AriDelivery without action
+   */
+  export type AriDeliveryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AriDelivery
+     */
+    select?: AriDeliverySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AriDelivery
+     */
+    omit?: AriDeliveryOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13353,6 +14492,11 @@ export namespace Prisma {
     airtableRecordId: 'airtableRecordId',
     airtableSyncedAt: 'airtableSyncedAt',
     airtableError: 'airtableError',
+    ariShipId: 'ariShipId',
+    ariSyncedAt: 'ariSyncedAt',
+    ariError: 'ariError',
+    reviewHours: 'reviewHours',
+    reviewDetail: 'reviewDetail',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -13495,6 +14639,16 @@ export namespace Prisma {
   export type SuggestionScalarFieldEnum = (typeof SuggestionScalarFieldEnum)[keyof typeof SuggestionScalarFieldEnum]
 
 
+  export const AriDeliveryScalarFieldEnum: {
+    id: 'id',
+    event: 'event',
+    gameId: 'gameId',
+    createdAt: 'createdAt'
+  };
+
+  export type AriDeliveryScalarFieldEnum = (typeof AriDeliveryScalarFieldEnum)[keyof typeof AriDeliveryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -13519,14 +14673,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -13534,6 +14680,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -13612,16 +14766,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Bytes'
+   * Reference to a field of type 'Float'
    */
-  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
   /**
-   * Reference to a field of type 'Bytes[]'
+   * Reference to a field of type 'Float[]'
    */
-  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -13640,23 +14794,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes[]'
+   */
+  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -13714,6 +14868,11 @@ export namespace Prisma {
     airtableRecordId?: StringNullableFilter<"Game"> | string | null
     airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     airtableError?: StringNullableFilter<"Game"> | string | null
+    ariShipId?: StringNullableFilter<"Game"> | string | null
+    ariSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    ariError?: StringNullableFilter<"Game"> | string | null
+    reviewHours?: FloatNullableFilter<"Game"> | number | null
+    reviewDetail?: JsonNullableFilter<"Game">
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
@@ -13741,6 +14900,11 @@ export namespace Prisma {
     airtableRecordId?: SortOrderInput | SortOrder
     airtableSyncedAt?: SortOrderInput | SortOrder
     airtableError?: SortOrderInput | SortOrder
+    ariShipId?: SortOrderInput | SortOrder
+    ariSyncedAt?: SortOrderInput | SortOrder
+    ariError?: SortOrderInput | SortOrder
+    reviewHours?: SortOrderInput | SortOrder
+    reviewDetail?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13771,6 +14935,11 @@ export namespace Prisma {
     airtableRecordId?: StringNullableFilter<"Game"> | string | null
     airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     airtableError?: StringNullableFilter<"Game"> | string | null
+    ariShipId?: StringNullableFilter<"Game"> | string | null
+    ariSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    ariError?: StringNullableFilter<"Game"> | string | null
+    reviewHours?: FloatNullableFilter<"Game"> | number | null
+    reviewDetail?: JsonNullableFilter<"Game">
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
@@ -13798,6 +14967,11 @@ export namespace Prisma {
     airtableRecordId?: SortOrderInput | SortOrder
     airtableSyncedAt?: SortOrderInput | SortOrder
     airtableError?: SortOrderInput | SortOrder
+    ariShipId?: SortOrderInput | SortOrder
+    ariSyncedAt?: SortOrderInput | SortOrder
+    ariError?: SortOrderInput | SortOrder
+    reviewHours?: SortOrderInput | SortOrder
+    reviewDetail?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13831,6 +15005,11 @@ export namespace Prisma {
     airtableRecordId?: StringNullableWithAggregatesFilter<"Game"> | string | null
     airtableSyncedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
     airtableError?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    ariShipId?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    ariSyncedAt?: DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
+    ariError?: StringNullableWithAggregatesFilter<"Game"> | string | null
+    reviewHours?: FloatNullableWithAggregatesFilter<"Game"> | number | null
+    reviewDetail?: JsonNullableWithAggregatesFilter<"Game">
     createdAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Game"> | Date | string
     userId?: StringWithAggregatesFilter<"Game"> | string
@@ -14527,6 +15706,53 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Suggestion"> | string
   }
 
+  export type AriDeliveryWhereInput = {
+    AND?: AriDeliveryWhereInput | AriDeliveryWhereInput[]
+    OR?: AriDeliveryWhereInput[]
+    NOT?: AriDeliveryWhereInput | AriDeliveryWhereInput[]
+    id?: StringFilter<"AriDelivery"> | string
+    event?: StringFilter<"AriDelivery"> | string
+    gameId?: StringNullableFilter<"AriDelivery"> | string | null
+    createdAt?: DateTimeFilter<"AriDelivery"> | Date | string
+  }
+
+  export type AriDeliveryOrderByWithRelationInput = {
+    id?: SortOrder
+    event?: SortOrder
+    gameId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AriDeliveryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AriDeliveryWhereInput | AriDeliveryWhereInput[]
+    OR?: AriDeliveryWhereInput[]
+    NOT?: AriDeliveryWhereInput | AriDeliveryWhereInput[]
+    event?: StringFilter<"AriDelivery"> | string
+    gameId?: StringNullableFilter<"AriDelivery"> | string | null
+    createdAt?: DateTimeFilter<"AriDelivery"> | Date | string
+  }, "id">
+
+  export type AriDeliveryOrderByWithAggregationInput = {
+    id?: SortOrder
+    event?: SortOrder
+    gameId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AriDeliveryCountOrderByAggregateInput
+    _max?: AriDeliveryMaxOrderByAggregateInput
+    _min?: AriDeliveryMinOrderByAggregateInput
+  }
+
+  export type AriDeliveryScalarWhereWithAggregatesInput = {
+    AND?: AriDeliveryScalarWhereWithAggregatesInput | AriDeliveryScalarWhereWithAggregatesInput[]
+    OR?: AriDeliveryScalarWhereWithAggregatesInput[]
+    NOT?: AriDeliveryScalarWhereWithAggregatesInput | AriDeliveryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AriDelivery"> | string
+    event?: StringWithAggregatesFilter<"AriDelivery"> | string
+    gameId?: StringNullableWithAggregatesFilter<"AriDelivery"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AriDelivery"> | Date | string
+  }
+
   export type GameCreateInput = {
     id?: string
     title: string
@@ -14547,6 +15773,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutGamesInput
@@ -14573,6 +15804,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -14599,6 +15835,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutGamesNestedInput
@@ -14625,6 +15866,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -14651,6 +15897,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -14676,6 +15927,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14700,6 +15956,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -15472,6 +16733,55 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type AriDeliveryCreateInput = {
+    id: string
+    event: string
+    gameId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AriDeliveryUncheckedCreateInput = {
+    id: string
+    event: string
+    gameId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AriDeliveryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    gameId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AriDeliveryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    gameId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AriDeliveryCreateManyInput = {
+    id: string
+    event: string
+    gameId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AriDeliveryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    gameId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AriDeliveryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    gameId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15538,6 +16848,40 @@ export namespace Prisma {
     not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15584,6 +16928,11 @@ export namespace Prisma {
     airtableRecordId?: SortOrder
     airtableSyncedAt?: SortOrder
     airtableError?: SortOrder
+    ariShipId?: SortOrder
+    ariSyncedAt?: SortOrder
+    ariError?: SortOrder
+    reviewHours?: SortOrder
+    reviewDetail?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -15593,6 +16942,7 @@ export namespace Prisma {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
     awardedPumpkins?: SortOrder
+    reviewHours?: SortOrder
   }
 
   export type GameMaxOrderByAggregateInput = {
@@ -15615,6 +16965,10 @@ export namespace Prisma {
     airtableRecordId?: SortOrder
     airtableSyncedAt?: SortOrder
     airtableError?: SortOrder
+    ariShipId?: SortOrder
+    ariSyncedAt?: SortOrder
+    ariError?: SortOrder
+    reviewHours?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -15640,6 +16994,10 @@ export namespace Prisma {
     airtableRecordId?: SortOrder
     airtableSyncedAt?: SortOrder
     airtableError?: SortOrder
+    ariShipId?: SortOrder
+    ariSyncedAt?: SortOrder
+    ariError?: SortOrder
+    reviewHours?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -15649,6 +17007,7 @@ export namespace Prisma {
     trackedSeconds?: SortOrder
     claimedSeconds?: SortOrder
     awardedPumpkins?: SortOrder
+    reviewHours?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -15735,6 +17094,48 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
     _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -15837,29 +17238,6 @@ export namespace Prisma {
     _min?: NestedBytesFilter<$PrismaModel>
     _max?: NestedBytesFilter<$PrismaModel>
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type AdminAuditCountOrderByAggregateInput = {
     id?: SortOrder
@@ -15890,32 +17268,6 @@ export namespace Prisma {
     targetType?: SortOrder
     targetId?: SortOrder
     createdAt?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -16351,6 +17703,27 @@ export namespace Prisma {
     _max?: NestedEnumSuggestionStatusFilter<$PrismaModel>
   }
 
+  export type AriDeliveryCountOrderByAggregateInput = {
+    id?: SortOrder
+    event?: SortOrder
+    gameId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AriDeliveryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    event?: SortOrder
+    gameId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AriDeliveryMinOrderByAggregateInput = {
+    id?: SortOrder
+    event?: SortOrder
+    gameId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type UserCreateNestedOneWithoutGamesInput = {
     create?: XOR<UserCreateWithoutGamesInput, UserUncheckedCreateWithoutGamesInput>
     connectOrCreate?: UserCreateOrConnectWithoutGamesInput
@@ -16395,6 +17768,14 @@ export namespace Prisma {
 
   export type NullableEnumReviewStatusFieldUpdateOperationsInput = {
     set?: $Enums.ReviewStatus | null
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -16851,6 +18232,17 @@ export namespace Prisma {
     not?: NestedEnumReviewStatusNullableFilter<$PrismaModel> | $Enums.ReviewStatus | null
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -16933,17 +18325,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -16966,6 +18347,45 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
     _max?: NestedEnumReviewStatusNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -17024,29 +18444,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBytesFilter<$PrismaModel>
     _max?: NestedBytesFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -17280,6 +18677,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutGamesInput
@@ -17305,6 +18707,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -17346,6 +18753,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutGamesNestedInput
@@ -17371,6 +18783,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -17650,6 +19067,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     screenshot?: ScreenshotCreateNestedOneWithoutGameInput
@@ -17675,6 +19097,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     screenshot?: ScreenshotUncheckedCreateNestedOneWithoutGameInput
@@ -17893,6 +19320,11 @@ export namespace Prisma {
     airtableRecordId?: StringNullableFilter<"Game"> | string | null
     airtableSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
     airtableError?: StringNullableFilter<"Game"> | string | null
+    ariShipId?: StringNullableFilter<"Game"> | string | null
+    ariSyncedAt?: DateTimeNullableFilter<"Game"> | Date | string | null
+    ariError?: StringNullableFilter<"Game"> | string | null
+    reviewHours?: FloatNullableFilter<"Game"> | number | null
+    reviewDetail?: JsonNullableFilter<"Game">
     createdAt?: DateTimeFilter<"Game"> | Date | string
     updatedAt?: DateTimeFilter<"Game"> | Date | string
     userId?: StringFilter<"Game"> | string
@@ -18329,6 +19761,11 @@ export namespace Prisma {
     airtableRecordId?: string | null
     airtableSyncedAt?: Date | string | null
     airtableError?: string | null
+    ariShipId?: string | null
+    ariSyncedAt?: Date | string | null
+    ariError?: string | null
+    reviewHours?: number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18443,6 +19880,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     screenshot?: ScreenshotUpdateOneWithoutGameNestedInput
@@ -18468,6 +19910,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     screenshot?: ScreenshotUncheckedUpdateOneWithoutGameNestedInput
@@ -18493,6 +19940,11 @@ export namespace Prisma {
     airtableRecordId?: NullableStringFieldUpdateOperationsInput | string | null
     airtableSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     airtableError?: NullableStringFieldUpdateOperationsInput | string | null
+    ariShipId?: NullableStringFieldUpdateOperationsInput | string | null
+    ariSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ariError?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewDetail?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

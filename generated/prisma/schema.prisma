@@ -38,6 +38,14 @@ model Game {
   airtableRecordId String?
   airtableSyncedAt DateTime?
   airtableError    String?
+  // The submission in Ari (Hack Club's review platform), sent on ship; decisions come back by webhook.
+  ariShipId        String?
+  ariSyncedAt      DateTime?
+  ariError         String?
+  // Ari's last review: the hours it approved and the rest of the review (decision, reviewer,
+  // justification fields), copied into Airtable for the Unified YSWS submission.
+  reviewHours      Float?
+  reviewDetail     Json?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
@@ -218,4 +226,13 @@ enum SuggestionStatus {
   NEW
   ADDED
   DECLINED
+}
+
+/// Ari webhook deliveries already handled. Ari retries a delivery until it gets a 2xx, so
+/// a delivery whose id is here is acknowledged without being applied again.
+model AriDelivery {
+  id        String   @id
+  event     String
+  gameId    String?
+  createdAt DateTime @default(now())
 }

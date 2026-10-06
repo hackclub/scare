@@ -27,7 +27,7 @@ export default async function AdminOverview() {
 
   return (
     <>
-      <PageHead title="Admin" lead="Everything that needs a person: ship reviews, orders, suggestions, balances." />
+      <PageHead title="Admin" lead="Everything that needs a person: orders, suggestions, balances. Ships are reviewed in Ari." />
 
       <div className="ad-grid">
         <section className="frame" aria-labelledby="todo-title">
@@ -36,9 +36,9 @@ export default async function AdminOverview() {
           </div>
           <ul className="pf-list">
             <li className="pf-list-row ad-todo">
-              <span className="pf-list-title">Ships waiting for review</span>
+              <span className="pf-list-title">Ships waiting in Ari</span>
               <span className="ad-big">{shippedPending}</span>
-              <Link href="/admin/ships" className="pf-head-link">Review</Link>
+              <Link href="/admin/ships" className="pf-head-link">View</Link>
             </li>
             <li className="pf-list-row ad-todo">
               <span className="pf-list-title">Orders to fulfill</span>

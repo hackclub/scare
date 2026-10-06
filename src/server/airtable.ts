@@ -38,6 +38,10 @@ const F = {
   additionalJustification: "fldpDfgEAo5eWW5ZA", // Justification - Additional Justification
   status: "fldfpZrihjUEwPUMk", // Status
   resubmitReason: "fldjtQStpQfx4AuM5", // Resubmission Request Reason
+  technicalFeatures: "fldKmk82PssX4ZUhb", // Justification - Specific Technical Features
+  deflation: "fld26wxZGOAhJS4tA", // Justification - Deflation Justification
+  lapseLinks: "fldhDbksFHBOWWhXk", // Justification - Lapse Links, comma-separated
+  alternateTracking: "fldW3FuQSGPIpznJ8", // Justification - Alternate Tracking Method
 } as const;
 
 export const airtableConfigured = Boolean(env.AIRTABLE_PAT && env.AIRTABLE_BASE_ID && env.AIRTABLE_TABLE_ID);
@@ -91,8 +95,8 @@ function signature(gameId: string, exp: number) {
   return createHmac("sha256", env.AUTH_SECRET ?? "scare-dev-secret").update(`screenshot:${gameId}:${exp}`).digest("base64url");
 }
 
-export function signedScreenshotUrl(origin: string, gameId: string) {
-  const exp = Date.now() + SIGNED_TTL_MS;
+export function signedScreenshotUrl(origin: string, gameId: string, ttlMs = SIGNED_TTL_MS) {
+  const exp = Date.now() + ttlMs;
   const url = new URL(`/api/games/${gameId}/screenshot`, origin);
   url.searchParams.set("exp", String(exp));
   url.searchParams.set("sig", signature(gameId, exp));
@@ -114,7 +118,26 @@ const hours = (seconds: number | null | undefined) =>
 
 const day = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : null);
 
-type Status = "Pending" | "Accepted" | "Resubmission Requested";
+type Status = "Pending" | "Accepted" | "Resubmission Requested" | "Rejected";
+
+/** The parts of an Ari review Scare keeps (Game.reviewDetail). */
+export interface ReviewDetail {
+  decision: "approved" | "changes" | "rejected";
+  reviewer: string | null;
+  note: string;
+  justification: {
+    hackatime_projects?: string;
+    hackatime_user_id?: string;
+    lapse_links?: string;
+    technical_features?: string;
+    deflation_reason?: string;
+    time_evidence?: string;
+    supporting_evidence?: string;
+    hours_reasoning?: string;
+    additional_justification?: string;
+  };
+}
+const joined = (...parts: (string | null | undefined)[]) => parts.filter((p) => p?.trim()).join("\n\n") || null;
 
 async function record(gameId: string, error: string | null, recordId?: string) {
   await db.game.update({
@@ -150,21 +173,32 @@ export async function syncShip(gameId: string, origin: string, status: Status = 
     const tracked = hours(game.trackedSeconds);
     const claimed = hours(game.claimedSeconds);
     const edited = claimed !== null && claimed !== tracked;
+    const estimated = edited ? claimed : tracked;
+    const review = game.reviewDetail as ReviewDetail | null;
+    const j = review?.justification ?? {};
 
     // The reviewer's approval note feeds the Unified Justification. That formula uses only the
     // override justification when hours were overridden, so the note goes there too in that case.
     const reviewerNote =
       game.reviewStatus === "APPROVED" && game.reviewNote
-        ? `Reviewed in Scare by ${game.reviewedBy ?? "an admin"}: ${game.reviewNote}`
+        ? `Reviewed in ${review ? "Ari" : "Scare"} by ${review?.reviewer ?? game.reviewedBy ?? "an admin"}: ${game.reviewNote}`
         : null;
-    const overrideJustification = edited
-      ? [
-          `The participant changed their hours in Scare from Hackatime's ${tracked ?? 0}h to ${claimed}h.`,
-          reviewerNote,
-        ]
-          .filter(Boolean)
-          .join("\n\n")
-      : null;
+    const additional = joined(j.additional_justification, reviewerNote);
+    // Ari's approved hours win over the participant's figure when they differ.
+    const approved = game.reviewStatus === "APPROVED" ? game.reviewHours : null;
+    const override = approved != null && approved !== estimated ? approved : edited ? claimed : null;
+    // The Unified Justification formula reads only this field once hours are overridden, so it
+    // carries the reasoning and everything else the reviewer wrote.
+    const overrideJustification =
+      override == null
+        ? null
+        : joined(
+            edited ? `The participant changed their hours in Scare from Hackatime's ${tracked ?? 0}h to ${claimed}h.` : null,
+            approved != null && approved !== estimated ? `Ari's reviewer approved ${approved}h.` : null,
+            j.hours_reasoning,
+            j.deflation_reason,
+            additional,
+          );
 
     const fields: Record<string, unknown> = {
       [F.codeUrl]: game.sourceUrl,
@@ -174,14 +208,20 @@ export async function syncShip(gameId: string, origin: string, status: Status = 
         ? [{ url: signedScreenshotUrl(origin, game.id), filename: `${game.id}.png` }]
         : [],
       [F.githubUsername]: game.user.hackatime?.githubUsername ?? null,
-      [F.hackatimeId]: game.user.hackatime ? String(game.user.hackatime.hackatimeId) : null,
-      [F.hackatimeProjects]: game.hackatimeProject
-        ? `${game.hackatimeProject} (all Hackatime time up to ${day(game.shippedAt) ?? "shipping"})`
-        : null,
-      [F.estimatedHours]: edited ? claimed : tracked,
-      [F.overrideHours]: edited ? claimed : null,
+      [F.hackatimeId]: j.hackatime_user_id ?? (game.user.hackatime ? String(game.user.hackatime.hackatimeId) : null),
+      [F.hackatimeProjects]:
+        j.hackatime_projects ??
+        (game.hackatimeProject
+          ? `${game.hackatimeProject} (all Hackatime time up to ${day(game.shippedAt) ?? "shipping"})`
+          : null),
+      [F.estimatedHours]: estimated,
+      [F.overrideHours]: override,
       [F.overrideJustification]: overrideJustification,
-      [F.additionalJustification]: reviewerNote,
+      [F.additionalJustification]: additional,
+      [F.technicalFeatures]: j.technical_features ?? null,
+      [F.deflation]: j.deflation_reason ?? null,
+      [F.lapseLinks]: j.lapse_links ?? null,
+      [F.alternateTracking]: joined(j.time_evidence, j.supporting_evidence),
       [F.status]: status,
     };
     if (person) {
@@ -215,22 +255,19 @@ export async function syncShip(gameId: string, origin: string, status: Status = 
 export async function syncReview(
   gameId: string,
   origin: string,
-  review: { status: "Accepted" } | { status: "Resubmission Requested"; reason: string },
+  review: { status: "Accepted" | "Pending" } | { status: "Resubmission Requested" | "Rejected"; reason: string },
 ) {
   if (!airtableConfigured) return;
+  // Every decision rewrites the whole record, so hours and justification follow the review.
+  await syncShip(gameId, origin, review.status);
   const game = await db.game.findUnique({ where: { id: gameId }, select: { airtableRecordId: true } });
-  // Approval rewrites the whole record, so the reviewer's note reaches the justification fields.
-  if (!game?.airtableRecordId || review.status === "Accepted") return syncShip(gameId, origin, review.status);
+  if (!game?.airtableRecordId) return;
   try {
     await airtable(
       "PATCH",
-      {
-        [F.status]: review.status,
-        [F.resubmitReason]: review.status === "Resubmission Requested" ? review.reason.slice(0, 500) : null,
-      },
+      { [F.resubmitReason]: "reason" in review ? review.reason.slice(0, 500) : null },
       game.airtableRecordId,
     );
-    await record(gameId, null);
   } catch (e) {
     await record(gameId, e instanceof Error ? e.message.slice(0, 500) : "Airtable sync failed.").catch(() => undefined);
   }

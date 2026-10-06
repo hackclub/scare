@@ -2,19 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { after } from "next/server";
 import { z } from "zod";
 
 import { audit, requireAdminAction } from "~/server/admin";
-import { airtableConfigured, syncReview, syncShip } from "~/server/airtable";
+import { airtableConfigured, syncShip } from "~/server/airtable";
+import { ariConfigured, submitToAri } from "~/server/ari";
 import { db } from "~/server/db";
 import { originFromHeaders } from "~/server/origin";
-
-/** After the response: keep the Airtable record's Status in step with the review. */
-async function mirrorReview(gameId: string, review: Parameters<typeof syncReview>[2]) {
-  const origin = originFromHeaders(await headers());
-  after(() => syncReview(gameId, origin, review));
-}
 
 export type ActionState = { ok?: string; error?: string } | null;
 
@@ -22,6 +16,7 @@ const SLOW: ActionState = { error: "Slow down: too many admin actions in a minut
 
 const id = z.string().min(1).max(40);
 const note = z.string().trim().max(1000).optional();
+// Ships are reviewed in Ari, not here; this file only resends ships to Ari and Airtable.
 
 function parse<T>(schema: z.ZodType<T, z.ZodTypeDef, unknown>, form: FormData): T | { error: string } {
   const r = schema.safeParse(Object.fromEntries(form));
@@ -42,90 +37,23 @@ async function run(fn: () => Promise<string>): Promise<ActionState> {
 
 /* ------------------------------------------------------------ ships */
 
-export async function approveShip(_: ActionState, form: FormData): Promise<ActionState> {
+/** Send a shipped game to Ari again, e.g. after fixing whatever made the last send fail. */
+export async function resendAri(_: ActionState, form: FormData): Promise<ActionState> {
   const admin = await requireAdminAction();
   if (!admin) return SLOW;
-  const input = parse(
-    z.object({
-      gameId: id,
-      pumpkins: z.coerce.number().int("Whole Pumpkins only").min(0).max(100_000),
-      note,
-    }),
-    form,
-  );
+  const input = parse(z.object({ gameId: id }), form);
   if (isError(input)) return input;
+  if (!ariConfigured) return { error: "Ari isn't configured on this server." };
 
-  return run(() =>
-    db.$transaction(async (tx) => {
-      // Only a shipped game that hasn't been reviewed yet; a double click can't award twice.
-      const { count } = await tx.game.updateMany({
-        where: { id: input.gameId, status: "SHIPPED", OR: [{ reviewStatus: null }, { reviewStatus: "PENDING" }] },
-        data: {
-          reviewStatus: "APPROVED",
-          awardedPumpkins: input.pumpkins,
-          reviewNote: input.note ?? null,
-          reviewedAt: new Date(),
-          reviewedBy: admin.identity,
-        },
-      });
-      if (count === 0) throw new Error("That game isn't waiting for review any more.");
-      const game = await tx.game.findUniqueOrThrow({
-        where: { id: input.gameId },
-        select: { userId: true, title: true },
-      });
-      await tx.user.update({
-        where: { id: game.userId },
-        data: { pumpkins: { increment: input.pumpkins } },
-      });
-      await audit(tx, admin, "ship.approve", { type: "game", id: input.gameId }, {
-        title: game.title,
-        pumpkins: input.pumpkins,
-        note: input.note ?? null,
-      });
-      revalidatePath("/admin", "layout");
-      return `Approved "${game.title}" and awarded ${input.pumpkins} Pumpkins.`;
-    }),
-  ).then(async (r) => {
-    if (r?.ok) await mirrorReview(input.gameId, { status: "Accepted" });
-    return r;
-  });
-}
-
-export async function rejectShip(_: ActionState, form: FormData): Promise<ActionState> {
-  const admin = await requireAdminAction();
-  if (!admin) return SLOW;
-  const input = parse(
-    z.object({ gameId: id, note: z.string().trim().min(1, "Say what needs fixing.").max(1000) }),
-    form,
-  );
-  if (isError(input)) return input;
-
-  return run(() =>
-    db.$transaction(async (tx) => {
-      // Back to brewing, so they can fix it and ship again.
-      const { count } = await tx.game.updateMany({
-        where: { id: input.gameId, status: "SHIPPED", OR: [{ reviewStatus: null }, { reviewStatus: "PENDING" }] },
-        data: {
-          status: "BREWING",
-          reviewStatus: "REJECTED",
-          reviewNote: input.note,
-          reviewedAt: new Date(),
-          reviewedBy: admin.identity,
-        },
-      });
-      if (count === 0) throw new Error("That game isn't waiting for review any more.");
-      const game = await tx.game.findUniqueOrThrow({ where: { id: input.gameId }, select: { title: true } });
-      await audit(tx, admin, "ship.reject", { type: "game", id: input.gameId }, {
-        title: game.title,
-        note: input.note,
-      });
-      revalidatePath("/admin", "layout");
-      return `Sent "${game.title}" back with your note.`;
-    }),
-  ).then(async (r) => {
-    if (r?.ok) await mirrorReview(input.gameId, { status: "Resubmission Requested", reason: input.note });
-    return r;
-  });
+  const game = await db.game.findUnique({ where: { id: input.gameId }, select: { status: true } });
+  if (game?.status !== "SHIPPED") return { error: "Only shipped games go to Ari." };
+  await submitToAri(input.gameId, originFromHeaders(await headers()));
+  const after = await db.game.findUnique({ where: { id: input.gameId }, select: { ariShipId: true, ariError: true } });
+  await db.$transaction((tx) => audit(tx, admin, "ari.resend", { type: "game", id: input.gameId }, { error: after?.ariError ?? null }));
+  revalidatePath("/admin/ships");
+  return after?.ariError
+    ? { error: `Ari: ${after.ariError}` }
+    : { ok: `In Ari as ${after?.ariShipId}. New ships sit in "processing" while Ari gathers evidence.` };
 }
 
 /** Re-send a game to Airtable now, e.g. after fixing whatever made the last sync fail. */
