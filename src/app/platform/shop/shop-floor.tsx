@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { Plus, PumpkinPlain } from "~/app/_components/icons";
+import { Info, Plus, PumpkinPlain } from "~/app/_components/icons";
 import { iconFor } from "~/app/_components/shop-icons";
 import { PUMPKINS_PER_HOUR } from "~/lib/program";
 import { type Shelf, type ShopItem } from "~/lib/shop-catalog";
@@ -228,7 +228,10 @@ function Tile({
         <Icon className="sh-tile-icon" />
         {shelfLabel && <span className="sh-tile-shelf">{shelfLabel}</span>}
       </span>
-      <span className="sh-tile-name">{item.name}</span>
+      <span className="sh-tile-name">
+        {item.name}
+        {item.grant && <Info className="sh-grant-icon" title="Sent as a grant toward this item" />}
+      </span>
       {showDescription && item.description && <span className="sh-tile-desc">{item.description}</span>}
       <span className="sh-tile-price">
         <span className="sh-tile-cost">{item.pumpkins}</span>
@@ -310,6 +313,12 @@ function Checkout({
           {item.name}
         </h2>
         {item.description && <p className="sh-checkout-desc">{item.description}</p>}
+        {item.grant && (
+          <p className="sh-grant-note">
+            <Info className="sh-grant-icon" />
+            You&rsquo;ll get a grant for this item to buy it yourself!
+          </p>
+        )}
         <p className="sh-checkout-price">
           <span className="sh-tile-cost">{item.pumpkins}</span>
           <span className="sh-tile-unit">Pumpkins · about {hours(item.pumpkins)} hours</span>
@@ -381,7 +390,7 @@ function Checkout({
               <span>{buy.isPending ? "Ordering…" : `Spend ${item.pumpkins} Pumpkins`}</span>
             </button>
             <p className="sh-checkout-fine">
-              {item.ships && "Ships to the address on your Hack Club account. "}
+              {item.ships && !item.grant && "Ships to the address on your Hack Club account. "}
               That leaves you {balance - item.pumpkins}. You can cancel while it&rsquo;s pending.
             </p>
           </form>

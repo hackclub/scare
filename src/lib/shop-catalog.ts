@@ -50,11 +50,16 @@ export interface ShopItem {
   /** Shown on the Featured tab, the shop's front page. */
   featured?: boolean;
   sample?: boolean;
+  /** Expensive enough that we send money toward it instead of buying it. Set from `usd`. */
+  grant?: boolean;
 }
+
+/** Items at or above this price arrive as a grant rather than the item itself. */
+export const GRANT_FROM_USD = 200;
 
 const COSTUME_PICK = { label: "Where you'll shop", options: ["Spirit Halloween", "Amazon", "General costume grant"] };
 
-const ITEMS: Omit<ShopItem, "sample">[] = [
+const ITEMS: Omit<ShopItem, "sample" | "grant">[] = [
   {
     id: "steam-10",
     shelf: "steam",
@@ -81,6 +86,20 @@ const ITEMS: Omit<ShopItem, "sample">[] = [
     ask: null,
   },
   {
+    id: "steam-developer",
+    featured: true,
+    shelf: "steam",
+    name: "Steam developer grant",
+    description: "Covers the $100 Steam Direct fee to put your own game on Steam.",
+    usd: 100,
+    ask: {
+      label: "Your game",
+      placeholder: "https://github.com/you/your-game",
+      missing: "Link the game you'll put on Steam.",
+      url: true,
+    },
+  },
+  {
     id: "gear-switch-lite",
     featured: true,
     shelf: "gear",
@@ -92,8 +111,18 @@ const ITEMS: Omit<ShopItem, "sample">[] = [
     icon: "handheld",
   },
   {
-    id: "gear-mouse",
+    id: "gear-rog-xbox-ally-x",
     featured: true,
+    shelf: "gear",
+    name: "ROG Xbox Ally X",
+    description: "A handheld gaming PC that plays your Steam and Xbox library anywhere.",
+    usd: 1000,
+    ask: null,
+    ships: true,
+    icon: "handheld",
+  },
+  {
+    id: "gear-mouse",
     shelf: "gear",
     name: "Gaming mouse",
     description: "An RGB gaming mouse, or $30 toward one you like better.",
@@ -261,6 +290,7 @@ const ITEMS: Omit<ShopItem, "sample">[] = [
 export const CATALOG: (ShopItem & { pumpkins: number })[] = ITEMS.map((i) => ({
   ...i,
   sample: true,
+  grant: i.usd >= GRANT_FROM_USD,
   pumpkins: pumpkinsFor(i.usd),
 }));
 

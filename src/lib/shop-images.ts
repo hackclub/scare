@@ -36,6 +36,7 @@ const ITEM_PHOTO: Record<string, keyof typeof PHOTOS> = {
   "steam-10": "steam",
   "steam-20": "steam",
   "steam-40": "steam",
+  "steam-developer": "steam",
   "gear-switch-lite": "switch",
   "gear-mouse": "mouse",
   "gear-keyboard": "keyboard",

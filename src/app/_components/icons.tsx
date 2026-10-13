@@ -37,6 +37,10 @@ export const Caret = (p: IconProps) => (
 
 export const Plus = (p: IconProps) => <Pixels {...p} d="M5 2h2v8H5zM2 5h8v2H2z" />;
 
+export const Info = (p: IconProps) => (
+  <Pixels {...p} d="M3 0h6v1H3zM1 1h2v1H1zM9 1h2v1H9zM0 2h1v8H0zM11 2h1v8H11zM1 10h2v1H1zM9 10h2v1H9zM3 11h6v1H3zM5 2h2v2H5zM5 5h2v5H5z" />
+);
+
 
 export const Skull = (p: IconProps) => (
   <Pixels
