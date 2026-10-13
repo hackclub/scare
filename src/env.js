@@ -23,6 +23,9 @@ export const env = createEnv({
     TOKEN_ENCRYPTION_KEY: z.string().min(16).optional(),
     // Comma-separated Hack Club identity IDs (ident!xxxx) allowed into /admin. Empty = nobody.
     ADMIN_IDENTITY_IDS: z.string().optional(),
+    // Admin MCP endpoint (/api/mcp): "ident!xxxx:token" pairs, comma-separated. Each token acts as
+    // that admin, who must also be in ADMIN_IDENTITY_IDS. Unset = endpoint off.
+    ADMIN_MCP_TOKENS: z.string().optional(),
     // Airtable: shipped projects are mirrored to the program base's YSWS Project Submission table
     AIRTABLE_PAT: z.string().optional(),
     AIRTABLE_BASE_ID: z.string().optional(),
@@ -58,6 +61,7 @@ export const env = createEnv({
     HACKATIME_CLIENT_SECRET: process.env.HACKATIME_CLIENT_SECRET,
     TOKEN_ENCRYPTION_KEY: process.env.TOKEN_ENCRYPTION_KEY,
     ADMIN_IDENTITY_IDS: process.env.ADMIN_IDENTITY_IDS,
+    ADMIN_MCP_TOKENS: process.env.ADMIN_MCP_TOKENS,
     AIRTABLE_PAT: process.env.AIRTABLE_PAT,
     AIRTABLE_BASE_ID: process.env.AIRTABLE_BASE_ID,
     AIRTABLE_TABLE_ID: process.env.AIRTABLE_TABLE_ID,

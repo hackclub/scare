@@ -73,6 +73,7 @@ For reviewing ships, handling orders and managing balances.
 - **Orders:** fulfill, or reject (refunds the Pumpkins). Both only act on pending orders.
 - **Suggestions:** items participants asked for from the shop's "Suggest an item" tile (`Suggestion` model). New ones sort by how many people asked for the same name. Mark one added (after putting it in the catalog) or decline it; an optional note is shown to the person who suggested it. Participants can have 10 open suggestions and send 5 an hour.
 - **Users:** search, view games/orders/history, adjust Pumpkins with a reason (can't go below zero), reset onboarding.
+- **MCP (`/api/mcp`):** the same reads and actions as tools for Claude or any MCP client (stateless Streamable HTTP). Set `ADMIN_MCP_TOKENS` to `ident!xxxx:<token>` pairs (comma-separated, tokens 32+ chars, e.g. `openssl rand -hex 32`); the identity must also be in `ADMIN_IDENTITY_IDS`. Writes run through `src/server/admin-ops.ts`, the same code as the dashboard, and are audited as that admin. Unset means the endpoint 404s. Connect with `claude mcp add --transport http scare-admin https://<host>/api/mcp --header "Authorization: Bearer <token>"`.
 
 ### Airtable
 

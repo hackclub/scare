@@ -1,5 +1,6 @@
 import "server-only";
 
+import { timingSafeEqual } from "node:crypto";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
@@ -82,4 +83,34 @@ export function audit(
       detail,
     },
   });
+}
+
+/**
+ * Admin MCP tokens. ADMIN_MCP_TOKENS is "ident!xxxx:token,..."; tokens shorter than 32 chars are
+ * ignored. A token acts as its admin only while that identity is still in ADMIN_IDENTITY_IDS and
+ * belongs to a signed-up user, so removing someone from the allowlist kills their token too.
+ */
+const MCP_TOKENS = (env.ADMIN_MCP_TOKENS ?? "")
+  .split(",")
+  .map((pair) => pair.trim().replace(/^["']+|["']+$/g, ""))
+  .map((pair) => {
+    const i = pair.indexOf(":");
+    return { identity: pair.slice(0, i).trim(), token: pair.slice(i + 1).trim() };
+  })
+  .filter((t) => isAdminIdentity(t.identity) && t.token.length >= 32);
+
+export const mcpConfigured = MCP_TOKENS.length > 0;
+
+export async function adminFromMcpToken(token: string): Promise<Admin | null> {
+  const given = Buffer.from(token);
+  const match = MCP_TOKENS.find((t) => {
+    const want = Buffer.from(t.token);
+    return want.length === given.length && timingSafeEqual(want, given);
+  });
+  if (!match) return null;
+  const user = await db.user.findUnique({
+    where: { hcIdentityId: match.identity },
+    select: { id: true, name: true },
+  });
+  return user ? { userId: user.id, identity: match.identity, name: user.name } : null;
 }
