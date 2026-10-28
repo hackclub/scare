@@ -52,7 +52,10 @@ export async function submitToAri(gameId: string, origin: string) {
   if (!user.email || !user.slackId) return fail("The maker has no email or Slack ID on their Hack Club account.");
   if (!game.sourceUrl || !game.playUrl) return fail("The game needs a source link and a play link.");
 
-  const seconds = game.claimedSeconds ?? game.trackedSeconds ?? 0;
+  // Ari reads the Hackatime project itself, so only send time the maker claimed beyond it.
+  const seconds = game.hackatimeProject
+    ? Math.max(0, (game.claimedSeconds ?? 0) - (game.trackedSeconds ?? game.claimedSeconds ?? 0))
+    : (game.claimedSeconds ?? game.trackedSeconds ?? 0);
   const hours = Math.min(1000, Math.round((seconds / 3600) * 100) / 100);
 
   try {
