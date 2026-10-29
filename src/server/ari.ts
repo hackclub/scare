@@ -37,7 +37,7 @@ const describeError = (e: unknown) =>
         : "Couldn't reach Ari.";
 
 /** Send a shipped game to Ari. Never throws: failures are stored on the game for the admin card. */
-export async function submitToAri(gameId: string, origin: string) {
+export async function submitToAri(gameId: string, origin: string, updateMessage = "Shipped again after changes.") {
   if (!client) return;
   const game = await db.game.findUnique({
     where: { id: gameId },
@@ -75,7 +75,7 @@ export async function submitToAri(gameId: string, origin: string) {
       thumbnail_url: signedScreenshotUrl(origin, game.id, SCREENSHOT_TTL_MS),
       ...(game.hackatimeProject ? { hackatime_projects: [game.hackatimeProject] } : {}),
       // A game Ari has seen before is being shipped again after a send-back.
-      ...(game.ariShipId ? { is_update: true, update_message: "Shipped again after changes." } : {}),
+      ...(game.ariShipId ? { is_update: true, update_message: updateMessage } : {}),
       meta: {
         engine: game.engine ?? null,
         hours_source: game.claimedSeconds != null ? "edited by maker" : game.hackatimeProject ? "hackatime" : "none",
@@ -93,6 +93,21 @@ export async function submitToAri(gameId: string, origin: string) {
     }
     console.error("[ari] submit failed", gameId, e);
     await fail(describeError(e));
+  }
+}
+
+/**
+ * Pull a game's open submission out of Ari's queue, so a corrected one can be sent in its place.
+ * Ari answers a create for an open ship with already_queued, so there's no other way to change it.
+ */
+export async function withdrawFromAri(gameId: string) {
+  if (!client) return;
+  try {
+    await client.ships.withdraw(gameId);
+  } catch (e) {
+    // Nothing open in Ari: there's nothing to withdraw.
+    if (e instanceof AriApiError && e.code === "not_queued") return;
+    throw new Error(describeError(e));
   }
 }
 

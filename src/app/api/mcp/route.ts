@@ -300,6 +300,15 @@ const TOOLS: Record<string, Tool> = {
     inputSchema: obj({ gameId: str("Game id") }, ["gameId"]),
     run: write(ops.schemas.gameId, (a, i, req) => ops.resendAri(a, i, publicOrigin(req))),
   },
+  edit_game_links: {
+    description:
+      "Correct a game's play and/or source link. A shipped game is re-synced to Airtable, and if Ari hasn't approved it yet it's withdrawn from Ari and sent again with the new links.",
+    inputSchema: obj(
+      { gameId: str("Game id"), playUrl: str("New play link"), sourceUrl: str("New source link") },
+      ["gameId"],
+    ),
+    run: write(ops.schemas.editGameLinks, (a, i, req) => ops.editGameLinks(a, i, publicOrigin(req))),
+  },
   resync_airtable: {
     description: "Re-sync a shipped game to the program Airtable now. Writes to the real base.",
     inputSchema: obj({ gameId: str("Game id") }, ["gameId"]),

@@ -5,8 +5,9 @@ import { z } from "zod";
 
 import { type Admin, audit } from "~/server/admin";
 import { airtableConfigured, syncShip } from "~/server/airtable";
-import { ariConfigured, submitToAri } from "~/server/ari";
+import { ariConfigured, submitToAri, withdrawFromAri } from "~/server/ari";
 import { db } from "~/server/db";
+import { httpUrl } from "~/lib/safe-url";
 
 /**
  * Every admin write, shared by the dashboard's server actions and the admin MCP endpoint.
@@ -19,6 +20,12 @@ const note = z.string().trim().max(1000).optional();
 
 export const schemas = {
   gameId: z.object({ gameId: id }),
+  // Either link can be left out (the MCP tool); the dashboard form always sends both.
+  editGameLinks: z.object({
+    gameId: id,
+    playUrl: httpUrl("Paste the play link.").optional(),
+    sourceUrl: httpUrl("Paste the source link.").optional(),
+  }),
   fulfillOrder: z.object({ orderId: id, note }),
   rejectOrder: z.object({ orderId: id, note: z.string().trim().min(1, "Say why it was rejected.").max(1000) }),
   suggestion: z.object({ suggestionId: id, note }),
@@ -65,6 +72,58 @@ export async function resyncAirtable(admin: Admin, input: In<"gameId">, origin: 
   revalidatePath("/admin", "layout");
   if (synced?.airtableError) throw new Error(synced.airtableError);
   return "Synced to Airtable.";
+}
+
+/**
+ * Correct a game's play or source link. Makers can't edit a shipped game, so this is how a moved
+ * or mistyped link gets fixed. A shipped game is then re-synced to Airtable, and while Ari still has
+ * it open it's withdrawn and sent again: Ari won't change an open submission (a plain resend is
+ * just already_queued). Once Ari has approved it, Ari keeps the links it reviewed.
+ */
+export async function editGameLinks(admin: Admin, input: In<"editGameLinks">, origin: string) {
+  const game = await db.game.findUnique({
+    where: { id: input.gameId },
+    select: { title: true, playUrl: true, sourceUrl: true, status: true, reviewStatus: true, ariShipId: true },
+  });
+  if (!game) throw new Error("No game with that id.");
+  const data = {
+    ...(input.playUrl && input.playUrl !== game.playUrl ? { playUrl: input.playUrl } : {}),
+    ...(input.sourceUrl && input.sourceUrl !== game.sourceUrl ? { sourceUrl: input.sourceUrl } : {}),
+  };
+  if (Object.keys(data).length === 0) throw new Error("Those are already its links.");
+  await db.$transaction(async (tx) => {
+    await tx.game.update({ where: { id: input.gameId }, data });
+    await audit(tx, admin, "game.edit_links", { type: "game", id: input.gameId }, {
+      title: game.title,
+      from: { playUrl: game.playUrl, sourceUrl: game.sourceUrl },
+      to: data,
+    });
+  });
+  revalidatePath("/admin", "layout");
+  if (game.status !== "SHIPPED") return "Links saved.";
+
+  const problems: string[] = [];
+  if (airtableConfigured) {
+    await syncShip(input.gameId, origin, game.reviewStatus === "APPROVED" ? "Accepted" : "Pending");
+    const synced = await db.game.findUnique({ where: { id: input.gameId }, select: { airtableError: true } });
+    if (synced?.airtableError) problems.push(`Airtable: ${synced.airtableError}`);
+  }
+  let ari = "";
+  if (ariConfigured && game.reviewStatus === "APPROVED") {
+    ari = " Ari already approved it, so Ari keeps the old links.";
+  } else if (ariConfigured) {
+    try {
+      if (game.ariShipId) await withdrawFromAri(input.gameId);
+      await submitToAri(input.gameId, origin, "Links corrected by a Scare admin.");
+      const after = await db.game.findUnique({ where: { id: input.gameId }, select: { ariShipId: true, ariError: true } });
+      if (after?.ariError) problems.push(`Ari: ${after.ariError}`);
+      else ari = ` Resent to Ari as ${after?.ariShipId}.`;
+    } catch (e) {
+      problems.push(`Ari withdraw: ${e instanceof Error ? e.message : "failed"}. Ari still has the old links.`);
+    }
+  }
+  if (problems.length > 0) throw new Error(`Links saved, but ${problems.join(" ")}`);
+  return `Links saved and synced to Airtable.${ari}`;
 }
 
 /* ------------------------------------------------------------ orders */

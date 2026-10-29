@@ -10,7 +10,7 @@ import { originFromHeaders } from "~/server/origin";
 export type ActionState = { ok?: string; error?: string } | null;
 
 const SLOW: ActionState = { error: "Slow down: too many admin actions in a minute." };
-// Ships are reviewed in Ari, not here; this file only resends ships to Ari and Airtable.
+// Ships are reviewed in Ari, not here; this file only fixes ship links and resends ships to Ari and Airtable.
 // The logic lives in ~/server/admin-ops so the admin MCP endpoint runs the same code.
 
 /** Gate, parse, run. Every action reports back instead of throwing, so the form can show what happened. */
@@ -40,6 +40,10 @@ export async function resendAri(_: ActionState, form: FormData) {
 
 export async function resyncAirtable(_: ActionState, form: FormData) {
   return act(ops.schemas.gameId, form, async (a, i) => ops.resyncAirtable(a, i, await origin()));
+}
+
+export async function editGameLinks(_: ActionState, form: FormData) {
+  return act(ops.schemas.editGameLinks, form, async (a, i) => ops.editGameLinks(a, i, await origin()));
 }
 
 /* ------------------------------------------------------------ orders */

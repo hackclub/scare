@@ -9,6 +9,7 @@ import { syncShip } from "~/server/airtable";
 import { submitToAri } from "~/server/ari";
 import { projectSeconds } from "~/server/hackatime";
 import { originFromHeaders } from "~/server/origin";
+import { httpUrl } from "~/lib/safe-url";
 
 /** A Hackatime project to pull time from, and the participant's own figure if they edited it. */
 const timeFields = {
@@ -78,43 +79,6 @@ async function ownBrewingGame(db: PrismaClient, userId: string, id: string) {
   const game = await ownGame(db, userId, id);
   if (game.status !== "BREWING") throw new TRPCError({ code: "FORBIDDEN", message: SHIPPED_LOCKED });
   return game;
-}
-
-/**
- * A web link, typed loosely: "itch.io/game" is fine and gets https:// added. It still has to be a
- * real http(s) address with a proper domain. z.string().url() alone accepts javascript:, data: and
- * the like, which become XSS in an href.
- */
-const httpUrl = (empty: string) =>
-  z
-    .string()
-    .trim()
-    .max(500)
-    .refine((v) => v.length > 0, empty)
-    .transform((v, ctx) => {
-      const link = normalizeLink(v);
-      if (link) return link;
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "That doesn't look like a link. Something like itch.io/your-game",
-      });
-      return z.NEVER;
-    });
-
-function normalizeLink(raw: string) {
-  if (/\s/.test(raw)) return null;
-  try {
-    const url = new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
-    const web = url.protocol === "https:" || url.protocol === "http:";
-    const domain = /^([a-z\d-]+\.)+[a-z\d-]{2,}$/i.test(url.hostname);
-    if (!web || !domain || url.username || url.password) return null;
-    // Bare domains come back as "https://meow.com/"; keep them as typed.
-    return url.pathname === "/" && !url.search && !url.hash && !raw.endsWith("/")
-      ? `${url.protocol}//${url.host}`
-      : url.href;
-  } catch {
-    return null;
-  }
 }
 
 /**

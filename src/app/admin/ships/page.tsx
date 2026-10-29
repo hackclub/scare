@@ -4,7 +4,7 @@ import { PageHead } from "~/app/platform/_components/page-head";
 import { formatDuration } from "~/lib/time";
 import { requireAdmin } from "~/server/admin";
 import { db } from "~/server/db";
-import { resendAri, resyncAirtable } from "../actions";
+import { editGameLinks, resendAri, resyncAirtable } from "../actions";
 import { type ReviewDetail } from "~/server/airtable";
 import { ARI_DASHBOARD_URL, ariConfigured } from "~/server/ari";
 import { env } from "~/env";
@@ -229,6 +229,17 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                   </div>
                 )}
 
+                <ActionForm action={editGameLinks} submit="Save links" tone="ghost">
+                  <input type="hidden" name="gameId" value={g.id} />
+                  <label className="field">
+                    <span className="field-label">Play link</span>
+                    <input name="playUrl" className="input" defaultValue={g.playUrl ?? ""} maxLength={500} required />
+                  </label>
+                  <label className="field">
+                    <span className="field-label">Source link</span>
+                    <input name="sourceUrl" className="input" defaultValue={g.sourceUrl ?? ""} maxLength={500} required />
+                  </label>
+                </ActionForm>
               </li>
             );
           })}
