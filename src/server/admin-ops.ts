@@ -52,10 +52,14 @@ export async function resendAri(admin: Admin, input: In<"gameId">, origin: strin
   const game = await db.game.findUnique({ where: { id: input.gameId }, select: { status: true } });
   if (game?.status !== "SHIPPED") throw new Error("Only shipped games go to Ari.");
   await submitToAri(input.gameId, origin);
-  const after = await db.game.findUnique({ where: { id: input.gameId }, select: { ariShipId: true, ariError: true } });
+  const after = await db.game.findUnique({
+    where: { id: input.gameId },
+    select: { ariShipId: true, ariError: true, status: true, reviewNote: true },
+  });
   await db.$transaction((tx) => audit(tx, admin, "ari.resend", { type: "game", id: input.gameId }, { error: after?.ariError ?? null }));
   revalidatePath("/admin/ships");
   if (after?.ariError) throw new Error(`Ari: ${after.ariError}`);
+  if (after?.status === "BREWING") return `Ari refused it, so it went back to the maker: ${after.reviewNote}`;
   return `In Ari as ${after?.ariShipId}. New ships sit in "processing" while Ari gathers evidence.`;
 }
 
