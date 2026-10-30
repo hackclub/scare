@@ -32,6 +32,7 @@ const ITEM_ICON: Record<ItemIcon, Icon> = {
   macropad: Macropad,
   keychain: Keychain,
   handheld: Handheld,
+  controller: Controller,
   gadget: Gadget,
   laptop: Laptop,
   duck: Duck,

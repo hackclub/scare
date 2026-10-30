@@ -13,12 +13,12 @@ import { pumpkinsFor } from "~/lib/program";
 export type Shelf = "steam" | "gear" | "friends" | "candy" | "costume" | "hardware";
 
 export const SHELVES: { id: Shelf; name: string; blurb: string }[] = [
-  { id: "steam", name: "Steam games", blurb: "A grant toward games on Steam." },
+  { id: "steam", name: "Games", blurb: "Steam grants, and the fee to publish your own game." },
   { id: "gear", name: "Gear", blurb: "Desk gear and gadgets, shipped to you." },
-  { id: "candy", name: "Candy", blurb: "Candy, shipped to you." },
+  { id: "candy", name: "Candy & food", blurb: "Candy shipped to you, or food while you build." },
   { id: "friends", name: "Desk friends", blurb: "Ducks and sharks to talk your bugs through with." },
   { id: "costume", name: "Costume grants", blurb: "Money toward a Halloween costume." },
-  { id: "hardware", name: "Hardware grants", blurb: "Money toward hardware for your projects." },
+  { id: "hardware", name: "Hardware", blurb: "Boards for your projects, or money toward hardware." },
 ];
 
 /** Pixel icons an item can use instead of its shelf's. */
@@ -28,6 +28,7 @@ export type ItemIcon =
   | "macropad"
   | "keychain"
   | "handheld"
+  | "controller"
   | "gadget"
   | "laptop"
   | "duck"
@@ -100,6 +101,19 @@ const ITEMS: Omit<ShopItem, "sample" | "grant">[] = [
     },
   },
   {
+    id: "apple-developer",
+    shelf: "steam",
+    name: "Apple Developer grant",
+    description: "Covers the $99 Apple Developer Program fee to put your app or game on the App Store.",
+    usd: 99,
+    ask: {
+      label: "Your app",
+      placeholder: "https://github.com/you/your-app",
+      missing: "Link the app you'll put on the App Store.",
+      url: true,
+    },
+  },
+  {
     id: "gear-switch-lite",
     featured: true,
     shelf: "gear",
@@ -120,6 +134,59 @@ const ITEMS: Omit<ShopItem, "sample" | "grant">[] = [
     ask: null,
     ships: true,
     icon: "handheld",
+  },
+  {
+    id: "gear-steam-deck",
+    shelf: "gear",
+    name: "Steam Deck OLED",
+    description: "Valve's handheld. Your whole Steam library, and a good way to playtest.",
+    usd: 549,
+    ask: null,
+    ships: true,
+    icon: "handheld",
+  },
+  {
+    id: "gear-laptop",
+    shelf: "gear",
+    name: "$500 laptop grant",
+    description: "Toward a laptop to build on: a MacBook, ThinkPad, Framework, anything.",
+    usd: 500,
+    ask: {
+      label: "What you'll get",
+      placeholder: "A Framework Laptop 12",
+      missing: "Tell us which laptop you'll get.",
+    },
+    icon: "laptop",
+  },
+  {
+    id: "gear-ipad",
+    shelf: "gear",
+    name: "iPad",
+    description: "The 11\" iPad, for studying, sketching and testing.",
+    usd: 349,
+    ask: null,
+    ships: true,
+    icon: "laptop",
+  },
+  {
+    id: "gear-controller",
+    shelf: "gear",
+    name: "Wireless controller",
+    description: "A wireless controller for playtesting your game, or $35 toward one you like better.",
+    usd: 35,
+    ask: null,
+    pick: { label: "Which one", options: ["8BitDo Ultimate 2C", "$35 controller grant"] },
+    ships: true,
+    icon: "controller",
+  },
+  {
+    id: "gear-headphones",
+    shelf: "gear",
+    name: "$30 headphones grant",
+    description: "Toward headphones or earbuds. Programming needs music.",
+    usd: 30,
+    ask: null,
+    icon: "gadget",
   },
   {
     id: "gear-mouse",
@@ -194,12 +261,30 @@ const ITEMS: Omit<ShopItem, "sample" | "grant">[] = [
     ships: true,
   },
   {
+    id: "food-20",
+    shelf: "candy",
+    name: "$20 pizza grant",
+    description: "$20 toward pizza, or a real meal, while you build.",
+    usd: 20,
+    ask: null,
+  },
+  {
     id: "blahaj-gigantic",
     featured: true,
     shelf: "friends",
     name: "Gigantic Blåhaj",
     description: "The 100 cm IKEA shark. Takes up most of a bed.",
     usd: 50,
+    ask: null,
+    ships: true,
+    icon: "shark",
+  },
+  {
+    id: "blahaj-smol",
+    shelf: "friends",
+    name: "Smolhaj",
+    description: "The 55 cm baby Blåhaj. Fits on a lap next to a laptop.",
+    usd: 15,
     ask: null,
     ships: true,
     icon: "shark",
@@ -260,6 +345,24 @@ const ITEMS: Omit<ShopItem, "sample" | "grant">[] = [
     usd: 60,
     ask: null,
     pick: COSTUME_PICK,
+  },
+  {
+    id: "hardware-pi-zero",
+    shelf: "hardware",
+    name: "Raspberry Pi Zero 2 W",
+    description: "A tiny Linux board with Wi-Fi for small hardware builds.",
+    usd: 15,
+    ask: null,
+    ships: true,
+  },
+  {
+    id: "hardware-pi-5",
+    shelf: "hardware",
+    name: "Raspberry Pi 5 (8GB)",
+    description: "A full Linux computer on a board, for servers, bots and bigger builds.",
+    usd: 95,
+    ask: null,
+    ships: true,
   },
   {
     id: "hardware-50",
