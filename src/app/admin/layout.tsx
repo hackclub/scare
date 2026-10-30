@@ -34,20 +34,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Link href="/admin" className="pf-brand" aria-label="Admin overview">
           <PumpkinMark className="pf-brand-pumpkin" />
           <span className="pf-brand-word">SCARE</span>
-          <span className="pf-brand-tag ad-tag">admin</span>
+          <span className="pf-brand-tag adm-tag">admin</span>
         </Link>
         <AdminNav counts={{ ships, orders, suggestions }} />
         <div className="pf-rail-foot">
-          <p className="ad-who">
+          <p className="adm-who">
             Signed in as <span className="pf-mono">{admin.identity}</span>
           </p>
-          <Link href="/platform" className="btn btn-ghost ad-back">
+          <Link href="/platform" className="btn btn-ghost adm-back">
             Back to the platform
           </Link>
         </div>
       </aside>
       <div className="pf-main">
-        <main id="main" className="pf-content ad-content">
+        <main id="main" className="pf-content adm-content">
           {children}
         </main>
       </div>

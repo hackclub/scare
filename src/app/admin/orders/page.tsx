@@ -32,9 +32,9 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
         title="Orders"
         lead="Fulfill an order once it's sent. Rejecting a pending order refunds its Pumpkins."
       />
-      <nav className="ad-tabs" aria-label="Filter orders">
+      <nav className="adm-tabs" aria-label="Filter orders">
         {STATUSES.map((s) => (
-          <Link key={s} href={`/admin/orders?status=${s}`} className="ad-tab" aria-current={s === status ? "page" : undefined}>
+          <Link key={s} href={`/admin/orders?status=${s}`} className="adm-tab" aria-current={s === status ? "page" : undefined}>
             {LABEL[s]}
           </Link>
         ))}
@@ -43,16 +43,16 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
       {orders.length === 0 ? (
         <p className="pf-empty frame">Nothing here.</p>
       ) : (
-        <ul className="ad-cards">
+        <ul className="adm-cards">
           {orders.map((o) => (
-            <li key={o.id} className="frame ad-card">
+            <li key={o.id} className="frame adm-card">
               <div className="frame-head">
                 <span>{o.itemName}</span>
                 <span>
                   {o.pumpkins} Pumpkins · ${o.usd.toFixed(2)} · {o.createdAt.toLocaleDateString()}
                 </span>
               </div>
-              <dl className="ledger pf-ledger ad-ledger">
+              <dl className="ledger pf-ledger adm-ledger">
                 <div>
                   <dt>For</dt>
                   <dd>
@@ -78,7 +78,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
                 {o.handledBy && <div><dt>Handled by</dt><dd className="pf-mono">{o.handledBy}</dd></div>}
               </dl>
               {o.status === "PENDING" && (
-                <div className="ad-decide">
+                <div className="adm-decide">
                   <ActionForm action={fulfillOrder} submit="Mark fulfilled">
                     <input type="hidden" name="orderId" value={o.id} />
                     <label className="field">

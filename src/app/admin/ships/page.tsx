@@ -60,9 +60,9 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
         }
       />
 
-      <nav className="ad-tabs" aria-label="Filter ships">
+      <nav className="adm-tabs" aria-label="Filter ships">
         {(Object.keys(VIEWS) as View[]).map((v) => (
-          <Link key={v} href={`/admin/ships?view=${v}`} className="ad-tab" aria-current={v === view ? "page" : undefined}>
+          <Link key={v} href={`/admin/ships?view=${v}`} className="adm-tab" aria-current={v === view ? "page" : undefined}>
             {VIEWS[v].label}
           </Link>
         ))}
@@ -71,7 +71,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
       {games.length === 0 ? (
         <p className="pf-empty frame">Nothing here.</p>
       ) : (
-        <ul className="ad-cards">
+        <ul className="adm-cards">
           {games.map((g) => {
             const counted = g.claimedSeconds ?? g.trackedSeconds;
             const review = g.reviewDetail as ReviewDetail | null;
@@ -81,12 +81,12 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
             // In "Sent back", the latest rejection is the game's own note; list only the ones before it.
             const earlier = view === "rejected" ? history.slice(0, -1) : history;
             return (
-              <li key={g.id} className="frame ad-card">
+              <li key={g.id} className="frame adm-card">
                 <div className="frame-head">
                   <span>
                     {g.title}
                     {reship && (
-                      <span className="tba ad-flag ad-reship">
+                      <span className="tba adm-flag adm-reship">
                         re-ship · sent back {Math.max(history.length, 1)}×
                       </span>
                     )}
@@ -99,8 +99,8 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                         : `shipped ${g.shippedAt?.toLocaleDateString() ?? ""}`}
                   </span>
                 </div>
-                <div className="ad-card-body">
-                  <div className="ad-shot">
+                <div className="adm-card-body">
+                  <div className="adm-shot">
                     {g.screenshot ? (
                       // eslint-disable-next-line @next/next/no-img-element -- private, served by our own route
                       <img src={`/api/games/${g.id}/screenshot?v=${g.screenshot.updatedAt.getTime()}`} alt={`Screenshot of ${g.title}`} />
@@ -108,14 +108,14 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                       <span className="pf-muted">No screenshot</span>
                     )}
                   </div>
-                  <div className="ad-facts">
+                  <div className="adm-facts">
                     <p className="pf-next-text">{g.pitch}</p>
-                    <dl className="ledger pf-ledger ad-ledger">
+                    <dl className="ledger pf-ledger adm-ledger">
                       <div>
                         <dt>By</dt>
                         <dd>
                           <Link href={`/admin/users/${g.user.id}`} className="link">{g.user.name ?? "Unnamed"}</Link>
-                          {!g.user.yswsEligible && <span className="tba ad-flag">not YSWS eligible</span>}
+                          {!g.user.yswsEligible && <span className="tba adm-flag">not YSWS eligible</span>}
                         </dd>
                       </div>
                       <div><dt>Slack</dt><dd className="pf-mono">{g.user.slackId ?? "none"}</dd></div>
@@ -133,7 +133,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                         <dd>
                           {formatDuration(counted)}
                           {g.claimedSeconds !== null && (
-                            <span className="tba ad-flag">edited · Hackatime {formatDuration(g.trackedSeconds)}</span>
+                            <span className="tba adm-flag">edited · Hackatime {formatDuration(g.trackedSeconds)}</span>
                           )}
                         </dd>
                       </div>
@@ -143,7 +143,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                         <div>
                           <dt>{view === "rejected" ? "Sent back before" : "Sent back"}</dt>
                           <dd>
-                            <ol className="ad-history">
+                            <ol className="adm-history">
                               {earlier.map((r) => (
                                 <li key={r.id}>
                                   <span className="pf-muted">
@@ -173,10 +173,10 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                           ) : (
                             "not synced"
                           )}
-                          {g.airtableError && <span className="tba ad-flag">sync error</span>}
+                          {g.airtableError && <span className="tba adm-flag">sync error</span>}
                         </dd>
                       </div>
-                      {g.airtableError && <div><dt>Sync error</dt><dd className="ad-error-text">{g.airtableError}</dd></div>}
+                      {g.airtableError && <div><dt>Sync error</dt><dd className="adm-error-text">{g.airtableError}</dd></div>}
                       {ariConfigured && (
                         <div>
                           <dt>Ari</dt>
@@ -188,7 +188,7 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                             ) : (
                               "not sent"
                             )}
-                            {g.ariError && <span className="tba ad-flag">send error</span>}
+                            {g.ariError && <span className="tba adm-flag">send error</span>}
                           </dd>
                         </div>
                       )}
@@ -211,13 +211,13 @@ export default async function Ships({ searchParams }: { searchParams: Promise<{ 
                       {review?.justification.hours_reasoning && (
                         <div><dt>Hours reasoning</dt><dd>{review.justification.hours_reasoning}</dd></div>
                       )}
-                      {g.ariError && <div><dt>Ari error</dt><dd className="ad-error-text">{g.ariError}</dd></div>}
+                      {g.ariError && <div><dt>Ari error</dt><dd className="adm-error-text">{g.ariError}</dd></div>}
                     </dl>
                   </div>
                 </div>
 
                 {g.status === "SHIPPED" && (
-                  <div className="ad-decide ad-decide-quiet">
+                  <div className="adm-decide adm-decide-quiet">
                     <ActionForm action={resyncAirtable} submit={g.airtableRecordId ? "Resync Airtable" : "Send to Airtable"} tone="ghost">
                       <input type="hidden" name="gameId" value={g.id} />
                     </ActionForm>

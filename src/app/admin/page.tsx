@@ -29,25 +29,25 @@ export default async function AdminOverview() {
     <>
       <PageHead title="Admin" lead="Everything that needs a person: orders, suggestions, balances. Ships are reviewed in Ari." />
 
-      <div className="ad-grid">
+      <div className="adm-grid">
         <section className="frame" aria-labelledby="todo-title">
           <div className="frame-head">
             <span id="todo-title">Needs you</span>
           </div>
           <ul className="pf-list">
-            <li className="pf-list-row ad-todo">
+            <li className="pf-list-row adm-todo">
               <span className="pf-list-title">Ships waiting in Ari</span>
-              <span className="ad-big">{shippedPending}</span>
+              <span className="adm-big">{shippedPending}</span>
               <Link href="/admin/ships" className="pf-head-link">View</Link>
             </li>
-            <li className="pf-list-row ad-todo">
+            <li className="pf-list-row adm-todo">
               <span className="pf-list-title">Orders to fulfill</span>
-              <span className="ad-big">{pendingOrders}</span>
+              <span className="adm-big">{pendingOrders}</span>
               <Link href="/admin/orders" className="pf-head-link">Open</Link>
             </li>
-            <li className="pf-list-row ad-todo">
+            <li className="pf-list-row adm-todo">
               <span className="pf-list-title">Shop suggestions to read</span>
-              <span className="ad-big">{newSuggestions}</span>
+              <span className="adm-big">{newSuggestions}</span>
               <Link href="/admin/suggestions" className="pf-head-link">Read</Link>
             </li>
           </ul>
@@ -69,7 +69,7 @@ export default async function AdminOverview() {
           </dl>
         </section>
 
-        <section className="frame ad-span" aria-labelledby="recent-title">
+        <section className="frame adm-span" aria-labelledby="recent-title">
           <div className="frame-head">
             <span id="recent-title">Recent admin actions</span>
             <Link href="/admin/audit" className="pf-head-link">Audit log</Link>

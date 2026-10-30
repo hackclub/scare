@@ -51,7 +51,7 @@ export default async function UserDetail({ params }: { params: Promise<{ id: str
         actions={<Link href="/admin/users" className="btn btn-ghost">All users</Link>}
       />
 
-      <div className="ad-grid">
+      <div className="adm-grid">
         <section className="frame">
           <div className="frame-head"><span>Account</span></div>
           <dl className="ledger pf-ledger">
@@ -72,7 +72,7 @@ export default async function UserDetail({ params }: { params: Promise<{ id: str
               </dd>
             </div>
           </dl>
-          <div className="ad-decide">
+          <div className="adm-decide">
             <ActionForm action={resetOnboarding} submit="Reset onboarding" tone="ghost">
               <input type="hidden" name="userId" value={user.id} />
             </ActionForm>
@@ -81,12 +81,12 @@ export default async function UserDetail({ params }: { params: Promise<{ id: str
 
         <section className="frame">
           <div className="frame-head"><span>Pumpkins</span><span>balance {user.pumpkins}</span></div>
-          <div className="ad-decide">
+          <div className="adm-decide">
             <ActionForm action={adjustPumpkins} submit="Apply">
               <input type="hidden" name="userId" value={user.id} />
               <label className="field">
                 <span className="field-label">Change<span className="field-hint">use a minus sign to remove</span></span>
-                <input name="delta" type="number" step={1} className="input ad-num" required />
+                <input name="delta" type="number" step={1} className="input adm-num" required />
               </label>
               <label className="field">
                 <span className="field-label">Reason<span className="field-hint">goes in the audit log</span></span>
@@ -128,7 +128,7 @@ export default async function UserDetail({ params }: { params: Promise<{ id: str
           )}
         </section>
 
-        <section className="frame ad-span">
+        <section className="frame adm-span">
           <div className="frame-head"><span>Admin history</span></div>
           {history.length === 0 ? <p className="pf-empty">No admin actions on this account.</p> : (
             <ul className="pf-list">

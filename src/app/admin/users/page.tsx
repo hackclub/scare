@@ -37,9 +37,9 @@ export default async function Users({ searchParams }: { searchParams: Promise<{ 
   return (
     <>
       <PageHead title="Users" lead="Find someone by name, email, Slack ID or Hack Club identity." />
-      <form className="ad-search" role="search">
-        <label htmlFor="ad-q" className="sr-only">Search users</label>
-        <input id="ad-q" name="q" defaultValue={q} className="input" placeholder="Search" />
+      <form className="adm-search" role="search">
+        <label htmlFor="adm-q" className="sr-only">Search users</label>
+        <input id="adm-q" name="q" defaultValue={q} className="input" placeholder="Search" />
         <button type="submit" className="btn btn-ghost">Search</button>
       </form>
 
@@ -53,11 +53,11 @@ export default async function Users({ searchParams }: { searchParams: Promise<{ 
         ) : (
           <ul className="pf-list">
             {users.map((u) => (
-              <li key={u.id} className="pf-list-row ad-user-row">
+              <li key={u.id} className="pf-list-row adm-user-row">
                 <Link href={`/admin/users/${u.id}`} className="pf-list-title link">{u.name ?? "Unnamed"}</Link>
                 <span className="pf-list-meta">{u.email ?? u.slackId ?? ""}</span>
                 <span className="pf-list-meta">{u._count.games} games · {u._count.orders} orders</span>
-                <span className="pf-list-meta ad-num-cell">{u.pumpkins} P</span>
+                <span className="pf-list-meta adm-num-cell">{u.pumpkins} P</span>
               </li>
             ))}
           </ul>

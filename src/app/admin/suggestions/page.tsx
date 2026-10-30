@@ -38,12 +38,12 @@ export default async function Suggestions({ searchParams }: { searchParams: Prom
         title="Suggestions"
         lead="Items people want in the shop. Add one to the catalog, then mark it added so they see it made it in."
       />
-      <nav className="ad-tabs" aria-label="Filter suggestions">
+      <nav className="adm-tabs" aria-label="Filter suggestions">
         {STATUSES.map((s) => (
           <Link
             key={s}
             href={`/admin/suggestions?status=${s}`}
-            className="ad-tab"
+            className="adm-tab"
             aria-current={s === status ? "page" : undefined}
           >
             {LABEL[s]}
@@ -54,11 +54,11 @@ export default async function Suggestions({ searchParams }: { searchParams: Prom
       {suggestions.length === 0 ? (
         <p className="pf-empty frame">Nothing here.</p>
       ) : (
-        <ul className="ad-cards">
+        <ul className="adm-cards">
           {suggestions.map((s) => {
             const n = asks.get(key(s.name)) ?? 1;
             return (
-              <li key={s.id} className="frame ad-card">
+              <li key={s.id} className="frame adm-card">
                 <div className="frame-head">
                   <span>{s.name}</span>
                   <span>
@@ -66,7 +66,7 @@ export default async function Suggestions({ searchParams }: { searchParams: Prom
                     {s.createdAt.toLocaleDateString()}
                   </span>
                 </div>
-                <dl className="ledger pf-ledger ad-ledger">
+                <dl className="ledger pf-ledger adm-ledger">
                   <div>
                     <dt>From</dt>
                     <dd>
@@ -93,7 +93,7 @@ export default async function Suggestions({ searchParams }: { searchParams: Prom
                   {s.handledBy && <div><dt>Handled by</dt><dd className="pf-mono">{s.handledBy}</dd></div>}
                 </dl>
                 {s.status === "NEW" && (
-                  <div className="ad-decide">
+                  <div className="adm-decide">
                     <ActionForm action={addSuggestion} submit="Mark added">
                       <input type="hidden" name="suggestionId" value={s.id} />
                       <label className="field">

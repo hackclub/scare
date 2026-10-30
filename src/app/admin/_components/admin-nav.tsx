@@ -28,7 +28,7 @@ export function AdminNav({ counts }: { counts: Partial<Record<(typeof NAV)[numbe
         >
           <PumpkinPlain className="pf-nav-pumpkin" />
           <span className="pf-nav-label">{n.label}</span>
-          {counts[n.key] ? <span className="ad-count">{counts[n.key]}</span> : null}
+          {counts[n.key] ? <span className="adm-count">{counts[n.key]}</span> : null}
         </Link>
       ))}
     </nav>

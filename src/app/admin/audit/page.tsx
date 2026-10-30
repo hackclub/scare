@@ -31,12 +31,12 @@ export default async function Audit() {
             {entries.map((a) => {
               const href = link(a.targetType, a.targetId);
               return (
-                <li key={a.id} className="pf-list-row ad-audit-row">
+                <li key={a.id} className="pf-list-row adm-audit-row">
                   <span className="pf-list-title pf-mono">{a.action}</span>
                   <span className="pf-list-meta">
                     {href ? <Link href={href} className="link">{a.targetType} {a.targetId.slice(-6)}</Link> : `${a.targetType} ${a.targetId.slice(-6)}`}
                   </span>
-                  <span className="pf-list-meta ad-detail">{JSON.stringify(a.detail ?? {})}</span>
+                  <span className="pf-list-meta adm-detail">{JSON.stringify(a.detail ?? {})}</span>
                   <span className="pf-list-meta pf-mono">{a.actorIdentity}</span>
                   <span className="pf-list-meta">{a.createdAt.toLocaleString()}</span>
                 </li>

@@ -20,18 +20,18 @@ export function ActionForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
   return (
-    <form action={formAction} className={`ad-form ${className}`}>
+    <form action={formAction} className={`adm-form ${className}`}>
       {children}
-      <div className="ad-form-row">
+      <div className="adm-form-row">
         <button
           type="submit"
-          className={`btn ${tone === "primary" ? "btn-primary" : "btn-ghost"} ${tone === "danger" ? "ad-danger" : ""}`}
+          className={`btn ${tone === "primary" ? "btn-primary" : "btn-ghost"} ${tone === "danger" ? "adm-danger" : ""}`}
           disabled={pending}
         >
           <span>{pending ? "Working…" : submit}</span>
         </button>
         {state?.ok && (
-          <p className="ad-ok" role="status">
+          <p className="adm-ok" role="status">
             {state.ok}
           </p>
         )}
