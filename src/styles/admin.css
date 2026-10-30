@@ -231,3 +231,6 @@
   color: var(--blood);
   text-align: right;
 }
+.adm-address {
+  white-space: pre-line;
+}

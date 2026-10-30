@@ -28,7 +28,7 @@ export function Secret({
         type="button"
         className="pf-secret-toggle"
         aria-pressed={shown}
-        aria-label={`${shown ? "Hide" : "Show"} your ${label}`}
+        aria-label={`${shown ? "Hide" : "Show"} ${label}`}
         title={`${shown ? "Hide" : "Show"} ${label}`}
         onClick={() => setShown((s) => !s)}
       >

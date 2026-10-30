@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { PageHead } from "~/app/platform/_components/page-head";
+import { Secret } from "~/app/platform/profile/secret";
 import { requireAdmin } from "~/server/admin";
 import { db } from "~/server/db";
+import { getIdentity, type HackClubAddress } from "~/server/hackclub";
 import { fulfillOrder, rejectOrder } from "../actions";
 import { ActionForm } from "../_components/action-form";
 
@@ -14,6 +16,17 @@ const LABEL: Record<Status, string> = { PENDING: "Pending", FULFILLED: "Fulfille
 
 const isUrl = (s: string | null) => Boolean(s && /^https?:\/\//.test(s));
 
+const formatAddress = (a: HackClubAddress) =>
+  [
+    [a.first_name, a.last_name].filter(Boolean).join(" "),
+    a.line_1,
+    a.line_2,
+    [a.city, a.state, a.postal_code].filter(Boolean).join(", "),
+    a.country,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
 export default async function Orders({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   await requireAdmin();
   const { status: raw } = await searchParams;
@@ -23,8 +36,19 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
     where: { status },
     orderBy: { createdAt: status === "PENDING" ? "asc" : "desc" },
     take: 200,
-    include: { user: { select: { id: true, name: true, slackId: true, pumpkins: true } } },
+    include: { user: { select: { id: true, name: true, email: true, slackId: true, pumpkins: true } } },
   });
+
+  // Addresses aren't stored in Scare; read them live from Hack Club Auth, once per person.
+  const userIds = [...new Set(orders.map((o) => o.user.id))];
+  const identities = await Promise.all(userIds.map((id) => getIdentity(id)));
+  const addresses = new Map(
+    userIds.map((id, i) => {
+      const r = identities[i]!;
+      const a = r.ok ? (r.me.identity.addresses?.find((x) => x.primary) ?? r.me.identity.addresses?.[0]) : undefined;
+      return [id, a ? formatAddress(a) : r.ok ? "none on file" : "couldn't read (they need to sign in again)"];
+    }),
+  );
 
   return (
     <>
@@ -59,7 +83,15 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
                     <Link href={`/admin/users/${o.user.id}`} className="link">{o.user.name ?? "Unnamed"}</Link>
                   </dd>
                 </div>
+                <div><dt>Email</dt><dd>{o.user.email ?? "none"}</dd></div>
                 <div><dt>Slack</dt><dd className="pf-mono">{o.user.slackId ?? "none"}</dd></div>
+                <div><dt>Balance</dt><dd>{o.user.pumpkins} Pumpkins</dd></div>
+                <div>
+                  <dt>Address</dt>
+                  <dd className="adm-address">
+                    <Secret value={addresses.get(o.user.id)!} label="address" />
+                  </dd>
+                </div>
                 <div>
                   <dt>Details</dt>
                   <dd>
