@@ -37,6 +37,7 @@ const F = {
   hackatimeProjects: "fldaRPvTChHhR6MhS", // Justification - Hackatime Project Name(s) + Date Range(s)
   additionalJustification: "fldpDfgEAo5eWW5ZA", // Justification - Additional Justification
   status: "fldfpZrihjUEwPUMk", // Status
+  fulfillment: "fldztw7DGK4YvOYXY", // Fulfillment Status
   resubmitReason: "fldjtQStpQfx4AuM5", // Resubmission Request Reason
   technicalFeatures: "fldKmk82PssX4ZUhb", // Justification - Specific Technical Features
   deflation: "fld26wxZGOAhJS4tA", // Justification - Deflation Justification
@@ -155,7 +156,7 @@ async function record(gameId: string, error: string | null, recordId?: string) {
  * person (read live from Hack Club Auth, never stored in Scare), and Hackatime time.
  * Never throws: failures are saved on the game so an admin can see them and retry.
  */
-export async function syncShip(gameId: string, origin: string, status: Status = "Pending") {
+export async function syncShip(gameId: string, origin: string, status: Status = "Pending", reason: string | null = null) {
   if (!airtableConfigured) return;
   try {
     const game = await db.game.findUniqueOrThrow({
@@ -223,7 +224,11 @@ export async function syncShip(gameId: string, origin: string, status: Status = 
       [F.lapseLinks]: j.lapse_links ?? null,
       [F.alternateTracking]: joined(j.time_evidence, j.supporting_evidence),
       [F.status]: status,
+      // Only a send-back carries a reason, so a re-ship clears the last one.
+      [F.resubmitReason]: reason?.slice(0, 500) ?? null,
     };
+    // Nothing to fulfil for a send-back. Accepted is left alone: the fulfilment team owns it from there.
+    if (status !== "Accepted") fields[F.fulfillment] = status === "Pending" ? "Unmarked" : "Inapplicable";
     if (person) {
       Object.assign(fields, {
         [F.firstName]: person.first_name ?? null,
@@ -257,18 +262,6 @@ export async function syncReview(
   origin: string,
   review: { status: "Accepted" | "Pending" } | { status: "Resubmission Requested" | "Rejected"; reason: string },
 ) {
-  if (!airtableConfigured) return;
   // Every decision rewrites the whole record, so hours and justification follow the review.
-  await syncShip(gameId, origin, review.status);
-  const game = await db.game.findUnique({ where: { id: gameId }, select: { airtableRecordId: true } });
-  if (!game?.airtableRecordId) return;
-  try {
-    await airtable(
-      "PATCH",
-      { [F.resubmitReason]: "reason" in review ? review.reason.slice(0, 500) : null },
-      game.airtableRecordId,
-    );
-  } catch (e) {
-    await record(gameId, e instanceof Error ? e.message.slice(0, 500) : "Airtable sync failed.").catch(() => undefined);
-  }
+  await syncShip(gameId, origin, review.status, "reason" in review ? review.reason : null);
 }

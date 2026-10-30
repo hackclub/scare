@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { type Prisma, type PrismaClient } from "../../../../generated/prisma";
+import { Prisma, type PrismaClient } from "../../../../generated/prisma";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { toTRPC } from "~/server/api/routers/hackatime";
 import { syncShip } from "~/server/airtable";
@@ -173,6 +173,10 @@ export const gameRouter = createTRPCRouter({
       if (!shot) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Add a screenshot before you ship." });
       }
+      // Ari won't take a ship with no time on it, so catch that here rather than after shipping.
+      if (!game.hackatimeProject && !game.claimedSeconds) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Pick a Hackatime project or enter your hours before you ship." });
+      }
       // Freeze Hackatime's total at the moment of shipping. If Hackatime is down, keep the last read.
       let trackedSeconds = game.trackedSeconds;
       if (game.hackatimeProject) {
@@ -189,8 +193,13 @@ export const gameRouter = createTRPCRouter({
           playUrl: input.playUrl,
           status: "SHIPPED",
           shippedAt: new Date(),
-          // Into the admin review queue (again, if it was sent back).
+          // Into the review queue (again, if it was sent back), without the last review's leftovers.
           reviewStatus: "PENDING",
+          reviewNote: null,
+          reviewHours: null,
+          reviewDetail: Prisma.DbNull,
+          reviewedAt: null,
+          reviewedBy: null,
           trackedSeconds,
         },
       });
@@ -198,8 +207,11 @@ export const gameRouter = createTRPCRouter({
       const shipped = await ctx.db.game.findUniqueOrThrow({ where: { id: game.id }, select: participantGame });
       // Mirror to Airtable once the response is out; a slow or failing Airtable never blocks shipping.
       const origin = originFromHeaders(ctx.headers);
-      after(() => syncShip(shipped.id, origin, "Pending"));
-      after(() => submitToAri(shipped.id, origin));
+      // In order: if Ari bounces the ship, its send-back must land in Airtable after the Pending.
+      after(async () => {
+        await syncShip(shipped.id, origin, "Pending");
+        await submitToAri(shipped.id, origin);
+      });
       return shipped;
     }),
 
@@ -207,7 +219,8 @@ export const gameRouter = createTRPCRouter({
     .input(z.object({ id: z.string().max(40) }))
     .mutation(async ({ ctx, input }) => {
       const { count } = await ctx.db.game.deleteMany({
-        where: { id: input.id, userId: ctx.session.user.id, status: "BREWING" },
+        // Once shipped, a game stays on record (it has an Airtable row and an Ari history); fix and re-ship instead.
+        where: { id: input.id, userId: ctx.session.user.id, status: "BREWING", shippedAt: null },
       });
       if (count === 0) throw new TRPCError({ code: "NOT_FOUND" });
       return { ok: true };

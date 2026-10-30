@@ -49,8 +49,10 @@ export async function submitToAri(gameId: string, origin: string, updateMessage 
     db.game.update({ where: { id: gameId }, data: { ariError: message.slice(0, 500) } });
 
   const { user } = game;
-  if (!user.email || !user.slackId) return fail("The maker has no email or Slack ID on their Hack Club account.");
-  if (!game.sourceUrl || !game.playUrl) return fail("The game needs a source link and a play link.");
+  if (!user.email || !user.slackId) {
+    return sendBack(gameId, origin, "Your Hack Club account needs an email and a Slack ID. Add them at auth.hackclub.com, then ship again.");
+  }
+  if (!game.sourceUrl || !game.playUrl) return sendBack(gameId, origin, "Add a source link and a play link, then ship again.");
 
   // Ari reads the Hackatime project itself, so only send time the maker claimed beyond it.
   const seconds = game.hackatimeProject
@@ -91,9 +93,31 @@ export async function submitToAri(gameId: string, origin: string, updateMessage 
       await db.game.update({ where: { id: gameId }, data: { ariError: null, ariSyncedAt: new Date() } });
       return;
     }
+    // Ari refused the ship itself, so no review will ever come: hand it back to the maker now.
+    if (e instanceof AriInputError) return sendBack(gameId, origin, `Ari couldn't take this ship: ${e.message}`);
     console.error("[ari] submit failed", gameId, e);
     await fail(describeError(e));
   }
+}
+
+/** Send a ship Ari can't take back to the maker, the same way a reviewer's send-back would. */
+async function sendBack(gameId: string, origin: string, reason: string) {
+  const { count } = await db.game.updateMany({
+    where: { id: gameId, status: "SHIPPED", OR: [{ reviewStatus: null }, { reviewStatus: "PENDING" }] },
+    data: {
+      status: "BREWING",
+      reviewStatus: "REJECTED",
+      reviewNote: reason,
+      reviewedAt: new Date(),
+      reviewedBy: "ari:intake",
+      ariError: null,
+    },
+  });
+  if (count === 0) return;
+  await db.adminAudit.create({
+    data: { actorUserId: ARI_ACTOR.userId, actorIdentity: ARI_ACTOR.identity, action: "ship.changes", targetType: "game", targetId: gameId, detail: { note: reason } },
+  });
+  await syncReview(gameId, origin, { status: "Resubmission Requested", reason });
 }
 
 /**

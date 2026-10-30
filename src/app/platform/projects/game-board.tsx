@@ -453,7 +453,7 @@ function GameRow({ game }: { game: Game }) {
                   Edit time
                 </button>
               )}
-              {confirmRemove ? (
+              {game.shippedAt ? null : confirmRemove ? (
                 <span className="confirm">
                   Delete for good?{" "}
                   <button
