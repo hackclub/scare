@@ -122,7 +122,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "When does it end?",
-    a: <>Halloween, {DEADLINE_LABEL}. The countdown up top is real.</>,
+    a: <>{DEADLINE_LABEL}. We extended it past Halloween. The countdown up top is real.</>,
   },
   {
     q: "What's Hack Club? What's a YSWS?",
@@ -399,7 +399,7 @@ export default async function Home({
           />
           <Countdown variant="glyph" />
           <p className="close-lead">
-            Scare ends on Halloween... all games must be in by then!
+            Scare ends on November 3... all games must be in by then!
           </p>
           {cta}
         </section>

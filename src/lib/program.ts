@@ -3,10 +3,10 @@
  * replace it here rather than in page copy.
  */
 
-/** Midnight at the end of Halloween, US Eastern (EDT, UTC-4). */
-export const DEADLINE = new Date("2026-11-01T04:00:00Z");
+/** Midnight at the end of November 3, US Eastern (EST, UTC-5; DST ends Nov 1). */
+export const DEADLINE = new Date("2026-11-04T05:00:00Z");
 
-export const DEADLINE_LABEL = "October 31, 2026";
+export const DEADLINE_LABEL = "November 3, 2026";
 
 export const LINKS = {
   hackClub: "https://hackclub.com",

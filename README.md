@@ -1,6 +1,6 @@
 # Scare
 
-A Hack Club YSWS: make a horror game, ship it before Halloween (October 31, 2026), earn **Pumpkins**, and spend them on Steam games in the Pumpkin Shop.
+A Hack Club YSWS: make a horror game, ship it by November 3, 2026, earn **Pumpkins**, and spend them on Steam games in the Pumpkin Shop.
 
 This repo is the program site: the landing page and a signed-in dashboard ("your haunt") where participants register games and mark them shipped.
 
